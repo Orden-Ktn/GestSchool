@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inscription</title>
+    <link rel="stylesheet" href="/static/css/sb-admin-2.min.css" />
+
+<style>
+      /* Style commun pour les formulaires */
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+    }
+    button{
+      margin-top:5%;
+    }
+    body{
+      background-color: skyblue;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color:green;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    /* Style pour les messages d'erreur */
+    .error-message {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
+
+    /* Style pour les messages de succès (si nécessaire) */
+    .success-message {
+        color: #28a745;
+        font-size: 14px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
+</style>
+  </head>
+  
+<body class="bg-gradient-secondary">
+
+  <div class="container">
+
+      <!-- Outer Row -->
+      <div class="row justify-content-center">
+
+          <div class="col-xl-10 col-lg-12 col-md-9" >
+
+              <div class="card o-hidden border-0 shadow-lg my-5" >
+                  <div class="card-body p-0">
+                      <!-- Nested Row within Card Body -->
+                      <div class="row">
+                     
+                          <div class="col-lg-6" style="margin:auto;">
+                              <div class="p-5">
+                                  <div class="text-center">
+                                      <h1 class="h4 text-gray-900 mb-4" style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold; font-size: x-large;">Inscription</h1>
+                                  </div>
+
+      <div class="formulaire">
+        <div class="case">
+          <form method="post" action="{% url 'inscription' %}">
+            {% csrf_token %} {{ form.as_p }}
+
+            <button class="btn btn-primary btn-user btn-block"  type="submit">S'inscrire</button>
+
+            <p  class="btn btn-user btn-block" style="font-family: cursive; font-size: 90%; font-style: italic; font-weight: bolder;">
+               Déjà inscrit?<a href="{% url 'connexion' %}" class="waves-effect"><span style="color:green;"> Se Connecter </span></a>
+            </p>
+
+          </form>
+        </div>
+      </div>
+  </div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

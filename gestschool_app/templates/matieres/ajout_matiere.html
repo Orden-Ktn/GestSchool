@@ -1,0 +1,59 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+
+{% if messages %}
+<div class="success-message">
+    {% for message in messages %}
+        <div class="alert alert-fill alert-info col-lg-6" style="margin-left : 25%; margin-top : 2%; text-align: center;" role="alert">
+            <em class="icon ni ni-alert-circle"></em>
+            <strong>{{message}}</strong>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<div class="nk-block nk-block-lg container" style="margin-top : 5%;">
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                <h5 class="card-title">Ajout Matière</h5>
+            </div>
+            <form role="form" method="post" action="{% url 'ajouter_matiere' %}">
+                {% csrf_token %}
+                <div class="row g-4">
+
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Nom</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" name="nom" id="nom">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Sigle</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" name="sigle" id="sigle">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-lg btn-success"><em class="icon ni ni-save" style="font-size: large;">
+                            </em> &nbsp Enregistrer</button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div><!-- .nk-block -->
+
+{% endblock %}

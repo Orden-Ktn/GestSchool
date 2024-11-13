@@ -1,0 +1,54 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+
+    </div>
+    <div class="card card-bordered card-preview">
+        <div class="card-inner">
+            <div class="nk-block-head-content">
+                <h4 class="nk-block-title">Liste de tous les élèves</h4><br>
+            </div>
+            <table class="datatable-init-export nowrap table" data-export-title="Export">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Prénoms</th>
+                        <th>Date de naissance</th>
+                        <th>Sexe</th>
+                        <th>Contact parent (s)</th>
+                        <th>Classe</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+                    {% for eleve in eleves %}
+                    <tr>
+                        <td>{{eleve.id_eleve }}</td>
+                        <td>{{eleve.nom }}</td>
+                        <td>{{eleve.prenom }}</td>
+                        <td>{{eleve.date_naissance }}</td>
+                        <td>{{eleve.sexe}}</td>
+                        <td>{{eleve.contact }}</td>
+                        <td>{{eleve.classe }} {{eleve.serie }}</td>
+                        <td>{{eleve.statut }} </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" style="text-align: center;">Aucun(e) élève enregistré(e)</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div><!-- .card-preview -->
+</div> <!-- nk-block -->
+
+
+{% endblock %}

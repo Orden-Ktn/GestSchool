@@ -1,0 +1,52 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+<div class="nk-block nk-block-lg container" style="margin-top : 5%;">
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                <h5 class="card-title">Liste des Années Scolaires</h5>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">Année</th>
+                        <th style="text-align: center;">Statut</th>
+                        <th style="text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for annee in annees %}
+                    <tr style="text-align: center;" class="success">
+                        <td>{{ annee.annee }}</td>
+                        <td>
+                            {% if annee.active %}
+                            Active
+                            {% else %}
+                            Inactive
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'activer_annee' annee.id %}" class="btn btn-warning btn-sm"
+                                style="color: rgb(21, 21, 21);"><span class="icon text-black-50">
+                                    <em class="icon ni ni-toggle-off"></em>
+                                </span>Activer
+                            </a>
+                        </td>
+
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center;">Aucune année enregistrée</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+
+{% if messages %}
+<div class="success-message">
+    {% for message in messages %}
+    <div class="alert alert-fill alert-info col-lg-6" style="margin-left : 25%; margin-top : 2%; text-align: center;"
+        role="alert">
+        <em class="icon ni ni-alert-circle"></em>
+        <strong>{{message}}</strong>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<div class="nk-block nk-block-lg" style="margin-top : 5%; margin-left : -1.5%;">
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                <h5 class="card-title">Liste des Elèves du Premier Cycle</h5>
+            </div>
+
+            <div class="tab-content">
+
+
+                <div class="nk-block nk-block-lg">
+                    <div class="card card-bordered card-preview">
+
+                        <div class="form-group">
+
+                            <form method="post" action="{% url 'download'  %}">
+                                {% csrf_token %}
+
+                                <label class="form-label" for="nom">ELEVE</label><br>
+                                <select class="form-control form-control-user select2" name="id_eleve" id="id_eleve"
+                                    required>
+
+                                    {% for eleve in eleves %}
+                                    <option value="{{ eleve.id_eleve }}">{{ eleve.nom}} || {{ eleve.prenom}} || {{eleve.classe}} &nbsp {{ eleve.serie}}</option>
+                                    {% empty %}
+
+                                    <tr>
+                                        <td colspan="2">Aucune classe enregistrée</td>
+                                    </tr>
+                                    {% endfor %}
+                                </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="nom">TRIMESTRE</label><br>
+                            <select class="form-control form-control-user" name="tri" id="tri" required>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-lg btn-success"><em style="font-size: large;"
+                                        class="icon ni ni-check-circle"></em> &nbsp Rechercher</button>
+                            </div>
+                        </div>
+
+                        </form>
+                    </div><!-- .card-preview -->
+                </div><!-- nk-block -->
+
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

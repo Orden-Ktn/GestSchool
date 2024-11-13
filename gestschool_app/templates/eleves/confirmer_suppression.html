@@ -1,0 +1,29 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+<div class="container-fluid " style="padding: 8%;">
+
+    <div class="row  o-hidden border-0 shadow-lg my-5">
+        
+        <div class="col-lg-12">
+            <div class="p-5">
+<p style="text-align: center;">Êtes-vous sûr de vouloir supprimer {{ objet.nom }} {{ objet.prenom }} ?</p>
+<form method="POST">
+    {% csrf_token %}
+ <br>
+        <button class="btn btn-success btn-user btn-block" type="submit"><em class="icon ni ni-check-circle-fill"></em>&nbsp OUI
+        </button>
+<br><br>
+    <a href="{% url 'liste_eleve_cycle1' %}" class="col-lg-12 btn btn-danger btn-icon-split" >
+        <em class="icon ni ni-cross-circle-fill"  style="margin-left: 47.4%;"></em>&nbsp  NON
+    </a>
+
+</form>
+</div>
+</div>
+</div>
+
+</div>
+
+{% endblock %}

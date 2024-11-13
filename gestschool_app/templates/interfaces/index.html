@@ -1,0 +1,72 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+
+
+<div class="col-md-12 col-xxl-4" style="margin-top: 1%;">
+  <div class="card card-bordered card-full">
+    <div class="card-title" style="margin: auto; text-align: center; justify-content: center; margin-top: 2%;">
+      <h4 class="title">ANNEE SCOLAIRE : {{ annee_active }}</h4>
+    </div>
+    <div class="card-inner d-flex flex-column h-100">
+
+      <div class="card-title-group mb-3">
+        <div class="card-title" style="margin: auto; text-align: center; justify-content: center;">
+          <h6 class="title">Nombre total d'élève inscrit :  {{ total_students }}</h6>
+        </div>
+
+      </div>
+      <div class="progress-list gy-3">
+        <div class="progress-wrap">
+          <div class="progress-text">
+            <div class="progress-label">{{ total_students_boys }} Garçons</div>
+            <div class="progress-amount">{{percent_boys}} %</div>
+          </div>
+          <div class="progress progress-md">
+            <div class="progress-bar bg-blue" data-progress="{{ total_students_boys }}"></div>
+          </div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-text">
+            <div class="progress-label">{{ total_students_girls }} filles</div>
+            <div class="progress-amount">{{percent_girls}}%</div>
+          </div>
+          <div class="progress progress-md">
+            <div class="progress-bar bg-pink" data-progress="{{ total_students_girls }}"></div>
+          </div>
+        </div>
+        <div class="card-title" style="margin: auto; text-align: center; justify-content: center; margin-top: 2%;">
+          <h6 class="title">Nombre total de classe : {{ total_classes }}</h6>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-text">
+            <div class="progress-label">{{total_classes}}</div>
+            <div class="progress-amount"></div>
+          </div>
+          <div class="progress progress-md">
+            <div class="progress-bar bg-teal" data-progress="{{total_classes}}"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+
+  <img style="width: 20%; margin-left: 40%; margin-top: 4%; border-radius: 50%;"
+    src="/static/image/logo_gestschool.png" alt="">
+
+</div>
+
+
+
+<div class="js-preloader">
+  <div class="loading-animation tri-ring"></div>
+</div>
+
+</div>
+
+{% endblock %}

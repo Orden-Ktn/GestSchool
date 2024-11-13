@@ -1,0 +1,261 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+<div class="nk-block nk-block-lg" style="margin-top : 5%; margin-left : -1.5%;">
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                <h5 class="card-title">Liste des Elèves du Second Cycle</h5>
+            </div>
+            <ul class="nav nav-tabs nav-tabs-s2">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#tabItem9">2nde</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tabItem10">1ère</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tabItem11">Tle</a>
+                </li>
+
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tabItem9">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"> ID</th>
+                                <th scope="col">NOM</th>
+                                <th scope="col">PRENOMS</th>
+                                <th scope="col">SEXE</th>
+                                <th scope="col">DATE DE NAISSANCE</th>
+                                <th scope="col">CONTACT PARENT(S)</th>
+                                <th scope="col">STATUT</th>
+                                <th scope="col">SERIE</th>
+                                <th scope="col">ACTION</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for eleve0 in eleve0 %}
+
+                            <div class="modal fade" id="deleteEleve1{{ eleve0.id_eleve }}">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-body modal-body-lg text-center">
+                                            <div class="nk-modal py-4">
+                                                <em
+                                                    class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-alert bg-danger"></em>
+                                                <h4 class="nk-modal-title">Êtes-vous sûr de vouloir supprimer {{eleve0.nom }} {{ eleve0.prenom }}
+                                                    ?</h4>
+                                                <div class="nk-modal-text mt-n2">
+                                                    <p class="text-soft">La suppression sera définitive et les données
+                                                        de
+                                                        l'élève seront perdues.</p>
+                                                </div>
+                                                <ul class="d-flex justify-content-center gx-4 mt-4">
+                                                    <li>
+                                                        <a href="{% url 'delete_student' eleve0.id_eleve %}"> <button
+                                                                data-bs-dismiss="modal" id="deleteEvent"
+                                                                class="btn btn-success">Oui</button></a>
+                                                    </li>
+                                                    <li>
+                                                        <button data-bs-dismiss="modal" data-bs-toggle="modal"
+                                                            data-bs-target="#editEventPopup"
+                                                            class="btn btn-danger btn-dim">Non</button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div><!-- .modal-body -->
+                                    </div>
+                                </div>
+
+                                <tr>
+                                    <th scope="row">{{eleve0.id_eleve }}</th>
+                                    <td>{{eleve0.nom }}</td>
+                                    <td>{{eleve0.prenom }}</td>
+                                    <td>{{eleve0.sexe }}</td>
+                                    <td>{{eleve0.date_naissance }}</td>
+                                    <td>{{eleve0.contact }}</td>
+                                    <td>{{eleve0.statut }}</td>
+                                    <td>{{eleve0.serie }}</td>
+                                    <td>
+                                        <a href="{% url 'modify_information' eleve0.id_eleve %}"
+                                            class="btn btn-warning"><em class="icon ni ni-edit"></em>Modifier</a>
+
+                                        <a href="{% url 'delete_student' eleve0.id_eleve %}"
+                                            data-bs-target="#deleteEleve1{{ eleve0.id_eleve }}" data-bs-dismiss="modal"
+                                            data-bs-toggle="modal" class="btn btn-danger"><em
+                                                class="icon ni ni-trash"></em>Supprimer</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="9" style="text-align: center;">Aucun(e) élève enregistré(e)</td>
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-pane" id="tabItem10">
+                   <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"> ID</th>
+                                <th scope="col">NOM</th>
+                                <th scope="col">PRENOMS</th>
+                                <th scope="col">SEXE</th>
+                                <th scope="col">DATE DE NAISSANCE</th>
+                                <th scope="col">CONTACT PARENT(S)</th>
+                                <th scope="col">STATUT</th>
+                                <th scope="col">SERIE</th>
+                                <th scope="col">ACTION</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for eleve1 in eleve1 %}
+
+                            <div class="modal fade" id="deleteEleve1{{ eleve1.id_eleve }}">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-body modal-body-lg text-center">
+                                            <div class="nk-modal py-4">
+                                                <em
+                                                    class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-alert bg-danger"></em>
+                                                <h4 class="nk-modal-title">Êtes-vous sûr de vouloir supprimer {{eleve1.nom }} {{ eleve1.prenom }}
+                                                    ?</h4>
+                                                <div class="nk-modal-text mt-n2">
+                                                    <p class="text-soft">La suppression sera définitive et les données
+                                                        de l'élève seront perdues.</p>
+                                                </div>
+                                                <ul class="d-flex justify-content-center gx-4 mt-4">
+                                                    <li>
+                                                        <a href="{% url 'delete_student' eleve1.id_eleve %}"> <button
+                                                                data-bs-dismiss="modal" id="deleteEvent"
+                                                                class="btn btn-success">Oui</button></a>
+                                                    </li>
+                                                    <li>
+                                                        <button data-bs-dismiss="modal" data-bs-toggle="modal"
+                                                            data-bs-target="#editEventPopup"
+                                                            class="btn btn-danger btn-dim">Non</button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div><!-- .modal-body -->
+                                    </div>
+                                </div>
+
+                                <tr>
+                                    <th scope="row">{{eleve1.id_eleve }}</th>
+                                    <td>{{eleve1.nom }}</td>
+                                    <td>{{eleve1.prenom }}</td>
+                                    <td>{{eleve1.sexe }}</td>
+                                    <td>{{eleve1.date_naissance }}</td>
+                                    <td>{{eleve1.contact }}</td>
+                                    <td>{{eleve1.statut }}</td>
+                                    <td>{{eleve1.serie }}</td>
+                                    <td>
+                                        <a href="{% url 'modify_information' eleve1.id_eleve %}"
+                                            class="btn btn-warning"><em class="icon ni ni-edit"></em>Modifier</a>
+
+                                        <a href="{% url 'delete_student' eleve1.id_eleve %}"
+                                            data-bs-target="#deleteEleve1{{ eleve1.id_eleve }}" data-bs-dismiss="modal"
+                                            data-bs-toggle="modal" class="btn btn-danger"><em
+                                                class="icon ni ni-trash"></em>Supprimer</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="9" style="text-align: center;">Aucun(e) élève enregistré(e)</td>
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-pane" id="tabItem11">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"> ID</th>
+                                <th scope="col">NOM</th>
+                                <th scope="col">PRENOMS</th>
+                                <th scope="col">SEXE</th>
+                                <th scope="col">DATE DE NAISSANCE</th>
+                                <th scope="col">CONTACT PARENT(S)</th>
+                                <th scope="col">STATUT</th>
+                                <th scope="col">SERIE</th>
+                                <th scope="col">ACTION</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                             {% for eleve2 in eleve2 %}
+
+                            <div class="modal fade" id="deleteEleve2{{ eleve2.id_eleve }}">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-body modal-body-lg text-center">
+                                            <div class="nk-modal py-4">
+                                                <em
+                                                    class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-alert bg-danger"></em>
+                                                <h4 class="nk-modal-title">Êtes-vous sûr de vouloir supprimer {{eleve2.nom }} {{ eleve2.prenom }}
+                                                    ?</h4>
+                                                <div class="nk-modal-text mt-n2">
+                                                    <p class="text-soft">La suppression sera définitive et les données
+                                                        de l'élève seront perdues.</p>
+                                                </div>
+                                                <ul class="d-flex justify-content-center gx-4 mt-4">
+                                                    <li>
+                                                        <a href="{% url 'delete_student' eleve2.id_eleve %}"> <button
+                                                                data-bs-dismiss="modal" id="deleteEvent"
+                                                                class="btn btn-success">Oui</button></a>
+                                                    </li>
+                                                    <li>
+                                                        <button data-bs-dismiss="modal" data-bs-toggle="modal"
+                                                            data-bs-target="#editEventPopup"
+                                                            class="btn btn-danger btn-dim">Non</button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div><!-- .modal-body -->
+                                    </div>
+                                </div>
+
+                                <tr>
+                                    <th scope="row">{{eleve2.id_eleve }}</th>
+                                    <td>{{eleve2.nom }}</td>
+                                    <td>{{eleve2.prenom }}</td>
+                                    <td>{{eleve2.sexe }}</td>
+                                    <td>{{eleve2.date_naissance }}</td>
+                                    <td>{{eleve2.contact }}</td>
+                                    <td>{{eleve2.statut }}</td>
+                                    <td>{{eleve2.serie }}</td>
+                                    <td>
+                                        <a href="{% url 'modify_information' eleve2.id_eleve %}"
+                                            class="btn btn-warning"><em class="icon ni ni-edit"></em>Modifier</a>
+
+                                        <a href="{% url 'delete_student' eleve2.id_eleve %}"
+                                            data-bs-target="#deleteEleve2{{ eleve2.id_eleve }}" data-bs-dismiss="modal"
+                                            data-bs-toggle="modal" class="btn btn-danger"><em
+                                                class="icon ni ni-trash"></em>Supprimer</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="9" style="text-align: center;">Aucun(e) élève enregistré(e)</td>
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

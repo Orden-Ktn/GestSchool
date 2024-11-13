@@ -1,0 +1,30 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+<div class="nk-block nk-block-lg container" style="margin-top : 5%;">
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                <h5 class="card-title">Liste des Séries</h5>
+            </div>
+            <table class="table table-bordered">
+                <tbody>
+                    {% for serie in series %}
+                    <tr style="text-align: center;">
+                        <td>{{ serie.intitule }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center;">Aucune série enregistrée</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

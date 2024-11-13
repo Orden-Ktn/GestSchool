@@ -1,0 +1,395 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+<style>
+#datatable-article {
+    color: black; /* Couleur du texte */
+}
+
+#datatable-article th,
+#datatable-article td {
+    border: 1px solid black; /* Bordure noire visible */
+    color: black; /* Texte noir */
+}
+
+#datatable-article input {
+    color: black; /* Texte des inputs en noir */
+    border-color: black; /* Bordure des inputs en noir */
+}
+
+</style>
+
+{% if messages %}
+<div class="success-message">
+    {% for message in messages %}
+    <div class="alert alert-fill alert-info col-lg-6" style="margin-left : 25%; margin-top : 2%; text-align: center;"
+        role="alert">
+        <em class="icon ni ni-alert-circle"></em>
+        <strong>{{message}}</strong>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<p class="btn btn-success btn-icon-split" style="margin-top: 1%; margin-left: 41%;">
+                        <button class="btn btn-success btn-user btn-block" id="downloadPdf">
+                           <em class="icon ni ni-download" style="font-size: large;"></em>&nbsp TELECHARGER </button>
+                    </p>
+
+<div class="container-fluid ">
+
+    <div class="row o-hidden border-0 shadow-lg my-5 table-responsive">
+
+            <div class="p-5">
+
+                <img class="img-profile rounded-circle"
+                    style="border-radius:50%; height: auto; width: 80px; margin-right:0%; margin-top: 0%;"
+                    src="/static/image/img1.png">
+                <div style="text-align: center; margin-top:-7.5%;">
+                    <p
+                        style="font-size: medium; font-weight:bolder; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                        REPUBLIQUE DU BENIN <br> MINISTERE DES ENSEIGNEMENTS SECONDAIRE, TECHNIQUE <br> ET DE LA
+                        FORMATION PROFESSIONNELLE <br> <br> COMPLEXE SCOLAIRE GESTSCHOOL</p>
+                </div>
+                <img class="img-profile rounded-circle"
+                    style="border-radius:50%; height: auto; width: 80px; margin-left:90%; margin-top:-18%;"
+                    src="/static/image/logo_gestschool.png">
+
+
+                <h1
+                    style="text-align: center; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                    BULLETIN DE NOTES</h1>
+
+                    <table id="datatable-article" class="table table-bordered "
+                        style="color: black;">
+                        <thead>
+
+                            <th class="col-rang alert alert-primary"
+                                style="text-align: center; font-size: small; font-style: italic; padding: 1%;  ">
+                                IDENTIFIANT</th>
+                            <td class="col-numero" style="text-align: center; font-size: small; ">
+                                {{ eleve.id_eleve }}
+                                <input type="hidden" name="eleve_id" value="{{ eleve.id_eleve }}">
+                            </td>
+
+                            <th class="col-rang alert alert-primary"
+                                style="text-align: center; font-size: small; font-style: italic; padding: 1%;  ">
+                                NOM</th>
+                            <td class="col-numero" style="text-align: center; font-size: small; ">
+                                {{ eleve.nom }}
+                                <input type="hidden" name="nom" value="{{ eleve.nom }}">
+                            </td>
+
+                            <th class="col-rang alert alert-primary"
+                                style="text-align: center; font-size: small; font-style: italic; padding: 1%; ">
+                                PRENOMS</th>
+                            <td class="col-numero" style="text-align: center; font-size: small; ">
+                                {{ eleve.prenom }}
+                                <input type="hidden" name="prenom" value="{{ eleve.prenom }}">
+                            </td>
+                        </thead>
+
+                        <thead>
+                            <th class="col-rang alert alert-primary"
+                                style="text-align: center; font-size: small; font-style: italic; padding: 1%; ">
+                                SEXE</th>
+                            <td class="col-numero" style="text-align: center; font-size: small; ">
+                                {{ eleve.sexe }}
+                                <input type="hidden" name="sexe" value="{{ eleve.sexe }}">
+                            </td>
+
+                            <th class="col-rang alert alert-primary"
+                                style="text-align: center; font-size: small; font-style: italic; padding: 1%; ">
+                                CLASSE</th>
+                            <td class="col-numero" style="text-align: center; font-size: small; ">
+                                {{ eleve.classe }} {{ eleve.serie }}
+                                <input type="hidden" name="classe" value="{{ eleve.classe }}">
+                            </td>
+
+                            <th class="col-rang alert alert-primary"
+                                style="text-align: center; font-size: small; font-style: italic; padding: 1%; ">
+                                STATUT</th>
+                            <td class="col-numero" style="text-align: center; font-size: small; ">
+                                {{ eleve.statut }}
+                                <input type="hidden" name="statut" value="{{ eleve.statut }}">
+                            </td>
+                        </thead>
+
+                        <th class="col-rang" colspan="10" name
+                            style="text-align: center; font-size: medium; font-style: italic; padding: 1%; ">
+                            <input style="text-align: center; font-size: small; color: black;" name="tri"
+                                id="tri_{{ bul.id }}" type="text"
+                                class="bg-warning form-control form-control-small-input" value="TRIMESTRE : {{tri }}"
+                                readonly /></td>
+                        </th>
+
+                        <thead class="alert alert alert-primary">
+
+                            <tr style="text-align: center;">
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; font-style: italic;  width: 4%;">
+                                    MATIERE
+                                </th>
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; font-style: italic;  width: 1.5%;">
+                                    DEVOIR 1
+                                </th>
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; font-style: italic;  width: 1.5%;">
+                                    DEVOIR 2
+                                </th>
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; font-style: italic;  width: 1.5%;">
+                                    COEFFICIENT</th>
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; font-style: italic;  width: 1%;">
+                                    MOY INTERRO
+                                </th>
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; font-style: italic;  width: 1%;">
+                                    MOY
+                                    COEFFICIEE</th>
+                            </tr>
+                        </thead>
+
+                        {% for bul in bul %}
+                        <tbody class="alert" style="">
+                            <tr style="color: black; ">
+                                <td class="col-numero" name="matiere" id="matiere_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="matiere"
+                                        id="matiere_{{ bul.id }}" type="text"
+                                        class="bg-light form-control form-control-medium-input"
+                                        value="{{ bul.matiere_id.nom }}" readonly />
+                                </td>
+                                <td class="col-numero" name="dev1" id="dev1_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="dev1"
+                                        id="dev1_{{ bul.id }}" type="text"
+                                        class="bg-light form-control form-control-medium-input" value="{{ bul.dev1 }}"
+                                        readonly />
+                                </td>
+                                <td class="col-numero" name="dev2" id="dev2_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="dev2"
+                                        id="dev2_{{ bul.id }}" type="text"
+                                        class="bg-light form-control form-control-medium-input" value="{{ bul.dev2 }}"
+                                        readonly />
+                                </td>
+                                <td class="col-numero" name="coef" id="coef_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="coef"
+                                        id="coef_{{ bul.id }}" type="text"
+                                        class="bg-light form-control form-control-medium-input" value="{{ bul.coef }}"
+                                        readonly />
+                                </td>
+                                <td class="col-numero" name="moy_interro" id="moy_interro_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;"
+                                        name="moy_interro" id="moy_interro_{{ bul.id }}" type="text"
+                                        class="bg-light form-control form-control-medium-input"
+                                        value="{{ bul.moy_interro }}" readonly />
+                                </td>
+                                <td class="col-numero" name="moy_coef" id="moy_coef_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="moy_coef"
+                                        id="moy_coef_{{ bul.id }}" type="text"
+                                        class="bg-light form-control form-control-medium-input"
+                                        value="{{ bul.moy_coef }}" readonly />
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="11" style="text-align: center;">Aucune note enregistrée</td>
+                            </tr>
+                            {% endfor %}
+
+
+                         <tfoot class="alert-success">
+                            <tr>
+
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; padding: 1%; ">
+                                     MOYENNE GENERALE</th>
+
+                                <td class="col-numero" name="dev2" id="dev2_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="dev2"
+                                        id="dev2_{{ bul.id }}" type="text"
+                                        class="bg-green alert alert-success form-control form-control-medium-input" value="{{ moyenne_generale }}"
+                                        readonly />
+                                </td>
+
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; padding: 1%; ">
+                                    RANG</th>
+
+                                  <td class="col-numero" name="dev2" id="dev2_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="dev2"
+                                        id="dev2_{{ bul.id }}" type="text"
+                                        class="bg-green alert alert-success form-control form-control-medium-input" value="{{ rang }}"
+                                        readonly />
+                                </td>
+
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; padding: 1%; ">
+                                    DECISION</th>
+
+                                  <td class="col-numero" name="dev2" id="dev2_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="dev2"
+                                        id="dev2_{{ bul.id }}" type="text"
+                                        class="bg-green alert alert-success form-control form-control-medium-input" value="{{ statut }}"
+                                        readonly />
+                                </td>
+                            </tr>
+                        </tfoot>
+
+                        <tfoot class="alert-success">
+                            <tr>
+
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; padding: 1%; ">
+                                    TOTAL</th>
+
+                                <td class="col-numero" name="dev2" id="dev2_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="dev2"
+                                        id="dev2_{{ bul.id }}" type="text"
+                                        class="bg-green alert alert-success form-control form-control-medium-input" value="{{total}}"
+                                        readonly />
+                                </td>
+
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; padding: 1%; ">
+                                    MOYENNE TRIMESTRIELLE</th>
+
+                                  <td class="col-numero" name="dev2" id="dev2_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="dev2"
+                                        id="dev2_{{ bul.id }}" type="text"
+                                        class="bg-green alert alert-success form-control form-control-medium-input" value="{{ moyenne3 }}"
+                                        readonly />
+                                </td>
+
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; padding: 1%; ">
+                                    RANG</th>
+
+                                <td class="col-numero" name="dev2" id="dev2_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="dev2"
+                                        id="dev2_{{ bul.id }}" type="text"
+                                        class="bg-green alert alert-success form-control form-control-medium-input" value="{{ rang }}"
+                                        readonly />
+                                </td>
+
+                            </tr>
+                        </tfoot>
+
+                        <tfoot class="alert-success">
+                            <tr>
+                                <th class="col-rang" colspan="6 "
+                                    style="text-align: center; font-size: medium; padding: 1%; ">
+                                     RECAPITULATIF DES RESULTATS</th>
+                            </tr>
+                        </tfoot>
+
+                                                 <tfoot class="alert-success">
+                            <tr>
+
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; padding: 1%; ">
+                                     MOYENNE TRIMESTRE 1</th>
+
+                                <td class="col-numero" name="dev2" id="dev2_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="dev2"
+                                        id="dev2_{{ bul.id }}" type="text"
+                                        class="bg-green alert alert-success form-control form-control-medium-input" value="{{ moyenne1 }}"
+                                        readonly />
+                                </td>
+
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; padding: 1%; ">
+                                    MOYENNE TRIMESTRE 2</th>
+
+                                  <td class="col-numero" name="dev2" id="dev2_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="dev2"
+                                        id="dev2_{{ bul.id }}" type="text"
+                                        class="bg-green alert alert-success form-control form-control-medium-input" value="{{ moyenne2 }}"
+                                        readonly />
+                                </td>
+
+                                <th class="col-rang"
+                                    style="text-align: center; font-size: small; padding: 1%; ">
+                                    MOYENNE TRIMESTRE 3</th>
+
+                                  <td class="col-numero" name="dev2" id="dev2_{{ bul.id_eleve }}"
+                                    style="text-align: center; font-size: small; width: 1%; ">
+                                    <input style="text-align: center; font-size: small; color: black;" name="dev2"
+                                        id="dev2_{{ bul.id }}" type="text"
+                                        class="bg-green alert alert-success form-control form-control-medium-input" value="{{ moyenne3 }}"
+                                        readonly />
+                                </td>
+                            </tr>
+                        </tfoot>
+
+                        </tbody>
+                    </table>
+
+            </div>
+        </div>
+
+
+    </div>
+
+        <script>
+        document.getElementById('downloadPdf').addEventListener('click', function() {
+            var doc = new jsPDF('p', 'pt', 'a4');
+            var elementHTML = document.querySelector('.table-responsive');
+            var margins = {
+                top: 40,
+                bottom: 60,
+                left: 40,
+                width: 522
+            };
+
+            html2canvas(elementHTML, {
+                allowTaint: true,
+                scale: 1000 // Augmente la résolution de l'image pour une meilleure qualité
+            }).then(function(canvas) {
+                var imgData = canvas.toDataURL('image/png');
+                var imgWidth = 510; // Largeur d'une page A4 en points
+                var pageHeight = 800; // Hauteur d'une page A4 en points
+                var imgHeight = canvas.height * imgWidth / canvas.width;
+                var heightLeft = imgHeight;
+
+                var position = 20;
+
+                // Set font size for the PDF
+                doc.setFontSize(80); // Ajustez cette valeur pour augmenter ou diminuer la taille de la police
+
+                doc.addImage(imgData, 'PNG', 40, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 40) {
+                    position = heightLeft - imgHeight;
+                    doc.addPage();
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                doc.save('liste_participants_noel_partage.pdf');
+            });
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+
+
+
+{% endblock %}

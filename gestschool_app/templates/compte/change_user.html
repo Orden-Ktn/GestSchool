@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <base href="./static/./static/./static/">
+    <meta charset="utf-8">
+    <meta name="author" content="Softnio">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description"
+        content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+    <!-- Fav Icon  -->
+    <link rel="icon" href="/static/image/favicon/logo_gestschool.png" type="image/x-icon">
+    <!-- Page Title  -->
+    <title>GestSchool</title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="/static/css/dashlite.css?ver=3.2.3">
+    <link id="skin-default" rel="stylesheet" href="/static/css/theme.css?ver=3.2.3">
+    <link rel="stylesheet" href="/static/css/dashlite.css">
+
+</head>
+
+<body class="nk-body npc-default pg-auth">
+    <div class="nk-app-root">
+        <!-- main @s -->
+        <div class="nk-main ">
+            <!-- wrap @s -->
+            <div class="nk-wrap nk-wrap-nosidebar">
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="nk-split nk-split-page nk-split-lg">
+                        <div class="nk-split-content nk-block-area nk-block-area-column nk-auth-container bg-white">
+                            <div class="absolute-top-right d-lg-none p-3 p-sm-5">
+                                <a href="#" class="toggle btn-white btn btn-icon btn-light" data-target="athPromo"><em
+                                        class="icon ni ni-info"></em></a>
+                            </div>
+                            <div class="nk-block nk-block-middle nk-auth-body" style="margin-top: 20%;">
+                                <div class="brand-logo pb-5">
+                                    <a href="html/index.html" class="logo-link">
+                                        <h2 class="nk-block-title">Change ID</h2>
+                                    </a>
+                                </div>
+                                <div class="nk-block-head">
+                                    <div class="nk-block-head-content">
+                                        {% if messages %}
+                                        <div class="error-message">
+                                            {% for message in messages %}
+                                            <span class="btn btn-danger btn-user btn-block">{{message}} <i
+                                                    class="fa fa-check-circle-o"></i></span>
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+
+                                    </div>
+                                </div><!-- .nk-block-head -->
+
+                                <form class="form-validate is-alter" method="post" action="{% url 'change_user' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <div class="form-label-group">
+                                            <label class="form-label" for="email-address">New Username</label>
+                                        </div>
+                                        <div class="form-control-wrap">
+                                            <input autocomplete="off" type="text" class="form-control form-control-lg"
+                                                required name="new_username" id="username"
+                                                placeholder="Enter your new username">
+                                        </div>
+                                    </div><!-- .form-group -->
+                                    <div class="form-group">
+                                        <div class="form-label-group">
+                                            <label class="form-label" for="password">New Password</label>
+
+                                        </div>
+
+                                        <div class="form-control-wrap">
+                                            <a tabindex="-1" href="#"
+                                                class="form-icon form-icon-right passcode-switch lg"
+                                                data-target="password">
+                                                <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                            </a>
+                                            <input autocomplete="new-password" type="password"
+                                                class="form-control form-control-lg" required name="new_password"
+                                                id="password" placeholder="Enter your new password">
+                                        </div>
+                                    </div><!-- .form-group -->
+
+                                    <div class="form-group">
+                                        <button class="btn btn-lg btn-primary btn-block" type='submit'>Change  &nbsp<em class="icon ni ni-reload"></em></button>
+                                    </div>
+                                </form>
+
+                            </div><!-- .nk-block -->
+                        </div><!-- .nk-split-content -->
+                        <div class="nk-split-content nk-split-stretch bg-lighter d-flex toggle-break-lg toggle-slide toggle-slide-right"
+                            data-toggle-body="true" data-content="athPromo" data-toggle-screen="lg"
+                            data-toggle-overlay="true">
+                            <div class="slider-wrap w-100 w-max-550px p-3 p-sm-5 m-auto">
+                                <div class="slider-init">
+                                    <div class="slider-item">
+                                        <div class="nk-feature nk-feature-center">
+                                            <div class="nk-feature-img">
+                                                <img class="round" src="/static/images/slides/promo-a.png"
+                                                    srcset="/static/image/logo_gestschool.png" alt="">
+                                            </div>
+                                            <div class="nk-feature-content py-4 p-sm-5">
+                                                <h4>GestSchool</h4>
+                                                <p>Le numérique à votre portée</p>
+                                            </div>
+                                        </div>
+                                    </div><!-- .slider-item -->
+
+                                </div><!-- .slider-init -->
+                                <div class="slider-dots"></div>
+                                <div class="slider-arrows"></div>
+                            </div><!-- .slider-wrap -->
+                        </div><!-- .nk-split-content -->
+                    </div><!-- .nk-split -->
+                </div>
+                <!-- wrap @e -->
+            </div>
+            <!-- content @e -->
+        </div>
+        <!-- main @e -->
+    </div>
+
+
+    <!-- JavaScript -->
+    <script src="/static/js/bundle.js?ver=3.2.3"></script>
+    <script src="/static/js/scripts.js?ver=3.2.3"></script>
+    <script src="/static/js/main.js"></script>
+    <!-- select region modal -->
+</body>
+
+</html>

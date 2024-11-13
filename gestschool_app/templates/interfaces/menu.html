@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <base href="../">
+    <meta charset="utf-8">
+    <meta name="author" content="Softnio">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description"
+        content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+
+    <!-- Page Title  -->
+    <title>GestSchool</title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="/static/css/dashlite.css?ver=3.2.3">
+    <link id="skin-default" rel="stylesheet" href="/static/css/theme.css?ver=3.2.3">
+    <link rel="icon" href="/static/image/favicon/logo_gestschool.png" type="image/x-icon">
+    <link href="/static/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+        .clock-item {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .clock-item .val {
+            font-size: 36px;
+            font-weight: bold;
+            color: rgb(246, 242, 242);
+            margin: 0;
+        }
+
+        .clock-item .type-time {
+            font-size: 16px;
+            color: #f1eded;
+            margin: 0;
+        }
+
+
+
+        @font-face {
+            font-family: 'Ubuntu-MediumItalic.ttf';
+            src: url('Ubuntu-MediumItalic.ttf');
+            font-family: 'Ubuntu-BoldItalic.ttf';
+            src: url('Ubuntu-BoldItalic.ttf');
+        }
+
+        .horloge {
+            font-family: 'Ubuntu-BoldItalic.ttf';
+            font-size: large;
+        }
+
+        .services {
+            font-family: 'Ubuntu-MediumItalic.ttf';
+            font-size: large;
+        }
+    </style>
+</head>
+
+<body class="nk-body npc-default has-apps-sidebar has-sidebar ">
+    <div class="nk-app-root">
+        <div class="nk-apps-sidebar is-dark">
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="clock-item clock-time countdown-time-value">
+
+                    <ul style="margin-top: 17em;">
+                        <li class="nk-menu-item">
+                            <a class="btn btn-icon btn-lg btn-primary" class="circle horloge" id="hours" style="width: 60%;  justify-content: center;"></a>
+                        </li>
+
+                        <br><br>
+
+                        <li class="nk-menu-item">
+                            <a href="#" class="btn btn-icon btn-lg btn-primary" class="circle horloge" id="minutes" style="width: 60%;  justify-content: center;"></a>
+                        </li>
+
+                        <br> <br>
+
+                        <li class="nk-menu-item">
+                            <a href="#" class="btn btn-icon btn-lg btn-primary" class="circle horloge" id="seconds" style="width: 60%;  justify-content: center;"></a>
+                        </li>
+                    </ul>
+
+                </div><!-- /.clock-item -->
+            </div><!-- /.col -->
+
+
+        </div>
+        <!-- main @s -->
+        <div class="nk-main ">
+            <!-- wrap @s -->
+            <div class="nk-wrap ">
+                <!-- main header @s -->
+                <div class="nk-header nk-header-fixed is-light">
+                    <div class="container-fluid">
+                        <div class="nk-header-wrap">
+                            <div class="nk-menu-trigger d-xl-none ms-n1">
+                                <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em
+                                        class="icon ni ni-menu"></em></a>
+                            </div>
+                            <div class="nk-header-app-name">
+                                    <div class="nk-header-app-logo">
+                                        <img src="/static/image/logo_gestschool.png" alt="" style="width: 800%;">
+                                    </div>
+                                <div class="nk-header-app-info">
+                                    <span class="lead-text"></span>
+                                </div>
+                            </div>
+                            <div class="nk-header-menu is-light">
+                                <div class="nk-header-menu-inner">
+                                    <!-- Menu -->
+                                    <ul class="nk-menu nk-menu-main">
+                                        <li class="nk-menu-item">
+                                            <a class="nk-menu-link">
+                                                <span class="nk-menu-text">{{user.username}}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="html/index.html" class="nk-menu-link">
+                                                <span class="nk-menu-text"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <!-- Menu -->
+                                </div>
+                            </div>
+                            <div class="nk-header-tools">
+                                <ul class="nk-quick-nav">
+                                    <li class="dark-switch">
+                                        <em class="icon ni ni-toggle-off"></em>
+                                    </li>
+                                    <li class="dropdown user-dropdown">
+                                        <a href="#" class="dropdown-toggle me-n1" data-bs-toggle="dropdown">
+                                            <div class="user-toggle">
+                                                <div class="user-avatar sm">
+                                                    <img class="img-profile rounded-circle"
+                                                        src="/static/image/icone.png">
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-end">
+                                            <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+                                                <div class="user-card">
+                                                    <div class="user-avatar">
+                                                        <img class="img-profile rounded-circle"
+                                                            src="/static/image/icone.png">
+                                                    </div>
+                                                    <div class="user-info">
+                                                        <span class="lead-text">{{user.username}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="{% url 'change_user' %}"><em
+                                                                class="icon ni ni-setting-alt"></em><span>Paramètre de
+                                                                connexion</span></a></li>
+                                                    <li><a href="{% url 'lock_screen' %}"><em
+                                                                class="icon ni ni-lock"></em><span>Verrouiller
+                                                                l'écran</span></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="{% url 'deconnexion' %}"><em
+                                                                class="icon ni ni-signout"></em><span>Déconnexion</span></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- main header @e -->
+                <div class="nk-sidebar" data-content="sidebarMenu">
+                    <div class="nk-sidebar-inner" data-simplebar>
+                        <ul class="nk-menu nk-menu-md">
+
+                            <li class="nk-menu-item">
+                                <a href="{% url 'index' %}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-dashboard"
+                                            style="font-size: x-large;"></em></span>&nbsp
+                                    <span class="nk-menu-text"
+                                        style="font-size: medium;  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+                                        Dashboard</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+
+                            <li class="nk-menu-item has-sub">
+                                <a href="#" class="nk-menu-link nk-menu-toggle">
+                                    <span class="nk-menu-icon"><em style="font-size: x-large;"
+                                            class="icon ni ni-calender-date"></em></span>&nbsp
+                                    <span class="nk-menu-text"
+                                        style="font-size: medium; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Année
+                                        Scolaire</span>
+                                </a>
+                                <ul class="nk-menu-sub">
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'ajout_annee' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Ajouter une année scolaire</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'liste_annees' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Liste des années scolaires</span></a>
+                                    </li>
+                                </ul><!-- .nk-menu-sub -->
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item has-sub">
+                                <a href="#" class="nk-menu-link nk-menu-toggle">
+                                    <span class="nk-menu-icon"><em style="font-size: x-large;"
+                                            class="icon ni ni-building"></em></span>&nbsp
+                                    <span class="nk-menu-text"
+                                        style="font-size: medium; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Classe</span>
+                                </a>
+                                <ul class="nk-menu-sub">
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'ajout_classe' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Ajouter classe</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'liste_classes' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Liste des classes</span></a>
+                                    </li>
+                                </ul><!-- .nk-menu-sub -->
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item has-sub">
+                                <a href="#" class="nk-menu-link nk-menu-toggle">
+                                    <span class="nk-menu-icon"><em style="font-size: x-large;"
+                                            class="icon ni ni-bulb"></em></span>&nbsp
+                                    <span class="nk-menu-text"
+                                        style="font-size: medium; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Série</span>
+                                </a>
+                                <ul class="nk-menu-sub">
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'ajout_serie' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Ajouter série</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'liste_series' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Liste des séries</span></a>
+                                    </li>
+                                </ul><!-- .nk-menu-sub -->
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item has-sub">
+                                <a href="#" class="nk-menu-link nk-menu-toggle">
+                                    <span class="nk-menu-icon"><em style="font-size: x-large;"
+                                            class="icon ni ni-calc"></em></span>&nbsp
+                                    <span class="nk-menu-text"
+                                        style="font-size: medium; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Matière</span>
+                                </a>
+                                <ul class="nk-menu-sub">
+                                    <li class="nk-menu-item">
+                                        <a href="{%url 'ajout_matiere'%}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Ajouter matière</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{%url 'liste_matieres'%}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Listes des matières</span></a>
+                                    </li>
+                                </ul><!-- .nk-menu-sub -->
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item has-sub">
+                                <a href="#" class="nk-menu-link nk-menu-toggle">
+                                    <span class="nk-menu-icon"><em style="font-size: x-large;"
+                                            class="icon ni ni-calendar-check"></em></span>&nbsp
+                                    <span class="nk-menu-text"
+                                        style="font-size: medium; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+                                        Emplois du Temps</span>
+                                </a>
+                                <ul class="nk-menu-sub">
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'ajout_emploi' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Ajouter emploi</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'liste_emploi' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Liste des Emplois</span></a>
+                                    </li>
+                                </ul><!-- .nk-menu-sub -->
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item has-sub">
+                                <a href="#" class="nk-menu-link nk-menu-toggle">
+                                    <span class="nk-menu-icon"><em style="font-size: x-large;"
+                                            class="icon ni ni-user-alt"></em></span>&nbsp
+                                    <span class="nk-menu-text"
+                                        style="font-size: medium; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Elève</span>
+                                </a>
+                                <ul class="nk-menu-sub">
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'ajout_eleve' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Ajouter élève</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'liste_eleve_cycle1' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Liste des élèves 1er Cycle</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'liste_eleve_cycle2' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Liste des élèves 2nd Cycle</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'all_eleve' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Liste générale des élèves</span></a>
+                                    </li>
+                                </ul><!-- .nk-menu-sub -->
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item has-sub">
+                                <a href="#" class="nk-menu-link nk-menu-toggle">
+                                    <span class="nk-menu-icon"><em style="font-size: x-large;"
+                                            class="icon ni ni-edit-alt"></em></span>&nbsp
+                                    <span class="nk-menu-text"
+                                        style="font-size: medium; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Notes</span>
+                                </a>
+                                <ul class="nk-menu-sub">
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'eleve_cycle1' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Elèves 1er Cycle</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'eleve_cycle2' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Elèves 2nd Cycle</span></a>
+                                    </li>
+                                </ul><!-- .nk-menu-sub -->
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item has-sub">
+                                <a href="#" class="nk-menu-link nk-menu-toggle">
+                                    <span class="nk-menu-icon"><em style="font-size: x-large;"
+                                            class="icon ni ni-card-view"></em></span>&nbsp
+                                    <span class="nk-menu-text"
+                                        style="font-size: medium; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Bulletins</span>
+                                </a>
+                                <ul class="nk-menu-sub">
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'eleve1' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Elèves 1er Cycle</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'eleve2' %}" class="nk-menu-link"><span
+                                                class="nk-menu-text">Elèves 2nd Cycle</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{% url 'verification' %}" class="nk-menu-link"><span class="nk-menu-text">Télécharger un
+                                                bulletin</span></a>
+                                    </li>
+
+
+
+                                </ul><!-- .nk-menu-sub -->
+
+                            <li class="nk-menu-item" style="margin-top: 18em;">
+                                <span>&nbsp&nbsp&nbsp&nbsp &nbsp GestSchool by<em>Orden KOUTON </em></span>
+                            </li><!-- .nk-menu-item -->
+
+                            </li><!-- .nk-menu-item -->
+                        </ul><!-- .nk-menu -->
+                    </div>
+                </div>
+
+                <!-- content @s -->
+                <div>
+
+                    {% block content %}
+
+
+
+                    {% endblock %}
+                </div>
+                <!-- content @e -->
+
+            </div>
+            <!-- wrap @e -->
+        </div>
+        <!-- main @e -->
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/static/js/bundle.js?ver=3.2.3"></script>
+    <script src="/static/js/scripts.js?ver=3.2.3"></script>
+    <script src="/static/js/charts/gd-analytics.js?ver=3.2.3"></script>
+    <script src="/static/js/libs/jqvmap.js?ver=3.2.3"></script>
+    <script src="/static/js/libs/datatable-btns.js?ver=3.2.3"></script>
+    <script src="/static/js/libs/fullcalendar.js?ver=3.2.3"></script>
+    <script src="/static/js/apps/calendar.js?ver=3.2.3"></script>
+    <script src="/static/js/select2.min.js"></script>
+
+    <script>
+        function updateClock() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+
+            // Formate les heures, les minutes et les secondes pour qu'ils aient toujours deux chiffres
+            hours = ('0' + hours).slice(-2);
+            minutes = ('0' + minutes).slice(-2);
+            seconds = ('0' + seconds).slice(-2);
+
+            // Met à jour les éléments avec l'heure, les minutes et les secondes actuelles
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+        }
+
+        // Met à jour l'horloge chaque seconde
+        setInterval(updateClock, 1000);
+
+        // Met à jour l'horloge dès le chargement de la page
+        updateClock();
+    </script>
+
+     <script>
+        // In your Javascript (external .js resource or <script> tag)
+            $(document).ready(function () {
+            $('.select2').select2();
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+<div class="nk-block nk-block-lg container" style="margin-top : 2.5%;">
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                <h5 class="card-title">Liste des Matières</h5>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="text-align: center; font-weight: bolder;">Nom</th>
+                        <th style="text-align: center; font-weight: bolder;">Sigle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for matiere in matieres %}
+                    <tr style="text-align: center;">
+                        <td>{{ matiere.nom }}</td>
+                        <td>{{ matiere.sigle }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center;">Aucune matière enregistrée</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

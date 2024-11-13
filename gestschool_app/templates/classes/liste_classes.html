@@ -1,0 +1,40 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+
+{% if messages %}
+<div class="success-message">
+    {% for message in messages %}
+    <span class="btn btn-dark btn-user btn-block">{{message}}</span>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<div class="nk-block nk-block-lg container" style="margin-top : 5%;">
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                <h5 class="card-title">Liste des Classes</h5>
+            </div>
+            <table class="table table-bordered">
+
+                <tbody>
+                    {% for emploi in emplois %}
+                    <tr style="text-align: center;">
+                        <td>{{ emploi.classe }} {{ emploi.serie }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center;">Aucune classe enregistrée</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

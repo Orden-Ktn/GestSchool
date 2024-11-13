@@ -1,0 +1,165 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+
+{% if messages %}
+<div class="success-message">
+    {% for message in messages %}
+        <div class="alert alert-icon alert-primary col-lg-6" style="margin-left : 25%; margin-top : 2%; text-align: center;" role="alert">
+            <em class="icon ni ni-alert-circle"></em>
+            <strong>{{message}}</strong>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<div class="nk-block nk-block-lg container" style="margin-top : 5%;">
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                <h5 class="card-title">Ajout Elève</h5>
+            </div>
+            <form role="form" method="post" action="{% url 'ajouter_eleve' %}">
+                {% csrf_token %}
+                <div class="row g-4">
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Nom</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" name="nom" id="nom" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Prénom</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" name="prenom" id="prenom" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Date de naissance</label>
+                            <div class="form-control-wrap">
+                                <input type="date" class="form-control" name="date" id="date" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Sexe</label>
+                            <div class="col-lg-7">
+                                <ul class="custom-control-group g-3 align-center flex-wrap">
+                                    <li>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" checked name="sexe"
+                                                value="F" id="reg-enable">
+                                            <label class="custom-control-label" for="reg-enable">Féminin</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" name="sexe" value="M"
+                                                id="reg-disable">
+                                            <label class="custom-control-label" for="reg-disable">Masculin</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Contact parent(s)</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" name="contact" id="contact" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label" for="fv-phone">Statut</label>
+                            <div class="form-control-wrap">
+                                <ul class="custom-control-group">
+                                    <li>
+                                        <div class="custom-control custom-radio custom-control-pro no-control">
+                                            <input type="radio" class="custom-control-input" name="statut" id="sex-male"
+                                                value="A" required>
+                                            <label class="custom-control-label" for="sex-male">Ancien/Ancienne</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="custom-control custom-radio custom-control-pro no-control">
+                                            <input type="radio" class="custom-control-input" name="statut"
+                                                id="sex-female" value="N"  required>
+                                            <label class="custom-control-label"
+                                                for="sex-female">Nouveau/Nouvelle</label>
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label" for="fv-topics">Classe</label>
+                            <div class="form-control-wrap ">
+                                <select class="form-select js-select2" id="fv-topics" name="classe"
+                                    data-placeholder="Choisir une classe" required>
+
+                                    {% for classe in classes %}
+                                    <option value="{{ classe.sigle}}">{{ classe.sigle}}</option>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="2">Aucune classe enregistrée</td>
+                                    </tr>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label" for="fv-topics">Série</label>
+                            <div class="form-control-wrap ">
+                                <select class="form-select js-select2" id="fv-topics" name="serie"
+                                    data-placeholder="Choisir une série" required>
+                                    <option label="empty" value=" "></option>
+                                    {% for serie in series %}
+                                    <option value="{{ serie.intitule }}">{{ serie.intitule }}</option>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="2">Aucune série enregistrée</td>
+                                    </tr>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-lg btn-success"><em style="font-size: large;"
+                                    class="icon ni ni-check-circle-cut"></em> &nbsp Enregistrer</button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div><!-- .nk-block -->
+
+{% endblock %}
