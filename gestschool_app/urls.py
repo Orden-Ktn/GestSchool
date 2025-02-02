@@ -55,6 +55,7 @@ urlpatterns = [
     path('ajout élève/', views.ajout_eleve, name='ajout_eleve'),
     path('ajouter élève/', views.ajouter_eleve, name='ajouter_eleve'),
     path('liste élèves premier cycle/', views.liste_eleve_cycle1, name='liste_eleve_cycle1'),
+    path('liste de tous les élèves/', views.all_eleve, name='all_eleve'),
     path('liste élèves second cycle/', views.liste_eleve_cycle2, name='liste_eleve_cycle2'),
     path('modifier elève/<int:id_eleve>/', views.modify_information, name='modify_information'),
     path('supprimer élève/<int:id_eleve>/', views.delete_student, name='delete_student'),

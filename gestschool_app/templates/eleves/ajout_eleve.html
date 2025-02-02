@@ -115,7 +115,7 @@
                         <div class="form-group">
                             <label class="form-label" for="fv-topics">Classe</label>
                             <div class="form-control-wrap ">
-                                <select class="form-select js-select2" id="fv-topics" name="classe"
+                                <select class="form-select " name="classe"
                                     data-placeholder="Choisir une classe" required>
 
                                     {% for classe in classes %}
@@ -134,9 +134,9 @@
                         <div class="form-group">
                             <label class="form-label" for="fv-topics">Série</label>
                             <div class="form-control-wrap ">
-                                <select class="form-select js-select2" id="fv-topics" name="serie"
+                                <select class="form-select" id="fv-topics" name="serie"
                                     data-placeholder="Choisir une série" required>
-                                    <option label="empty" value=" "></option>
+                                    <option label="" value=" "></option>
                                     {% for serie in series %}
                                     <option value="{{ serie.intitule }}">{{ serie.intitule }}</option>
                                     {% empty %}

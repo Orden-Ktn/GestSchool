@@ -411,28 +411,25 @@ def ajouter_eleve(request):
     return render(request, 'ajout_eleve.html')  
 
 def liste_eleve_cycle1(request):
-       # Récupération de toutes les eleves1
-       eleve6 = Eleve.objects.filter(classe="6ème")
-       eleve5 = Eleve.objects.filter(classe="5ème")
-       eleve4 = Eleve.objects.filter(classe="4ème")
-       eleve3 = Eleve.objects.filter(classe="3ème")
+       annee_active = AnneeScolaire.objects.filter(active=True).first()
+       eleve6 = Eleve.objects.filter(classe="6ème", annee_scolaire_id=annee_active)
+       eleve5 = Eleve.objects.filter(classe="5ème", annee_scolaire_id=annee_active)
+       eleve4 = Eleve.objects.filter(classe="4ème", annee_scolaire_id=annee_active)
+       eleve3 = Eleve.objects.filter(classe="3ème", annee_scolaire_id=annee_active)
        return render(request, 'eleves/liste_eleve_cycle1.html', {'eleve6': eleve6, 'eleve5': eleve5, 'eleve4': eleve4, 'eleve3': eleve3})
 
 def liste_eleve_cycle2(request):
-       # Récupération de toutes les eleves2
-       eleve0 = Eleve.objects.filter(classe="2nde")
-       eleve1 = Eleve.objects.filter(classe="1ère")
-       eleve2 = Eleve.objects.filter(classe="Tle")
+
+       annee_active = AnneeScolaire.objects.filter(active=True).first()
+       eleve0 = Eleve.objects.filter(classe="2nde", annee_scolaire_id=annee_active)
+       eleve1 = Eleve.objects.filter(classe="1ère", annee_scolaire_id=annee_active)
+       eleve2 = Eleve.objects.filter(classe="Tle", annee_scolaire_id=annee_active)
        return render(request, 'eleves/liste_eleve_cycle2.html', {'eleve0': eleve0, 'eleve1': eleve1, 'eleve2': eleve2})
 
 def all_eleve(request):
        # Récupération de toutes les eleves1
        annee_active = AnneeScolaire.objects.filter(active=True).first()
-
-       if annee_active:
-           eleves = Eleve.objects.filter(annee_scolaire=annee_active).order_by('nom')
-       else:
-           eleves = Eleve.objects.all().order_by('nom')
+       eleves = Eleve.objects.filter(annee_scolaire_id=annee_active).order_by('nom')
 
        return render(request, 'eleves/all_eleve.html', {'eleves': eleves})
 
