@@ -453,7 +453,6 @@ def modify_information(request, id_eleve):
 def delete_student(request, id_eleve):
     objet = Eleve.objects.get(pk=id_eleve)
     objet.delete()
-    return redirect('all_eleve')
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
