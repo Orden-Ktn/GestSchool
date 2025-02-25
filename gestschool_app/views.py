@@ -58,7 +58,7 @@ def deverouillage(request):
     return render(request, 'compte/lock_screen.html')
     
       
-@login_required
+
 def index(request):
     total_classes = Classe_exist.objects.count()
     total_students = Eleve.objects.count()
