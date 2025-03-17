@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <base href="./static/auth/static/./static/auth/static/./static/auth/static/">
+    <meta charset="utf-8">
+    <meta name="author" content="Softnio">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description"
+        content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+    <!-- Fav Icon  -->
+    <link rel="icon" href="/static/auth/static/image/favicon/logo_gestschool.png" type="image/x-icon">
+    <!-- Page Title  -->
+    <title>GestSchool</title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="/static/auth/static/css/dashlite.css?ver=3.2.3">
+    <link id="skin-default" rel="stylesheet" href="/static/auth/static/css/theme.css?ver=3.2.3">
+    <link rel="stylesheet" href="/static/auth/static/css/dashlite.css">
+
+</head>
+
+<body class="nk-body npc-default pg-auth">
+    <div class="nk-app-root">
+        <!-- main @s -->
+        <div class="nk-main ">
+            <!-- wrap @s -->
+            <div class="nk-wrap nk-wrap-nosidebar">
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="nk-split nk-split-page nk-split-lg">
+                        <div class="nk-split-content nk-block-area nk-block-area-column nk-auth-container bg-white">
+                            <div class="absolute-top-right d-lg-none p-3 p-sm-5">
+                                <a href="#" class="toggle btn-white btn btn-icon btn-light" data-target="athPromo"><em
+                                        class="icon ni ni-info"></em></a>
+                            </div>
+                            <div class="nk-block nk-block-middle nk-auth-body" style="margin-top: 10%;">
+                                <div class="brand-logo pb-5">
+                                    <a href="html/index.html" class="logo-link">
+                                        <h2 class="nk-block-title">Connexion</h2>
+                                    </a>
+                                </div>
+
+                                {% if messages %}
+                                        <div class="success-message">
+                                            {% for message in messages %}
+                                                <div class="alert alert-icon alert-info col-lg-12" style="margin-left : 1%; margin-top : 1%; text-align: center;" role="alert">
+                                                    <em class="icon ni ni-alert-circle"></em>
+                                                    <strong>{{message}}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                {% endif %}
+
+                                <form class="form-validate is-alter" method="post" action="{% url 'connexion' %}" style=" margin-top : 2%;">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <div class="form-label-group">
+                                            <label class="form-label" for="email-address">Nom d'utilisateur</label>
+                                        </div>
+                                        <div class="form-control-wrap">
+                                            <input autocomplete="off" type="text" class="form-control form-control-lg"
+                                                required name="username" id="username"
+                                                placeholder="Enter your username">
+                                        </div>
+                                    </div>
+                                    <!-- <div class="form-group">
+                                        <div class="form-label-group">
+                                            <label class="form-label" for="email-address">Rôle</label>
+                                        </div>
+                                        <div class="form-control-wrap">
+                                            <select class="form-control" name="role">
+                                                <option>Choississez votre rôle</option>
+                                                <option value="Superadmin">Superadmin</option>
+                                                <option value="Censeur">Censeur</option>
+                                                <option value="Professeur">Professeur</option>
+                                                <option value="Secrétaire">Secrétaire</option>
+                                                <option value="Surveillant">Surveillant</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group">
+                                        <div class="form-label-group">
+                                            <label class="form-label" for="password">Mot de passe</label>
+
+                                        </div>
+
+                                        <div class="form-control-wrap">
+                                            <a tabindex="-1" href="#"
+                                                class="form-icon form-icon-right passcode-switch lg"
+                                                data-target="password">
+                                                <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                            </a>
+                                            <input autocomplete="new-password" type="password"
+                                                class="form-control form-control-lg" required name="password"
+                                                id="password" placeholder="Enter your password">
+                                        </div>
+                                    </div><!-- .form-group -->
+
+                                    <div class="form-group">
+                                        <button class="btn btn-lg btn-primary btn-block">Se connecter &nbsp<em
+                                                class="icon ni ni-signin"></em></button>
+                                    </div>
+                                </form><!-- form -->
+                                <div class="form-note-s2 pt-4" style="text-align: center;"> Vous n'avez pas de compte? <a href="{% url 'inscription' %}">Créez-en un</a>
+                                </div>
+                            </div><!-- .nk-block -->
+                        </div><!-- .nk-split-content -->
+                        
+
+
+                        <div class="image-container">
+                            <img src="/static/auth/static/image/eleve1.jpg" alt="" style="background-size: cover; height: 100vh; object-fit: cover; box-shadow: 30px 30px 50px rgba(1, 1, 1, 1);">
+                        </div>
+
+                    </div>
+                    <!-- wrap @e -->
+                </div>
+                <!-- content @e -->
+            </div>
+            <!-- main @e -->
+        </div>
+
+        <div class="preloader-body bg-lighter">
+            <div class="cube-wrapper">
+                <div class="cube-folding">
+                    <span class="leaf1"></span>
+                    <span class="leaf2"></span>
+                    <span class="leaf3"></span>
+                    <span class="leaf4"></span>
+                </div>
+                <span class="loading" data-name="Loading">Loading</span>
+            </div>
+        </div>
+
+        <!-- JavaScript -->
+        <script src="/static/auth/static/js/bundle.js?ver=3.2.3"></script>
+        <script src="/static/auth/static/js/scripts.js?ver=3.2.3"></script>
+        <script src="/static/auth/static/js/main.js"></script>
+        <!-- select region modal -->
+</body>
+
+</html>

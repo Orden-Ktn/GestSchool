@@ -1,0 +1,125 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+<div class="content-page">
+    <div class="content">
+
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <button type="button"
+                            class="page-title btn btn-outline-success btn-rounded waves-effect width-md waves-light"
+                            data-toggle="modal" data-target=".bs-example-modal-lg">
+                            <i class="ion ion-md-add-circle"></i>
+                            Ajouter une année scolaire
+                        </button>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb p-0 m-0">
+                                <li class="breadcrumb-item active">GestSchool</li>
+                                <li class="breadcrumb-item"><a>Année Scolaire</a></li>
+                            </ol>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+            {% if messages %}
+                <div class="alert-container">
+                    {% for message in messages %}
+                        <div class="alert alert-fill alert-info" role="alert">
+                            <h4 class="alert-title">GestSchool</h4>
+                            <div class="alert-message"><i class="ion ion-ios-alert"></i> {{ message }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="header-title mb-4">Les Annees Scolaires</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center;">Année</th>
+                                                <th style="text-align: center;">Statut</th>
+                                                <th style="text-align: center;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for annee in annees %}
+                                            <tr style="text-align: center;" class="success">
+                                                <td>{{ annee.annee }}</td>
+                                                <td>
+                                                    {% if annee.active %}
+                                                    <span class="badge" style="background-color: green; padding: 1.5%;">Active</span>
+                                                    {% else %}
+                                                    <span class="badge badge-secondary" style="padding: 1.5%;">Inactive</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'activer_annee' annee.id %}">
+                                                        <button class="btn btn-info btn-sm">
+                                                            <em class="ion ion-ios-checkmark-circle"></em> Activer
+                                                        </button> 
+                                                    </a>
+                                                </td>
+
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="3" style="text-align: center; color: red; font-style: italic;">Aucune année enregistrée
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="myLargeModalLabel">Ajout d'année scolaire</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form role="form" method="post" action="{% url 'ajouter_annee' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="userName">Année Scolaire<span class="text-danger">*</span></label>
+                        <input type="text" name="annee" parsley-trigger="change" required="" placeholder="Ex: 2021-2022"
+                            class="form-control" id="annee">
+                    </div>
+                    <div class="col-lg-12 modal-footer">
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+{% endblock %}

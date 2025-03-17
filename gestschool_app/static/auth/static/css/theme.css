@@ -1,0 +1,15 @@
+/*!
+ * Theme Name: Default
+ * Package : DashLite
+ * Author: Softnio
+ * Author URI: http://themeforest.net/user/softnio
+ * Version	 :	1.0.0
+ * Updated	 :	07.23.2020
+**/
+
+.image-container img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  box-shadow: 30px 30px 30px black; /* Ombre noire sur tous les côtés */
+}

@@ -1,0 +1,187 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+<div class="content-page">
+    <div class="content">
+
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <!-- <button type="button"
+                            class="page-title btn btn-outline-success btn-rounded waves-effect width-md waves-light"
+                            data-toggle="modal" data-target=".bs-example-modal-lg">
+                            <i class="ion ion-md-add-circle"></i>
+                            Ajouter une classe
+                        </button> -->
+                        <div class="page-title-right">
+                            <ol class="breadcrumb p-0 m-0">
+                                <li class="breadcrumb-item active">GestSchool</li>
+                                <li class="breadcrumb-item"><a>Classe</a></li>
+                            </ol>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+            {% if messages %}
+            <div class="success-message">
+                {% for message in messages %}
+                <div class="alert alert-fill alert-info col-lg-6"
+                    style="margin-left : 25%; margin-top : 2%; text-align: center; font-size: medium;"
+                    role="alert">
+                    <h4 class="page-title">GestSchool</h4>
+                    <div><i class="ion ion-ios-alert"></i> {{message}}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card-box">
+                            <h4 class="header-title mb-4">Mes classes</h4>
+
+                            <ul class="nav nav-pills navtab-bg nav-justified">
+                                <li class="nav-item">
+                                    <a href="#home1" data-toggle="tab" aria-expanded="false" class="nav-link active">
+                                        <span class="d-block d-sm-none"><i class="mdi mdi-home-variant-outline font-18"></i></span>
+                                        <span class="d-none d-sm-block">6ème</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#profile1" data-toggle="tab" aria-expanded="true" class="nav-link">
+                                        <span class="d-block d-sm-none"><i class="mdi mdi-account-outline font-18"></i></span>
+                                        <span class="d-none d-sm-block">5ème</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#messages1" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                        <span class="d-block d-sm-none"><i class="mdi mdi-email-outline font-18"></i></span>
+                                        <span class="d-none d-sm-block">4ème</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#settings1" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                        <span class="d-block d-sm-none"><i class="mdi mdi-settings-outline font-18"></i></span>
+                                        <span class="d-none d-sm-block">3ème</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#settings2" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                        <span class="d-block d-sm-none"><i class="mdi mdi-settings-outline font-18"></i></span>
+                                        <span class="d-none d-sm-block">2nde</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#settings3" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                        <span class="d-block d-sm-none"><i class="mdi mdi-settings-outline font-18"></i></span>
+                                        <span class="d-none d-sm-block">1ère</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#settings4" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                        <span class="d-block d-sm-none"><i class="mdi mdi-settings-outline font-18"></i></span>
+                                        <span class="d-none d-sm-block">Tle</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane show active" id="home1">
+                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                    <p class="mb-0">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                </div>
+                                <div class="tab-pane" id="profile1">
+                                    <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                    <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                </div>
+                                <div class="tab-pane" id="messages1">
+                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                    <p class="mb-0">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                </div>
+                                <div class="tab-pane" id="settings1">
+                                    <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                  
+                                </div>
+                                <div class="tab-pane" id="settings2">
+                                    <div class="nk-block nk-block-lg">
+                                        <div class="card card-bordered card-preview">
+                                            <table class="table table-tranx">
+                                                <thead>
+                                                    <tr class="tb-tnx-head">
+                                                        <th class="tb-tnx-id"><span class="">ID</span></th>
+                                                        <th class="tb-tnx-info">
+                                                            <span class="tb-tnx-desc d-none d-sm-inline-block">
+                                                                <span>NOM ET PRENOM</span>
+                                                            </span>
+                                                           
+                                                        </th>
+                                                        <th class="tb-tnx-amount">
+                                                            <span class="tb-tnx-total">CLASSE</span>
+                                                        </th>
+                                                        <th class="tb-tnx-amount">
+                                                            <span class="tb-tnx-total">ACTION</span>
+                                                        </th>
+                                                </thead>
+                                                <tbody>
+                                                    {% for eleve0 in eleve0 %}
+                                                    <tr class="tb-tnx-item">
+                                                        <td class="tb-tnx-id">
+                                                            <a><span>{{eleve0.id_eleve }}</span></a>
+                                                        </td>
+                                                        <td class="tb-tnx-info">
+                                                            <div class="tb-tnx-desc">
+                                                                <span class="title">{{eleve0.nom }} {{eleve0.prenom }}</span>
+                                                            </div>
+                                                           
+                
+                                                        </td>
+                                                         <td class="tb-tnx-amount">
+                                                            <div class="tb-tnx-desc">
+                                                                <span class="title">{{eleve0.classe}}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="tb-tnx-amount">
+                                                            <div class="tb-tnx-desc">
+                                                                <a href="{% url 'ajout_note' eleve0.id_eleve %}"
+                                                                        class="btn btn-info"><em class="icon ni ni-pen"></em>
+                                                                        Ajouter une note</a>
+                                                            </div>
+                                                            
+                                                        </td>
+                                                    </tr>
+                                                    {% empty %}
+                                                    <tr>
+                                                        <td colspan="9" style="text-align: center;">Aucun(e) élève enregistré(e)</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div><!-- .card-preview -->
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="settings3">
+                                    
+                                    <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                </div>
+                                <div class="tab-pane" id="settings4">
+                                    <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

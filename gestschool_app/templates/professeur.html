@@ -1,0 +1,199 @@
+{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+<div class="content-page">
+    <div class="content">
+
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <!-- <button type="button"
+                            class="page-title btn btn-outline-success btn-rounded waves-effect width-md waves-light"
+                            data-toggle="modal" data-target=".bs-example-modal-lg">
+                            <i class="ion ion-md-add-circle"></i>
+                            Ajouter un élève
+                        </button> -->
+                        <div class="page-title-right">
+                            <ol class="breadcrumb p-0 m-0">
+                                <li class="breadcrumb-item active">GestSchool</li>
+                                <li class="breadcrumb-item"><a>Professeurs</a></li>
+                            </ol>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+            {% if messages %}
+                <div class="alert-container">
+                    {% for message in messages %}
+                        <div class="alert alert-fill alert-info" role="alert">
+                            <h4 class="alert-title">GestSchool</h4>
+                            <div class="alert-message"><i class="ion ion-ios-alert"></i> {{ message }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body table-responsive">
+                            <h4 class="m-t-0 header-title mb-4"><b>LISTE GENERALE DES PROFESSEURS</b></h4>
+
+                            <table id="datatable-buttons"
+                                class="table table-striped table-bordered dt-responsive nowrap"
+                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nom</th>
+                                        <th>Prénoms</th>
+                                        <th>Email</th>
+                                        <th>Contact</th>
+                                        <th>Matière enseignée</th>
+                                        <th>Classe(s)</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for professeur in professeurs %}
+                                    <tr>
+                                        <td>{{ professeur.id }}</td>
+                                        <td>{{ professeur.nom }}</td>
+                                        <td>{{ professeur.prenom }}</td>
+                                        <td>{{ professeur.email }}</td>
+                                        <td>{{ professeur.contact }}</td>
+                                        <td>{{ professeur.matiere.nom }}</td>
+                                        <td>
+                                            {% for classe in professeur.classes_attribuees %}
+                                                {{ classe }}{% if not forloop.last %}, {% endif %}
+                                            {% empty %}
+                                                Aucune classe attribuée
+                                            {% endfor %}
+                                        </td>
+                            
+                                        <td>
+                                
+                                            <button class="btn btn-success" data-toggle="modal" data-target="#editModal{{ professeur.id }}">
+                                               <i class="ion ion-ios-color-wand"></i> Attribuer une classe
+                                            </button>
+
+                                            <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ professeur.id }}">
+                                                <i class="ion ion-ios-trash"></i> Supprimer
+                                            </button>
+                                
+                                            <!-- Modal de suppression -->
+                                            <div class="modal fade" id="deleteModal{{ professeur.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Confirmation de suppression</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            <p>Êtes-vous sûr de vouloir supprimer le professeur <b>{{ professeur.nom }} {{ professeur.prenom }}</b> ?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="{% url 'delete_professeur' professeur.id %}" class="btn btn-primary">
+                                                                Oui
+                                                            </a>
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                            <!-- Modal de modification -->
+                                            <div class="modal fade" id="editModal{{ professeur.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Attribuer une classe</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form method="POST" action="{% url 'attribuer_classe_professeur' %}">
+                                                                {% csrf_token %}
+                                                                <div class="row">
+                                                                    <div class="col-lg-6">
+                                                                        <div class="form-group">
+                                                                            <label>Nom</label>
+                                                                            <input type="text" class="form-control" name="nom" value="{{ professeur.nom }}" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-6">
+                                                                        <div class="form-group">
+                                                                            <label>Prénom</label>
+                                                                            <input type="text" class="form-control" name="prenom" value="{{ professeur.prenom }}" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-6">
+                                                                        <div class="form-group">
+                                                                            <label>ID</label>
+                                                                            <input type="text" class="form-control" name="id_professeur" value="{{ professeur.id }}" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-6">
+                                                                        <div class="form-group">
+                                                                            <label>Matière enseignée</label>
+                                                                            <input type="text" class="form-control" name="matiere_enseignee" value="{{ professeur.matiere.nom }}" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-6">
+                                                                        <div class="form-group">     
+                                                                            <input type="text" class="form-control" name="matiere_enseignee" value="{{ professeur.matiere.id }}" hidden readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-12">
+                                                                        <div class="form-group">
+                                                                            <label for="inputState" class="form-label">Classe</label>
+                                                                            <select id="inputState" class="form-control" name="id_classe"
+                                                                                data-placeholder="Choisir une classe" required>
+                                                                                {% for classe in classes %}
+                                                                                <option value="{{ classe.id}}">{{ classe.fusion}}</option>
+                                                                                {% empty %}
+                                                                                <tr>
+                                                                                    <td colspan="2" style="color: red; font-style: italic;">Aucune classe enregistrée</td>
+                                                                                </tr>
+                                                                                {% endfor %}
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-success">Valider</button>
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

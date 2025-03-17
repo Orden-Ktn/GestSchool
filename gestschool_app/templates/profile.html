@@ -1,0 +1,146 @@
+﻿{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+<div class="content-page">
+    <div class="content">
+
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <!-- <button type="button"
+                            class="page-title btn btn-outline-success btn-rounded waves-effect width-md waves-light"
+                            data-toggle="modal" data-target=".bs-example-modal-lg">
+                            <i class="ion ion-md-add-circle"></i>
+                            Ajouter une matière
+                        </button> -->
+                        <div class="page-title-right">
+                            <ol class="breadcrumb p-0 m-0">
+                                <li class="breadcrumb-item active">GestSchool</li>
+                                <li class="breadcrumb-item"><a>Profile</a></li>
+                            </ol>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+            {% if messages %}
+                <div class="alert-container">
+                    {% for message in messages %}
+                        <div class="alert alert-fill alert-info" role="alert">
+                            <h4 class="alert-title">GestSchool</h4>
+                            <div class="alert-message"><i class="ion ion-ios-alert"></i> {{ message }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="profile-bg-picture" style="background-image:url('/static/images/bg-profile.jpg')">
+                            <span class="picture-bg-overlay"></span>
+                            <!-- overlay -->
+                        </div>
+                        <!-- meta -->
+                        <div class="profile-user-box">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="profile-user-img"><img src="/static/images/utilisateur-de-profil.png"
+                                            alt="" class="avatar-lg rounded-circle"></div>
+                                    <div class="">
+                                        <h2 class="mt-5 font-120 ellipsis"><i class="mdi mdi-account-outline"></i>Michael A. Franklin || Censeur</h2>
+                                        
+                                        <h3 class="font-18"><i class="ion ion-ios-mail"></i> gestschool@gmail.com</h3>
+
+                                        <h5 class="font-16"><i class="ion ion-ios-call"></i> 14528963</h5>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="text-right">
+                                        <button type="button" class="btn btn-success waves-effect waves-light"
+                                            data-toggle="modal" data-target=".bs-example-modal-lg">
+                                            <i class="mdi mdi-account-settings-variant mr-1"></i> Mettre à jour le
+                                            profile
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ meta -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="myLargeModalLabel">Mise à jour du profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form role="form" method="post" action="{% url 'editer_profile' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <label for="userName">Nom<span class="text-danger">*</span></label>
+                            <input type="text" name="nom" parsley-trigger="change" required=""
+                                class="form-control" id="nom">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="userName">Prénom<span class="text-danger">*</span></label>
+                            <input type="text" name="prenom" parsley-trigger="change" required=""
+                                class="form-control" id="prenom">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="userName">Rôle<span class="text-danger">*</span></label>
+                            <input type="text" name="role" parsley-trigger="change" required=""
+                                class="form-control" id="role">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="userName">Contact<span class="text-danger">*</span></label>
+                            <input type="text" name="contact" parsley-trigger="change" required=""
+                                class="form-control" id="contact">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="userName">Email<span class="text-danger">*</span></label>
+                            <input type="email" name="email" parsley-trigger="change" required=""
+                                class="form-control" id="email">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="userName">Matière enseignée<span class="text-danger">*</span></label>
+                            <select class="form-control form-control-user" name="matiere_enseignee" id="matiere_enseignee">
+                                {% for matiere in matieres %}
+                                <option value="{{ matiere.id }}">{{ matiere.sigle }}</option>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="2" style="color: red; font-style: italic;">Aucune matière enregistrée</td>
+                                </tr>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-lg-12 modal-footer">
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+{% endblock %}

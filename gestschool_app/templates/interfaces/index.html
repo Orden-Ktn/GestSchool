@@ -1,0 +1,99 @@
+﻿{% extends "interfaces/menu.html" %}
+
+{% block content %}
+
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">Bienvenue !</h4>
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb p-0 m-0">
+                                            <li class="breadcrumb-item active">GestSchool</li>
+                                            <li class="breadcrumb-item"><a>Dashboard</a></li>
+                                        </ol>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card bg-pink">
+                                    <div class="card-body widget-style-2">
+                                        <div class="text-white media">
+                                            <div class="media-body align-self-center">
+                                                <h2 class="my-0 text-white"><span>{{ annee_active }}</span></h2>
+                                                <p class="mb-0">Année Scolaire</p>
+                                            </div>
+                                            <i class="ion-md-calendar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card bg-purple">
+                                    <div class="card-body widget-style-2">
+                                        <div class="text-white media">
+                                            <div class="media-body align-self-center">
+                                                <h2 class="my-0 text-white"><span>{{ total_personnels }}</span></h2>
+                                                <p class="mb-0">Personnels administratifs</p>
+                                            </div>
+                                            <i class="ion-md-people"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card bg-info">
+                                    <div class="card-body widget-style-2">
+                                        <div class="text-white media">
+                                            <div class="media-body align-self-center">
+                                                <h2 class="my-0 text-white"><span>{{ total_students }}</span></h2>
+                                                <p class="mb-0">Elèves</p>
+                                            </div>
+                                            <i class="ion-ios-contacts"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card bg-primary">
+                                    <div class="card-body widget-style-2">
+                                        <div class="text-white media">
+                                            <div class="media-body align-self-center">
+                                                <h2 class="my-0 text-white"><span>{{ total_classes }}</span></h2>
+                                                <p class="mb-0">Classes</p>
+                                            </div>
+                                            <i class="mdi mdi-home"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end container-fluid -->
+
+                    <div class="container-fluid">
+
+                        <img style="width: 20%; margin-left: 40%; margin-top: 4%; border-radius: 50%;"
+                          src="/static/images/logo_gestschool.png" alt="">
+                      
+                      </div>
+                </div>
+                
+            </div>
+
+            {% endblock %}
