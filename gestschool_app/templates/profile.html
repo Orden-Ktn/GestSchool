@@ -1,23 +1,15 @@
-﻿{% extends "interfaces/menu.html" %}
+﻿{% extends "menu.html" %}
 
 {% block content %}
 
 <div class="content-page">
     <div class="content">
 
-        <!-- Start Content-->
         <div class="container-fluid">
 
-            <!-- start page title -->
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box">
-                        <!-- <button type="button"
-                            class="page-title btn btn-outline-success btn-rounded waves-effect width-md waves-light"
-                            data-toggle="modal" data-target=".bs-example-modal-lg">
-                            <i class="ion ion-md-add-circle"></i>
-                            Ajouter une matière
-                        </button> -->
                         <div class="page-title-right">
                             <ol class="breadcrumb p-0 m-0">
                                 <li class="breadcrumb-item active">GestSchool</li>
@@ -28,7 +20,6 @@
                     </div>
                 </div>
             </div>
-            <!-- end page title -->
             {% if messages %}
                 <div class="alert-container">
                     {% for message in messages %}
@@ -44,26 +35,26 @@
                     <div class="col-sm-12">
                         <div class="profile-bg-picture" style="background-image:url('/static/images/bg-profile.jpg')">
                             <span class="picture-bg-overlay"></span>
-                            <!-- overlay -->
-                        </div>
-                        <!-- meta -->
+                            </div>
                         <div class="profile-user-box">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="profile-user-img"><img src="/static/images/utilisateur-de-profil.png"
                                             alt="" class="avatar-lg rounded-circle"></div>
                                     <div class="">
-                                        <h2 class="mt-5 font-120 ellipsis"><i class="mdi mdi-account-outline"></i>Michael A. Franklin || Censeur</h2>
-                                        
-                                        <h3 class="font-18"><i class="ion ion-ios-mail"></i> gestschool@gmail.com</h3>
-
-                                        <h5 class="font-16"><i class="ion ion-ios-call"></i> 14528963</h5>
+                                        {% if professeur %}
+                                            <h2 class="mt-5 font-120 ellipsis"><i class="mdi mdi-account-outline"></i>{{ professeur.nom }} {{ professeur.prenom }}</h2>
+                                            <h3 class="mt-5 font-120 ellipsis font-18">&nbsp;<i class="ion ion-ios-checkbox-outline"></i>  {{ professeur.role }} </h3>
+                                            <h5 class="mt-5 font-120 ellipsis font-16">&nbsp;<i class="ion ion-ios-call"></i> {{ professeur.contact }} </h5>
+                                        {% else %}
+                                            <h2 class="mt-5 font-120 ellipsis"><i class="mdi mdi-account-outline"></i>Votre profil n'est pas à jour</h2>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="text-right">
                                         <button type="button" class="btn btn-success waves-effect waves-light"
-                                            data-toggle="modal" data-target=".bs-example-modal-lg">
+                                            data-toggle="modal" data-target=".editprofil">
                                             <i class="mdi mdi-account-settings-variant mr-1"></i> Mettre à jour le
                                             profile
                                         </button>
@@ -71,7 +62,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!--/ meta -->
                     </div>
                 </div>
             </div>
@@ -80,7 +70,7 @@
 </div>
 
 
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+<div class="modal fade editprofil" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
     style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -96,33 +86,33 @@
                         <div class="form-group col-lg-6">
                             <label for="userName">Nom<span class="text-danger">*</span></label>
                             <input type="text" name="nom" parsley-trigger="change" required=""
-                                class="form-control" id="nom">
+                                class="form-control" id="nom" {% if professeur %}value="{{ professeur.nom }}"{% endif %}>
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="userName">Prénom<span class="text-danger">*</span></label>
                             <input type="text" name="prenom" parsley-trigger="change" required=""
-                                class="form-control" id="prenom">
+                                class="form-control" id="prenom" {% if professeur %}value="{{ professeur.prenom }}"{% endif %}>
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="userName">Rôle<span class="text-danger">*</span></label>
-                            <input type="text" name="role" parsley-trigger="change" required=""
-                                class="form-control" id="role">
+                            <input type="text" name="role" parsley-trigger="change" required="" value="{{ user.role }}" readonly
+                                class="form-control" id="role" {% if professeur %}value="{{ professeur.role }}"{% endif %}>
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="userName">Contact<span class="text-danger">*</span></label>
                             <input type="text" name="contact" parsley-trigger="change" required=""
-                                class="form-control" id="contact">
+                                class="form-control" id="contact" {% if professeur %}value="{{ professeur.contact }}"{% endif %}>
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="userName">Email<span class="text-danger">*</span></label>
                             <input type="email" name="email" parsley-trigger="change" required=""
-                                class="form-control" id="email">
+                                class="form-control" id="email" {% if professeur %}value="{{ professeur.email }}"{% endif %}>
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="userName">Matière enseignée<span class="text-danger">*</span></label>
                             <select class="form-control form-control-user" name="matiere_enseignee" id="matiere_enseignee">
                                 {% for matiere in matieres %}
-                                <option value="{{ matiere.id }}">{{ matiere.sigle }}</option>
+                                <option value="{{ matiere.id }}" {% if professeur and professeur.matiere_id == matiere.id %}selected{% endif %}>{{ matiere.sigle }}</option>
                                 {% empty %}
                                 <tr>
                                     <td colspan="2" style="color: red; font-style: italic;">Aucune matière enregistrée</td>
@@ -138,9 +128,7 @@
                 </form>
             </div>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>
 
 {% endblock %}

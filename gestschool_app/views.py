@@ -12,6 +12,7 @@ from django.db.models import Count, F, Value, Window
 from django.db.models.functions import Rank
 from django.db.models import Prefetch, Q
 from decimal import Decimal
+from .forms import *
 
 
 
@@ -20,56 +21,57 @@ def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('connexion')
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'compte/register.html', {'form': form})
-
-def validation_inscription(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Inscription réussie. Veuillez vous connecter.')
-            return redirect('login')  # Redirige vers la page de connexion
+            user = form.save(commit=False)  # Ne pas enregistrer immédiatement
+            if user.username == 'Admin-GS':
+                user.role = 'Superadmin'  # Définit le rôle sur Superadmin
+            else:
+                user.role = 'Personnel'  # Définit le rôle par défaut
+            user.save()  # Enregistre l'utilisateur avec le rôle approprié
+            messages.success(request, 'Inscription réussie ! Connectez-vous.')
+            return redirect('login_view')
         else:
-            messages.error(request, 'Veuillez corriger les erreurs ci-dessous.')
+            messages.error(request, 'Erreur lors de l\'inscription. Veuillez vérifier les informations.')
     else:
         form = CustomUserCreationForm()
-    return render(request, 'inscription.html', {'form': form})
+    return render(request, 'register.html', {'form': form})
 
-def inscription(request):
-    return render(request, 'compte/register.html')
-
-def login(request):
-    return render(request, 'compte/connexion.html')
 
 #vue pour la connexion
-def connexion(request):
+def login_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request)
-            
-            return redirect('index')
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('index')  # Redirige vers le tableau de bord
+            else:
+                messages.error(request, 'Nom d\'utilisateur ou mot de passe incorrect.')
         else:
-            messages.error(request, 'Nom d\'utilisateur ou mot de passe incorrect.')
-    return render(request, 'compte/connexion.html')
+            messages.error(request, 'Veuillez corriger les erreurs du formulaire.')
+    else:
+        form = LoginForm()
+    return render(request, 'connexion.html', {'form': form})
 
 def lock_screen(request):
-    return render(request, 'compte/lock_screen.html')    
+    return render(request, 'lock_screen.html')    
 
 
+@login_required
 def profile(request):
     matieres = Matiere.objects.all()
-    return render(request, 'profile.html', {'matieres':matieres})   
+    try:
+        professeur = Professeur.objects.get(email=request.user.email)
+    except Professeur.DoesNotExist:
+        professeur = None
+    return render(request, 'profile.html', {'matieres': matieres, 'professeur': professeur})
 
+
+@login_required
 def editer_profile(request):
     if request.method == 'POST':
-        # Récupération des données du formulaire
         nom = request.POST.get('nom')
         prenom = request.POST.get('prenom')
         role = request.POST.get('role')
@@ -77,33 +79,34 @@ def editer_profile(request):
         email = request.POST.get('email')
         matiere = request.POST.get('matiere_enseignee')
         annee_active = AnneeScolaire.objects.filter(active=True).first()
-        
-        
-        existing_matiere = Professeur.objects.filter(email=email).exists()
 
-        if existing_matiere:
-            messages.error(request, "Les informations existent déjà pour votre profile.")
-            return redirect(request.META.get('HTTP_REFERER', '/'))
-        
         try:
-            if nom and prenom and role and contact and email and matiere:
-               Professeur.objects.create(nom=nom, prenom=prenom, role=role, contact=contact, email=email, matiere_id=matiere, annee_scolaire=annee_active) 
-               messages.success(request, "Profile mise à jour!")
-               return redirect(request.META.get('HTTP_REFERER', '/'))
-            else:
-               # Gérer les erreurs si les données sont invalides
-               return render(request, 'profile.html', {'error': 'Tous les champs sont requis.'})
-           
+            professeur = Professeur.objects.get(email=request.user.email)
+            professeur.nom = nom
+            professeur.prenom = prenom
+            professeur.role = role
+            professeur.contact = contact
+            professeur.email = email
+            professeur.matiere_id = matiere
+            professeur.annee_scolaire = annee_active
+            professeur.save()
+            messages.success(request, "Profil mis à jour!")
+            return redirect('index')
+        except Professeur.DoesNotExist:
+            Professeur.objects.create(nom=nom, prenom=prenom, role=role, contact=contact, email=email, matiere_id=matiere, annee_scolaire=annee_active)
+            messages.success(request, "Profil mise à jour!")
+            return redirect('index')
         except ValueError as e:
-            # Gérer les erreurs de conversion
             messages.error(request, 'Veuillez bien renseigner les informations.')
+            return redirect('index')
 
-    return redirect('profile')
+    return redirect('index')
+
 
 def professeur(request):
     annee_active = AnneeScolaire.objects.filter(active=True).first()
     classes = Classe_exist.objects.all()
-    professeurs = Professeur.objects.filter(annee_scolaire_id=annee_active)
+    professeurs = Professeur.objects.filter(Q(role='Professeur') & Q(annee_scolaire_id=annee_active))
 
     for professeur in professeurs:
         # Récupérer les classes attribuées à ce professeur
@@ -149,43 +152,62 @@ def delete_professeur(request, id):
     objet.delete()      
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import AnneeScolaire, Classe_exist, Eleve, Professeur, CustomUser, Matiere, Professeur_Classe
+from django.db.models import Q
 
+@login_required
 def index(request):
     annee_active = AnneeScolaire.objects.filter(active=True).first()
-    
+    matieres = Matiere.objects.all()
+
     if annee_active:
         total_classes = Classe_exist.objects.count()
         total_students = Eleve.objects.filter(annee_scolaire=annee_active).count()
-        total_personnels = Personnel.objects.exclude(role="Superadmin").exclude(role="Aucun").filter(annee_scolaire=annee_active).count()
+        total_professeurs = Professeur.objects.filter(Q(role='Professeur') & Q(annee_scolaire=annee_active)).count()
+        total_personnels = CustomUser.objects.exclude(role="Superadmin").exclude(role="Aucun").exclude(role="Professeur").filter(is_active="1").count()
         total_students_boys = Eleve.objects.filter(annee_scolaire=annee_active, sexe='M').count()
         total_students_girls = Eleve.objects.filter(annee_scolaire=annee_active, sexe='F').count()
-        
+
         pourcentage_boys = (total_students_boys * 100) / total_students if total_students > 0 else 0
         pourcentage_girls = (total_students_girls * 100) / total_students if total_students > 0 else 0
         percent_girls = round(float(pourcentage_girls), 2)
         percent_boys = round(float(pourcentage_boys), 2)
-        
+
+        # Récupérer le professeur connecté et compter ses classes
+        try:
+            professeur = Professeur.objects.get(user=request.user)
+            nombre_classes_professeur = Professeur_Classe.objects.filter(professeur=professeur).count()
+        except Professeur.DoesNotExist:
+            nombre_classes_professeur = 0  # Si le professeur n'existe pas, le nombre est 0
+
     else:
         total_classes = 0
         total_students = 0
+        total_professeurs = 0
         total_personnels = 0
         total_students_boys = 0
         total_students_girls = 0
         percent_boys = 0
         percent_girls = 0
+        nombre_classes_professeur = 0 # si l'année scolaire n'est pas active, le nombre est 0
 
     context = {
         'total_classes': total_classes,
         'total_students': total_students,
+        'total_professeurs': total_professeurs,
         'total_personnels': total_personnels,
         'total_students_boys': total_students_boys,
         'total_students_girls': total_students_girls,
         'percent_boys': percent_boys,
         'percent_girls': percent_girls,
-        'annee_active': annee_active
+        'annee_active': annee_active,
+        'matieres': matieres,
+        'nombre_classes_professeur': nombre_classes_professeur, # Ajout du nombre de classes
     }
-    
-    return render(request, 'interfaces/index.html', context)
+
+    return render(request, 'index.html', context)
 
 
 
@@ -193,10 +215,10 @@ def index(request):
 #vue pour la déconnexion
 def deconnexion(request):
     logout(request)
-    return redirect('connexion')
+    return redirect('login_view')
 
 def changer_user(request):
-    return render(request, 'compte/change_user.html')
+    return render(request, 'change_user.html')
 
 #vue pour le changement de nom et mot de passe
 def change_user(request):
@@ -219,7 +241,7 @@ def change_user(request):
     else:
         form = ChangeUserForm()
 
-    return render(request, 'compte/change_user.html', {'form': form})
+    return render(request, 'change_user.html', {'form': form})
 
 
 
@@ -338,7 +360,7 @@ def fiche_paiement(request):
             eleve.total_cotisations = 0
             eleve.statut_paiement = "N/A"  # Statut par défaut si le tarif n'est pas trouvé
 
-    return render(request, 'finance/fiche_paiement.html', {'eleves': eleves})
+    return render(request, 'fiche_paiement.html', {'eleves': eleves})
 
 
 def modifier_solde(request, eleve_id):
@@ -362,29 +384,29 @@ def modifier_solde(request, eleve_id):
 def tarif(request):
     tarifs = Tarif.objects.all()
     classes = Classe_exist.objects.all()
-    return render(request, 'finance/grille_tarif.html', {'tarifs': tarifs, 'classes': classes})
+    return render(request, 'grille_tarif.html', {'tarifs': tarifs, 'classes': classes})
 
 
 #vues pour le personnel
 def personnel(request):
-       personnels = Personnel.objects.exclude(role="Superadmin")
-       return render(request, 'personnel.html', {'personnels': personnels})
+    personnels = CustomUser.objects.exclude(role="Superadmin")
+    return render(request, 'personnel.html', {'personnels': personnels})
 
-def modifier_role(request, personnel_id):
+def modifier_role(request):
     if request.method == "POST":
-        personnel = get_object_or_404(Personnel, id_personnel=personnel_id)
+        personnel_id = request.POST.get("id_personnel")
+        personnel = get_object_or_404(CustomUser, id=personnel_id)
         nouveau_role = request.POST.get("role")
+        ROLES_VALIDES = ["Censeur", "Professeur", "Secrétaire", "Surveillant", "Comptable", "Aucun"]
 
-        ROLES_VALIDES = ["Censeur", "Professeur", "Secrétaire", "Surveillant", "Aucun"]
-        
-        if nouveau_role in ROLES_VALIDES and personnel.role=="Personnel" or personnel.role=="Aucun":
+        if nouveau_role in ROLES_VALIDES and (personnel.role == "Personnel" or personnel.role == "Aucun"):
             personnel.role = nouveau_role
             personnel.save()
             messages.success(request, f"Le rôle de {personnel.username} a été mis à jour en {nouveau_role}.")
         else:
             messages.error(request, f"Attribution de rôle non réussie. {personnel.username} a déjà un rôle.")
 
-    return redirect("personnel")  
+    return redirect("personnel")
 
 #vues pour les classes
 def ajouter_classe(request):
@@ -687,21 +709,25 @@ def update(request):
 
 
 #vues pour les notes
-def all_eleve(request):
-    eleve6 = Eleve.objects.filter(classe="6ème")
-    eleve5 = Eleve.objects.filter(classe="5ème")
-    eleve4 = Eleve.objects.filter(classe="4ème")
-    eleve3 = Eleve.objects.filter(classe="3ème")
-    eleve0 = Eleve.objects.filter(classe="2nde D")
-    eleve1 = Eleve.objects.filter(classe="1ère")
-    eleve2 = Eleve.objects.filter(classe="Tle")
-    return render(request, 'notes/all_eleve.html', {'eleve6': eleve6, 'eleve5': eleve5, 'eleve4': eleve4, 'eleve3': eleve3, 'eleve0': eleve0, 'eleve1': eleve1, 'eleve2': eleve2})
+@login_required
+def mes_classes(request):
+    try:
+        professeur = Professeur.objects.get(user=request.user)  # Access Professeur through the 'user' field
+        classes_attribuees = Professeur_Classe.objects.filter(professeur=professeur)
 
+        eleves_par_classe = {}
+        for classe_attribuee in classes_attribuees:
+            eleves_par_classe[classe_attribuee.classe.fusion] = Eleve.objects.filter(classe=classe_attribuee.classe.fusion)
+
+        return render(request, 'all_eleve.html', {'eleves_par_classe': eleves_par_classe})
+    except Professeur.DoesNotExist:
+        #Handle the case where a professor profile does not exist for the user.
+        return render(request, 'all_eleve.html', {'error':"Votre profil professeur n'existe pas"})
 
 def ajout_note(request, id_eleve):
     eleves = Eleve.objects.filter(id_eleve=id_eleve)
     matieres = Matiere.objects.all()
-    return render(request, 'notes/ajout_note.html', {'eleves': eleves, 'matieres': matieres})
+    return render(request, 'ajout_note.html', {'eleves': eleves, 'matieres': matieres})
 
 def ajouter_note(request):
     if request.method == 'POST':
@@ -768,7 +794,7 @@ def ajouter_note(request):
             # Gérer les erreurs de conversion
             messages.error(request, 'Veuillez entrer des valeurs numériques valides pour les notes.')
 
-    return render(request, 'interfaces/index.html')
+    return render(request, 'index.html')
 
 
 

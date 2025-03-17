@@ -2,6 +2,42 @@ from django.db import models
 from django.db.models import F, Window
 from django.db.models.functions import Rank
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+
+
+class CustomUser(AbstractUser):
+    ROLE_CHOICES = (
+        ('Choississez un rôle', 'Choississez un rôle'),
+        ('Censeur', 'Censeur'),
+        ('Surveillant', 'Surveillant'),
+        ('Secrétaire', 'Secrétaire'),
+        ('Professeur', 'Professeur'),
+        ('Comptable', 'Comptable'),
+        ('superadmin', 'superadmin'),
+    )
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Personnel')
+
+    groups = models.ManyToManyField(
+        'auth.Group',
+        verbose_name='groups',
+        blank=True,
+        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+        related_name="customuser_set",  # Ajout de related_name
+        related_query_name="user",
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        verbose_name='user permissions',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        related_name="customuser_permissions_set", # Ajout de related_name
+        related_query_name="user",
+    )
+
+    def __str__(self):
+        return self.username
+
 
 class AnneeScolaire(models.Model):
     annee = models.CharField(max_length=20)  
@@ -106,6 +142,7 @@ class Personnel(models.Model):
         return self.username
 
 class Professeur(models.Model):  
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     nom = models.CharField(max_length=80)
     prenom = models.CharField(max_length=100)
     role = models.CharField(max_length=100)

@@ -1,26 +1,16 @@
+# forms.py (dans votre application)
 from django import forms
+from .models import CustomUser
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.models import User
 
 class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username',)
+        widgets = {
+            'username': forms.TextInput(attrs={'placeholder': 'Entrez votre nom et prénom. Ex: Jean_Dupont'}),
+        }  
 
-    password1 = forms.CharField(
-        label="Mot de passe",
-        strip=False,
-        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
-    )
-    password2 = forms.CharField(
-        label="Password confirmation",
-        strip=False,
-        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
-    ),
-    
-class ChangeUserForm(forms.Form):
-    new_username = forms.CharField(label='New Username', max_length=150)
-    new_password = forms.CharField(label='New Password', widget=forms.PasswordInput)
-    
-
-
-class Meta(UserCreationForm.Meta):
-    fields = UserCreationForm.Meta.fields + ("nom", "password1", "password2")
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=150)
+    password = forms.CharField(widget=forms.PasswordInput)

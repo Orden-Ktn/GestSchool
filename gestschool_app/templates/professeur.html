@@ -1,4 +1,4 @@
-{% extends "interfaces/menu.html" %}
+{% extends "menu.html" %}
 
 {% block content %}
 
@@ -54,7 +54,6 @@
                                         <th>ID</th>
                                         <th>Nom</th>
                                         <th>Prénoms</th>
-                                        <th>Email</th>
                                         <th>Contact</th>
                                         <th>Matière enseignée</th>
                                         <th>Classe(s)</th>
@@ -68,7 +67,6 @@
                                         <td>{{ professeur.id }}</td>
                                         <td>{{ professeur.nom }}</td>
                                         <td>{{ professeur.prenom }}</td>
-                                        <td>{{ professeur.email }}</td>
                                         <td>{{ professeur.contact }}</td>
                                         <td>{{ professeur.matiere.nom }}</td>
                                         <td>
@@ -82,11 +80,11 @@
                                         <td>
                                 
                                             <button class="btn btn-success" data-toggle="modal" data-target="#editModal{{ professeur.id }}">
-                                               <i class="ion ion-ios-color-wand"></i> Attribuer une classe
+                                               <i class="ion ion-ios-color-wand"></i>Attribuer une classe
                                             </button>
 
                                             <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ professeur.id }}">
-                                                <i class="ion ion-ios-trash"></i> Supprimer
+                                                <i class="ion ion-ios-trash"></i>Supprimer
                                             </button>
                                 
                                             <!-- Modal de suppression -->

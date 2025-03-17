@@ -1,4 +1,4 @@
-{% extends "interfaces/menu.html" %}
+{% extends "menu.html" %}
 
 {% block content %}
 
@@ -61,7 +61,7 @@
                                                 <td>{{ tarif.montant }}</td>
                                                 <td>
                                                     <button class="btn btn-success" data-toggle="modal" data-target="#editModal{{ tarif.id }}">
-                                                        <i class="ion ion-ios-color-wand"></i> Modifier le tarif
+                                                        <i class="ion ion-ios-create"></i> Modifier le tarif
                                                     </button>
                                                     <div class="modal fade" id="editModal{{ tarif.id }}" tabindex="-1" role="dialog" aria-hidden="true">
                                                         <div class="modal-dialog modal-lg">

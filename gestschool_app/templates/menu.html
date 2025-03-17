@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>GestSchool</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive bootstrap 4 admin template" name="description">
+    <meta content="Coderthemes" name="author">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="/static/images/favicon/logo_gestschool.png">
+
+    <!-- Plugins css-->
+    <link href="/static/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
+
+    <link href="/static/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/libs/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/libs/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/libs/datatables/select.bootstrap4.min.css" rel="stylesheet" type="text/css"> 
+
+    <!-- App css -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap-stylesheet">
+    <link href="/static/css/icons.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/app.min.css" rel="stylesheet" type="text/css" id="app-stylesheet">
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <div class="navbar-custom">
+            <ul class="list-unstyled topnav-menu float-right mb-0">
+
+                <li class="dropdown notification-list">
+                    <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect" data-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="false" aria-expanded="false">
+                        <img src="/static/images/utilisateur-de-profil.png" alt="user-image" class="rounded-circle">
+                        <span class="pro-user-name ml-1">
+                            {{user.username}} <i class="mdi mdi-chevron-down"></i>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+
+                        {% if user.role == "Professeur" %}
+
+                            <button data-toggle="modal" data-target=".editprofil" class="dropdown-item notify-item">
+                                <i class="mdi mdi-account-outline"></i>
+                                <span>Profile</span>
+                            </button>
+
+                        {% endif %}
+
+                        <a class="dropdown-item notify-item">
+                            <i class="mdi mdi-account-outline"></i>
+                            <span>{{user.role}}</span>
+                        </a>
+           
+                        <!-- item-->
+                        <button style="color: red;" data-toggle="modal" data-target=".deconnexion" class="dropdown-item notify-item">
+                            <i class="mdi mdi-logout-variant"></i>
+                            <span>Se déconnecter</span>
+                        </button>
+
+                    </div>
+                </li>
+            </ul>
+
+            <div class="logo-box">
+                <a class="logo text-center logo-dark">
+                    <span class="logo-lg">
+                        <img src="/static/images/logo_gestschool.png" alt="" height="70">
+                        <!-- <span class="logo-lg-text-dark">Velonic</span> -->
+                    </span>
+                    <span class="logo-sm">
+                        <!-- <span class="logo-lg-text-dark">V</span> -->
+                        <img src="/static/images/logo_gestschool.png" alt="" height="22">
+                    </span>
+                </a>
+
+                <a class="logo text-center logo-light">
+                    <span class="logo-lg">
+                        <img src="/static/images/logo_gestschool.png" alt="" height="70">
+                        <!-- <span class="logo-lg-text-dark">Velonic</span> -->
+                    </span>
+                    <span class="logo-sm">
+                        <!-- <span class="logo-lg-text-dark">V</span> -->
+                        <img src="/static/images/logo_gestschool.png" alt="" height="22">
+                    </span>
+                </a>
+            </div>
+
+            <!-- LOGO -->
+
+
+            <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+                <li>
+                    <button class="button-menu-mobile waves-effect">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <!-- end Topbar --> <!-- ========== Left Sidebar Start ========== -->
+        <div class="left-side-menu">
+
+            <div class="slimscroll-menu">
+
+                <!--- Sidemenu -->
+                <div id="sidebar-menu">
+                    <ul class="metismenu" id="side-menu">
+
+                        {% if user.role == "Censeur" %}
+
+                            <li>
+                                <a href="{% url 'index' %}" class="waves-effect">
+                                    <i class="ion-md-speedometer"></i>
+                                    <span> Dashboard </span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'professeur' %}" class="waves-effect">
+                                    <i class="mdi mdi-account-outline"></i>
+                                    <span> Professeurs </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'classe' %}" class="waves-effect">
+                                    <i class="ion-md-home"></i>
+                                    <span> Classe </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'matiere' %}" class="waves-effect">
+                                    <i class="ion-md-flask"></i>
+                                    <span> Matière </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'emploi' %}" class="waves-effect">
+                                    <i class="ion ion-ios-calendar"></i>
+                                    <span> Emploi du temps </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'eleve' %}" class="waves-effect">
+                                    <i class="ion-ios-contacts"></i>
+                                    <span> Elève </span>
+                                </a>
+                            </li>
+                        {% elif user.role == "Comptable" %}
+                            <li>
+                                <a href="{% url 'tarif' %}" class="waves-effect">
+                                    <i class="ion ion-md-cash"></i>
+                                    <span> Grille tarifaire </span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'fiche_paiement' %}" class="waves-effect">
+                                    <i class="ion ion-ios-list-box"></i>
+                                    <span> Fiche de paiement </span>
+                                </a>
+                            </li>
+                        {% elif user.role == "Secrétaire" %}
+                            <li>
+                                <a href="{% url 'eleve' %}" class="waves-effect">
+                                    <i class="ion-ios-contacts"></i>
+                                    <span> Elève </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'verification' %}" class="waves-effect">
+                                    <i class="ion ion-md-list-box"></i>
+                                    <span> Bulletin </span>
+                                </a>
+                            </li>
+                        {% elif user.role == "Professeur" %}
+                            <li>
+                                <a href="javascript: void(0);" class="waves-effect">
+                                    <i class="ion ion-md-create"></i>
+                                    <span> Mes classes </span>
+                                </a>
+                                <ul class="nav-second-level" aria-expanded="false">
+                                    <li><a href="{% url 'mes_classes' %}">Ajout de note</a></li>
+                                    <li><a href="{% url 'mes_classes' %}">Calcul de moyenne</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{% url 'index' %}" class="waves-effect">
+                                    <i class="ion-md-speedometer"></i>
+                                    <span> Dashboard </span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'personnel' %}" class="waves-effect">
+                                    <i class="ion ion-md-people"></i>
+                                    <span> Personnels </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'annee_scolaire' %}" class="waves-effect">
+                                    <i class="ion-md-calendar"></i>
+                                    <span> Année Scolaire </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'trimestre' %}" class="waves-effect">
+                                    <i class="ion ion-ios-hourglass"></i>
+                                    <span> Trimestre </span>
+                                </a>
+                            </li>
+                            
+                        {% endif %}
+
+                    </ul>
+
+                </div>
+                <!-- End Sidebar -->
+
+                <div class="clearfix"></div>
+
+            </div>
+            <!-- Sidebar -left -->
+
+        </div>
+        <!-- Left Sidebar End -->
+
+        {% block content %}
+
+        {% endblock %}
+        
+        <div class="modal fade deconnexion" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmation de déconnexion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
+                    </div>
+                    <div class="modal-footer" style="text-align: center; margin: auto;">
+                        <a href="{% url 'deconnexion' %}"class="btn btn-primary">
+                            Oui
+                        </a>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Non</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+        <div class="modal fade editprofil" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+            style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myLargeModalLabel">Mise à jour du profile</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" method="post" action="{% url 'editer_profile' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label for="userName">Nom<span class="text-danger">*</span></label>
+                                    <input type="text" name="nom" parsley-trigger="change" required=""
+                                        class="form-control" id="nom" {% if professeur %}value="{{ professeur.nom }}"{% endif %}>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="userName">Prénom<span class="text-danger">*</span></label>
+                                    <input type="text" name="prenom" parsley-trigger="change" required=""
+                                        class="form-control" id="prenom" {% if professeur %}value="{{ professeur.prenom }}"{% endif %}>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="userName">Rôle<span class="text-danger">*</span></label>
+                                    <input type="text" name="role" parsley-trigger="change" required="" value="{{ user.role }}" readonly
+                                        class="form-control" id="role" {% if professeur %}value="{{ professeur.role }}"{% endif %}>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="userName">Contact<span class="text-danger">*</span></label>
+                                    <input type="text" name="contact" parsley-trigger="change" required=""
+                                        class="form-control" id="contact" {% if professeur %}value="{{ professeur.contact }}"{% endif %}>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="userName">Email<span class="text-danger">*</span></label>
+                                    <input type="email" name="email" parsley-trigger="change" required=""
+                                        class="form-control" id="email" {% if professeur %}value="{{ professeur.email }}"{% endif %}>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="userName">Matière enseignée<span class="text-danger">*</span></label>
+                                    <select class="form-control form-control-user" name="matiere_enseignee" id="matiere_enseignee">
+                                        {% for matiere in matieres %}
+                                        <option value="{{ matiere.id }}" {% if professeur and professeur.matiere_id == matiere.id %}selected{% endif %}>{{ matiere.sigle }}</option>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="2" style="color: red; font-style: italic;">Aucune matière enregistrée</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-12 modal-footer">
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+        <div class="alert-container">
+            {% for message in messages %}
+                <div class="alert alert-fill alert-info" role="alert">
+                    <h4 class="alert-title">GestSchool</h4>
+                    <div class="alert-message"><i class="ion ion-ios-alert"></i> {{ message }}</div>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+         <!-- Footer Start -->
+         <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        2025 &copy; GestSchool by <em>Orden KOUTON</em>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- end Footer -->
+
+        <!-- Vendor js -->
+        <script src="/static/js/vendor.min.js"></script>
+
+        <script src="/static/libs/moment/moment.min.js"></script>
+        <script src="/static/libs/jquery-scrollto/jquery.scrollTo.min.js"></script>
+        <script src="/static/libs/sweetalert2/sweetalert2.min.js"></script>
+
+        <!-- Chat app -->
+        <script src="/static/js/pages/jquery.chat.js"></script>
+
+        <!-- Todo app -->
+        <script src="/static/js/pages/jquery.todo.js"></script>
+
+        <!--Morris Chart-->
+        <script src="/static/libs/morris-js/morris.min.js"></script>
+        <script src="/static/libs/raphael/raphael.min.js"></script>
+
+        <!-- Sparkline charts -->
+        <script src="/static/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
+
+        <!-- Dashboard init JS -->
+        <script src="/static/js/pages/dashboard.init.js"></script>
+
+        <!-- App js -->
+        <script src="/static/js/app.min.js"></script>
+
+        <!-- Required datatable js -->
+        <script src="/static/libs/datatables/jquery.dataTables.min.js"></script>
+        <script src="/static/libs/datatables/dataTables.bootstrap4.min.js"></script>
+        <!-- Buttons examples -->
+        <script src="/static/libs/datatables/dataTables.buttons.min.js"></script>
+        <script src="/static/libs/datatables/buttons.bootstrap4.min.js"></script>
+        <script src="/static/libs/jszip/jszip.min.js"></script>
+        <script src="/static/libs/pdfmake/pdfmake.min.js"></script>
+        <script src="/static/libs/pdfmake/vfs_fonts.js"></script>
+        <script src="/static/libs/datatables/buttons.html5.min.js"></script>
+        <script src="/static/libs/datatables/buttons.print.min.js"></script>
+
+        <!-- Responsive examples -->
+        <script src="/static/libs/datatables/dataTables.responsive.min.js"></script>
+        <script src="/static/libs/datatables/responsive.bootstrap4.min.js"></script>
+
+        <script src="/static/libs/datatables/dataTables.keyTable.min.js"></script>
+        <script src="/static/libs/datatables/dataTables.select.min.js"></script>
+
+        <!-- Datatables init -->
+        <script src="/static/js/pages/datatables.init.js"></script>
+
+        <script>
+            setTimeout(function() {
+                let alerts = document.querySelectorAll('.alert-fill'); // Sélectionne les alertes par leur classe
+                alerts.forEach(function(alert) {
+                    alert.style.display = 'none';
+                });
+            }, 5000); // 5000 millisecondes = 5 secondes
+        </script>
+        <style>
+            .alert-container {
+                position: fixed; /* Position fixe pour rester en haut de la page */
+                margin: auto;
+                top: 20px; /* Marge du haut */
+                left: 50%; /* Centrer horizontalement */
+                transform: translateX(-50%); /* Ajuster le centrage */
+                width: 80%; /* Largeur de l'alerte (ajustez selon vos besoins) */
+                max-width: 500px; /* Largeur maximale */
+                z-index: 1000; /* Assurez-vous qu'il est au-dessus des autres éléments */
+            }
+        
+            .alert {
+                background-color: #e0f7fa; /* Couleur de fond claire */
+                border: 1px solid #b2ebf2; /* Bordure légère */
+                border-radius: 5px; /* Coins arrondis */
+                padding: 20px; /* Espacement intérieur */
+                text-align: center; /* Centrer le texte */
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Ombre légère */
+            }
+        
+            .alert-title {
+                color: #00838f; /* Couleur du titre */
+                margin-bottom: 10px; /* Marge sous le titre */
+            }
+        
+            .alert-message {
+                color: #263238; /* Couleur du message */
+                font-size: 16px; /* Taille de la police */
+            }
+        </style>
+
+    </div>
+</body>
+
+</html>
+

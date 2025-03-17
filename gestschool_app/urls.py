@@ -5,11 +5,9 @@ from . import views
 
 urlpatterns = [
 
-    path('', views.connexion, name='connexion'),
-    path('inscription/', views.inscription, name='inscription'),
-    path('login/', views.login, name='login'),
-    path('validation_inscription/', views.validation_inscription, name='validation_inscription'),
-    path('register/', views.register, name='register'),
+    path('', views.login_view, name='login_view'),
+    path('connexion/', views.login_view, name='login_view'),
+    path('inscription/', views.register, name='register'),
     path('déconnexion/', views.deconnexion, name='deconnexion'),
     path('modification des identifiants/', views.change_user, name='change_user'),
     path('ecran de verouillage/', views.lock_screen, name='lock_screen'),
@@ -70,25 +68,25 @@ urlpatterns = [
 
 
 #urls pour les notes
-      path('élèves/', views.all_eleve, name='all_eleve'),
-      path('élève/', views.eleve, name='eleve'),
-      path('ajout note/<int:id_eleve>/', views.ajout_note, name='ajout_note'),
-      path('ajouter note/', views.ajouter_note, name='ajouter_note'),
+    path('mes classes/', views.mes_classes, name='mes_classes'),
+    path('élève/', views.eleve, name='eleve'),
+    path('ajout note/<int:id_eleve>/', views.ajout_note, name='ajout_note'),
+    path('ajouter note/', views.ajouter_note, name='ajouter_note'),
 
 
 
 #urls pour les bulletins
-      path('élève cycle1/', views.eleve1, name='eleve1'),
-      path('élève cycle2/', views.eleve2, name='eleve2'),
-      path('bulletin trimestre 1/<int:id_eleve>/', views.bulletin_trim1, name='bulletin_trim1'),
-      path('bulletin trimestre 2/<int:id_eleve>/', views.bulletin_trim2, name='bulletin_trim2'),
-      path('bulletin trimestre 3/<int:id_eleve>/', views.bulletin_trim3, name='bulletin_trim3'),
-      path('save bulletin/', views.save_bulletin, name='save_bulletin'),
-      path('vérification/', views.verification, name='verification'),
-      path('download/', views.download, name='download'),
+    path('élève cycle1/', views.eleve1, name='eleve1'),
+    path('élève cycle2/', views.eleve2, name='eleve2'),
+    path('bulletin trimestre 1/<int:id_eleve>/', views.bulletin_trim1, name='bulletin_trim1'),
+    path('bulletin trimestre 2/<int:id_eleve>/', views.bulletin_trim2, name='bulletin_trim2'),
+    path('bulletin trimestre 3/<int:id_eleve>/', views.bulletin_trim3, name='bulletin_trim3'),
+    path('save bulletin/', views.save_bulletin, name='save_bulletin'),
+    path('vérification/', views.verification, name='verification'),
+    path('download/', views.download, name='download'),
 
 
-      path('personnel/', views.personnel, name='personnel'),
-      path("modifier_role/<int:personnel_id>/", views.modifier_role, name="modifier_role"),
+    path('personnel/', views.personnel, name='personnel'),
+    path("modifier_role/", views.modifier_role, name="modifier_role")
 
-      ]
+]

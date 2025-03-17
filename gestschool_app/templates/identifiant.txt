@@ -1,0 +1,21 @@
+superadmin
+        username : Admin-GS
+        password : gestschool25
+
+censeur 
+        username : KOUTON_Orden
+        password : azerty@gmail.com
+
+
+professeur
+        username : John_DOE
+        password : qwerty@gmail.com
+
+
+comptable
+        username : Emma_JADE
+        password : qwertz@gmail.com
+
+secretaire
+        username : Rose_LINA
+        password : asdfg@gmail.com

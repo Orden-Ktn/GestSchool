@@ -1,0 +1,122 @@
+{% extends "menu.html" %}
+
+{% block content %}
+
+<div class="content-page">
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <div class="page-title-right">
+                            <ol class="breadcrumb p-0 m-0">
+                                <li class="breadcrumb-item active">GestSchool</li>
+                                <li class="breadcrumb-item"><a>Classe</a></li>
+                            </ol>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            {% if messages %}
+            <div class="success-message">
+                {% for message in messages %}
+                <div class="alert alert-fill alert-info col-lg-6"
+                    style="margin-left : 25%; margin-top : 2%; text-align: center; font-size: medium;" role="alert">
+                    <h4 class="page-title">GestSchool</h4>
+                    <div><i class="ion ion-ios-alert"></i> {{message}}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card-box">
+                            <h4 class="header-title mb-4">Mes classes</h4>
+                            <ul class="nav nav-pills nav-fill nav-justified">  
+                                {% if eleves_par_classe %}
+                                    {% for classe_nom in eleves_par_classe %}
+                                        <li class="nav-item">
+                                            <a href="#{{ classe_nom|slugify }}" data-toggle="tab" aria-expanded="false"
+                                                class="nav-link {% if forloop.first %}active{% endif %}">
+                                                <span class="d-block d-sm-none"><i
+                                                        class="mdi mdi-home-variant-outline font-18"></i></span>
+                                                <span class="d-none d-sm-block">{{ classe_nom }}</span>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li class="nav-item">
+                                        <a class="nav-link disabled">Aucune classe attribuée</a> </li>
+                                {% endif %}
+                            </ul>
+                            <div class="tab-content">
+                                {% for classe_nom, eleves in eleves_par_classe.items %}
+                                <div class="tab-pane {% if forloop.first %}show active{% endif %}"
+                                    id="{{ classe_nom|slugify }}">
+                                    <div class="nk-block nk-block-lg">
+                                        <div class="card card-bordered card-preview">
+                                            <!-- <table class="table table-tranx">
+                                                <thead>
+                                                    <tr class="tb-tnx-head">
+                                                        <th class="tb-tnx-id"><span class="">ID</span></th>
+                                                        <th class="tb-tnx-info">
+                                                            <span class="tb-tnx-desc d-none d-sm-inline-block">
+                                                                <span>NOM ET PRENOM</span>
+                                                            </span>
+                                                        </th>
+                                                        <th class="tb-tnx-amount">
+                                                            <span class="tb-tnx-total">CLASSE</span>
+                                                        </th>
+                                                        <th class="tb-tnx-amount">
+                                                            <span class="tb-tnx-total">ACTION</span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for eleve in eleves %}
+                                                    <tr class="tb-tnx-item">
+                                                        <td class="tb-tnx-id">
+                                                            <a><span>{{eleve.id_eleve }}</span></a>
+                                                        </td>
+                                                        <td class="tb-tnx-info">
+                                                            <div class="tb-tnx-desc">
+                                                                <span class="title">{{eleve.nom }} {{eleve.prenom }}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="tb-tnx-amount">
+                                                            <div class="tb-tnx-desc">
+                                                                <span class="title">{{eleve.classe}}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="tb-tnx-amount">
+                                                            <div class="tb-tnx-desc">
+                                                                <a href="{% url 'ajout_note' eleve.id_eleve %}"
+                                                                    class="btn btn-info"><em class="icon ni ni-pen"></em>
+                                                                    Ajouter une note</a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {% empty %}
+                                                    <tr>
+                                                        <td colspan="9" style="text-align: center;">Aucun(e) élève
+                                                            enregistré(e)</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

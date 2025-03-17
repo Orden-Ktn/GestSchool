@@ -1,4 +1,4 @@
-{% extends "interfaces/menu.html" %}
+{% extends "menu.html" %}
 
 {% block content %}
 
@@ -51,8 +51,8 @@
                                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                         <thead>
                                             <tr>
+                                              
                                                 <th style="text-align: center;">Nom & Prénom</th>
-                                                <th style="text-align: center;">Contact</th>
                                                 <th style="text-align: center;">Rôle actuel</th>
                                                 <th style="text-align: center;">Nouveau rôle</th>
                                                 <th style="text-align: center;">Attribuer</th>
@@ -60,53 +60,52 @@
                                         </thead>
                                         <tbody style="text-align: center;">
                                             {% for personnel in personnels %}
-                                            <form method="POST" action="{% url 'modifier_role' personnel.id_personnel %}">
-                                                {% csrf_token %}
                                                 <tr>
+                                                 
+                                                    <input hidden readonly class="form-control" type="text" name="id_personnel" id="{{ personnel.id }}" value="{{ personnel.id }}" style="text-align: center;">
+                                                 
                                                     <td>{{ personnel.username }}</td>
-                                                    <td>{{ personnel.contact }}</td>
                                                     <td>
                                                         {% if personnel.role == "Censeur" %}
-                                                        <span class="badge" style="background-color: green; padding: 1.5%;">{{ personnel.role }}</span>
-                                                        {% endif %}
-                                                        {% if personnel.role == "Aucun" %}
-                                                        <span class="badge" style="background-color: red; padding: 1.5%;">{{ personnel.role }}</span>
-                                                        {% endif %}
-                                                        {% if personnel.role == "Professeur" %}
-                                                        <span class="badge" style="background-color: rebeccapurple; padding: 1.5%;">{{ personnel.role }}</span>
-                                                        {% endif %}
-                                                        {% if personnel.role == "Surveillant" %}
-                                                        <span class="badge" style="background-color: blue; padding: 1.5%;">{{ personnel.role }}</span>
-                                                        {% endif %}
-                                                        {% if personnel.role == "Personnel" %}
-                                                        <span class="badge" style="background-color: rgb(72, 71, 71); padding: 1.5%;">{{ personnel.role }}</span>
-                                                        {% endif %}
-                                                        {% if personnel.role == "Secrétaire" %}
-                                                        <span class="badge" style="background-color: orange; padding: 1.5%;">{{ personnel.role }}</span>
+                                                            <span class="badge" style="background-color: green; padding: 2%;">{{ personnel.role }}</span>
+                                                        {% elif personnel.role == "Aucun" %}
+                                                            <span class="badge" style="background-color: red; padding: 2%;">{{ personnel.role }}</span>
+                                                        {% elif personnel.role == "Professeur" %}
+                                                            <span class="badge" style="background-color: rebeccapurple; padding: 2%;">{{ personnel.role }}</span>
+                                                        {% elif personnel.role == "Surveillant" %}
+                                                            <span class="badge" style="background-color: blue; padding: 2%;">{{ personnel.role }}</span>
+                                                        {% elif personnel.role == "Personnel" %}
+                                                            <span class="badge" style="background-color: rgb(72, 71, 71); padding: 2%;">{{ personnel.role }}</span>
+                                                        {% elif personnel.role == "Secrétaire" %}
+                                                            <span class="badge" style="background-color: orange; padding: 2%;">{{ personnel.role }}</span>
+                                                        {% elif personnel.role == "Comptable" %}
+                                                            <span class="badge" style="background-color: brown; padding: 2%;">{{ personnel.role }}</span>
                                                         {% endif %}
                                                     </td>
-                                                    
                                                     <td>
-                                                        <select class="form-control" name="role">
-                                                            <option value="Censeur" {% if personnel.role == "Censeur" %}selected{% endif %}>Censeur</option>
-                                                            <option value="Professeur" {% if personnel.role == "Professeur" %}selected{% endif %}>Professeur</option>
-                                                            <option value="Secrétaire" {% if personnel.role == "Secrétaire" %}selected{% endif %}>Secrétaire</option>
-                                                            <option value="Surveillant" {% if personnel.role == "Surveillant" %}selected{% endif %}>Surveillant</option>
-                                                            <option value="Aucun" {% if personnel.role == "Aucun" %}selected{% endif %}>Aucun</option>
-                                                        </select>
-                                                    </td>
-                                                    <td>
-                                                        <button type="submit" class="btn btn-info btn-sm">
-                                                            <em class="ion ion-ios-checkmark-circle"></em> Attribuer
-                                                        </button>
+                                                        <form method="POST" action="{% url 'modifier_role' %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="id_personnel" value="{{ personnel.id }}">
+                                                            <select class="form-control" name="role">
+                                                                <option value="Censeur" {% if personnel.role == "Censeur" %}selected{% endif %}>Censeur</option>
+                                                                <option value="Professeur" {% if personnel.role == "Professeur" %}selected{% endif %}>Professeur</option>
+                                                                <option value="Secrétaire" {% if personnel.role == "Secrétaire" %}selected{% endif %}>Secrétaire</option>
+                                                                <option value="Surveillant" {% if personnel.role == "Surveillant" %}selected{% endif %}>Surveillant</option>
+                                                                <option value="Comptable" {% if personnel.role == "Comptable" %}selected{% endif %}>Comptable</option>
+                                                                <option value="Aucun" {% if personnel.role == "Aucun" %}selected{% endif %}>Aucun</option>
+                                                            </select>
+                                                            <td>
+                                                                <button type="submit" class="btn btn-info btn-sm">
+                                                                    <em class="ion ion-ios-checkmark-circle"></em> Attribuer
+                                                                </button>
+                                                            </td>
+                                                        </form>
                                                     </td>
                                                 </tr>
-                                            </form>
                                             {% empty %}
-                                            <tr>
-                                                <td colspan="5" style="text-align: center; color: red; font-style: italic;">Aucune personnel enregistré
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td colspan="5" style="text-align: center; color: red; font-style: italic;">Aucune personnel enregistré</td>
+                                                </tr>
                                             {% endfor %}
                                         </tbody>
                                     </table>
