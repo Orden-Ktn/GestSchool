@@ -1,6 +1,6 @@
 # Projet de Gestion d'École Django
 
-Ce projet est une application web de gestion d'école développée avec le framework Django. Il permet de gérer les élèves, les professeurs, les classes, les notes, le finance, l'élaboration de l'emploi du temps, la génération de bulletin et bien plus encore.
+Ce projet est une application web de gestion d'école développée avec le framework Django. Il permet de gérer les élèves, les professeurs, le personnel administratif, les classes, les notes, le finance, l'élaboration de l'emploi du temps, la génération de bulletin et bien plus encore.
 
 ## Prérequis
 
@@ -14,13 +14,13 @@ Avant de lancer le projet, assurez-vous d'avoir les éléments suivants install�
 1.  Clonez le dépôt :
 
     ```bash
-    git clone <URL_du_dépôt>
+    git clone https://github.com/Orden-Ktn/GestSchool.git
     ```
 
 2.  Accédez au répertoire du projet :
 
     ```bash
-    cd <nom_du_projet>
+    cd GestSchool
     ```
 
 3.  Créez un environnement virtuel (recommandé) :
