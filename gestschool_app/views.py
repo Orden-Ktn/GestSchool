@@ -210,8 +210,6 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-
-
 #vue pour la déconnexion
 def deconnexion(request):
     logout(request)
