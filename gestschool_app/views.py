@@ -165,7 +165,7 @@ def index(request):
         total_classes = Classe_exist.objects.count()
         total_students = Eleve.objects.filter(annee_scolaire=annee_active).count()
         total_professeurs = Professeur.objects.filter(Q(role='Professeur') & Q(annee_scolaire=annee_active)).count()
-        total_personnels = CustomUser.objects.exclude(role="Superadmin").exclude(role="Aucun").exclude(role="Professeur").filter(is_active="1").count()
+        total_personnels = CustomUser.objects.exclude(role="Superadmin").exclude(role="Aucun").exclude(role="Professeur").exclude(role="Personnel").filter(is_active="1").count()
         total_students_boys = Eleve.objects.filter(annee_scolaire=annee_active, sexe='M').count()
         total_students_girls = Eleve.objects.filter(annee_scolaire=annee_active, sexe='F').count()
         solde_paye = Solde_Scolarite.objects.aggregate(total_montant=Sum(Coalesce('montant_paye', 0), output_field=DecimalField()))['total_montant']

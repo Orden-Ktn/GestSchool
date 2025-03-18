@@ -7,10 +7,13 @@ censeur
         password : azerty@gmail.com
 
 
-professeur
+professeur1
         username : John_DOE
         password : qwerty@gmail.com
 
+professeur2
+        username : Jean_DUPONT
+        password : 123456@gmail.com
 
 comptable
         username : Emma_JADE

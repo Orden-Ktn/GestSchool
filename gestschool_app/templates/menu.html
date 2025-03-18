@@ -207,10 +207,18 @@
                                         </ul>
                                     {% endfor %}
                                 {% else %}
-                                    <li class="nav-item">
+                                    <ul class="nav-item">
                                         <a class="nav-link disabled">Aucune classe attribuée</a>
-                                    </li>
+                                    </ul>
                                 {% endif %}
+                            </li>
+
+                        {% elif user.role == "Personnel" %}
+                            <li>
+                                <a href="{% url 'index' %}" class="waves-effect">
+                                    <i class="ion-md-speedometer"></i>
+                                    <span> Dashboard </span>
+                                </a>
                             </li>
 
                         {% else %}
@@ -224,7 +232,7 @@
                             <li>
                                 <a href="{% url 'personnel' %}" class="waves-effect">
                                     <i class="ion ion-md-people"></i>
-                                    <span> Personnels </span>
+                                    <span> Utilisateurs </span>
                                 </a>
                             </li>
                             <li>
