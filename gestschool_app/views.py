@@ -71,34 +71,40 @@ def profile(request):
 
 @login_required
 def editer_profile(request):
-    if request.method == 'POST':
-        nom = request.POST.get('nom')
-        prenom = request.POST.get('prenom')
-        role = request.POST.get('role')
-        contact = request.POST.get('contact')
-        email = request.POST.get('email')
-        matiere = request.POST.get('matiere_enseignee')
-        annee_active = AnneeScolaire.objects.filter(active=True).first()
+    try:
+        professeur = Professeur.objects.get(user=request.user)
+        # Le profil existe déjà, donc on refuse la modification
+        messages.error(request, "Le profil a déjà été créé. Vous ne pouvez pas le modifier.")
+        return redirect('index')
+    except Professeur.DoesNotExist:
+        if request.method == 'POST':
+            nom = request.POST.get('nom')
+            prenom = request.POST.get('prenom')
+            role = request.POST.get('role')
+            contact = request.POST.get('contact')
+            email = request.POST.get('email')
+            matiere = request.POST.get('matiere_enseignee')
+            annee_active = AnneeScolaire.objects.filter(active=True).first()
 
-        try:
-            professeur = Professeur.objects.get(email=request.user.email)
-            professeur.nom = nom
-            professeur.prenom = prenom
-            professeur.role = role
-            professeur.contact = contact
-            professeur.email = email
-            professeur.matiere_id = matiere
-            professeur.annee_scolaire = annee_active
-            professeur.save()
-            messages.success(request, "Profil mis à jour!")
-            return redirect('index')
-        except Professeur.DoesNotExist:
-            Professeur.objects.create(nom=nom, prenom=prenom, role=role, contact=contact, email=email, matiere_id=matiere, annee_scolaire=annee_active)
-            messages.success(request, "Profil mise à jour!")
-            return redirect('index')
-        except ValueError as e:
-            messages.error(request, 'Veuillez bien renseigner les informations.')
-            return redirect('index')
+            try:
+                Professeur.objects.create(
+                    user=request.user,
+                    nom=nom,
+                    prenom=prenom,
+                    role=role,
+                    contact=contact,
+                    email=email,
+                    matiere=Matiere.objects.get(id=matiere),
+                    annee_scolaire=annee_active,
+                )
+                messages.success(request, "Profil créé!")
+                return redirect('index')
+            except (ValueError, Matiere.DoesNotExist) as e:
+                messages.error(request, f'Veuillez bien renseigner les informations. {e}')
+                return redirect('index')
+        else:
+            # Si la requête n'est pas POST, afficher un formulaire vide (ou pré-rempli si nécessaire)
+            return render(request, 'editer_profile.html')  # Assurez-vous d'avoir un template editer_profile.html
 
     return redirect('index')
 

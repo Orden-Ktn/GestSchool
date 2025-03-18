@@ -144,7 +144,7 @@ class Personnel(models.Model):
 
 class Professeur(models.Model):  
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
-    nom = models.CharField(max_length=80)
+    nom = models.CharField(max_length=80) 
     prenom = models.CharField(max_length=100)
     role = models.CharField(max_length=100)
     contact = models.CharField(max_length=100)
