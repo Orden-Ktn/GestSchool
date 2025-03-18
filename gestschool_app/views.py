@@ -179,8 +179,14 @@ def index(request):
         try:
             professeur = Professeur.objects.get(user=request.user)
             nombre_classes_professeur = Professeur_Classe.objects.filter(professeur=professeur).count()
+            classes_attribuees = Professeur_Classe.objects.filter(professeur=professeur)
+
+            eleves_par_classe = {}
+            for classe_attribuee in classes_attribuees:
+                eleves_par_classe[classe_attribuee.classe.fusion] = Eleve.objects.filter(classe=classe_attribuee.classe.fusion)
         except Professeur.DoesNotExist:
             nombre_classes_professeur = 0  # Si le professeur n'existe pas, le nombre est 0
+
 
     else:
         total_classes = 0
@@ -204,7 +210,8 @@ def index(request):
         'percent_girls': percent_girls,
         'annee_active': annee_active,
         'matieres': matieres,
-        'nombre_classes_professeur': nombre_classes_professeur, # Ajout du nombre de classes
+        'nombre_classes_professeur': nombre_classes_professeur,
+        'eleves_par_classe': eleves_par_classe
     }
 
     return render(request, 'index.html', context)
@@ -721,6 +728,22 @@ def mes_classes(request):
     except Professeur.DoesNotExist:
         #Handle the case where a professor profile does not exist for the user.
         return render(request, 'all_eleve.html', {'error':"Votre profil professeur n'existe pas"})
+
+@login_required
+def liste_eleves_classe(request, classe_nom):
+    try:
+        professeur = Professeur.objects.get(user=request.user)
+        matiere = professeur.matiere
+        classe = Classe_exist.objects.get(fusion=classe_nom)
+        classe_attribuee = Professeur_Classe.objects.get(professeur=professeur, classe=classe)
+        eleves = Eleve.objects.filter(classe=classe_nom)
+        return render(request, 'liste_eleves_classe.html', {'eleves': eleves, 'matiere': matiere, 'classe_nom': classe_nom, 'eleves_par_classe': {classe_nom:eleves} }) #ajouter le dictionnaire eleves_par_classe.
+    except Professeur.DoesNotExist:
+        return render(request, 'liste_eleves_classe.html', {'error': "Votre profil professeur n'existe pas.", 'eleves_par_classe': {}}) #ajouter dictionnaire vide, pour eviter les erreurs si le template est aussi utilisé pour les autres vues.
+    except Classe_exist.DoesNotExist:
+        return render(request, 'liste_eleves_classe.html', {'error': "Classe non trouvée.", 'eleves_par_classe': {}}) #ajouter dictionnaire vide, pour eviter les erreurs si le template est aussi utilisé pour les autres vues.
+    except Professeur_Classe.DoesNotExist:
+        return render(request, 'liste_eleves_classe.html', {'error': "Classe non attribuée à ce professeur.", 'eleves_par_classe': {}}) #ajouter dictionnaire vide, pour eviter les erreurs si le template est aussi utilisé pour les autres vues.
 
 def ajout_note(request, id_eleve):
     eleves = Eleve.objects.filter(id_eleve=id_eleve)

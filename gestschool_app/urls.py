@@ -70,6 +70,7 @@ urlpatterns = [
 #urls pour les notes
     path('mes classes/', views.mes_classes, name='mes_classes'),
     path('élève/', views.eleve, name='eleve'),
+    path('classe/<str:classe_nom>/', views.liste_eleves_classe, name='liste_eleves_classe'),
     path('ajout note/<int:id_eleve>/', views.ajout_note, name='ajout_note'),
     path('ajouter note/', views.ajouter_note, name='ajouter_note'),
 

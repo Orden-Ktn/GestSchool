@@ -176,16 +176,31 @@
                                 </a>
                             </li>
                         {% elif user.role == "Professeur" %}
+
+                            <li>
+                                <a href="{% url 'index' %}" class="waves-effect">
+                                    <i class="ion-md-speedometer"></i>
+                                    <span> Dashboard </span>
+                                </a>
+                            </li>
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect">
-                                    <i class="ion ion-md-create"></i>
+                                    <i class="ion-md-home"></i>
                                     <span> Mes classes </span>
                                 </a>
-                                <ul class="nav-second-level" aria-expanded="false">
-                                    <li><a href="{% url 'mes_classes' %}">Ajout de note</a></li>
-                                    <li><a href="{% url 'mes_classes' %}">Calcul de moyenne</a></li>
-                                </ul>
+                                {% if eleves_par_classe %}
+                                    {% for classe_nom in eleves_par_classe %}
+                                        <ul class="nav-second-level" aria-expanded="false">
+                                            <li><a href="{% url 'liste_eleves_classe' classe_nom=classe_nom %}">{{ classe_nom }}</a></li>
+                                        </ul>
+                                    {% endfor %}
+                                {% else %}
+                                    <li class="nav-item">
+                                        <a class="nav-link disabled">Aucune classe attribuée</a>
+                                    </li>
+                                {% endif %}
                             </li>
+
                         {% else %}
                             <li>
                                 <a href="{% url 'index' %}" class="waves-effect">
@@ -427,6 +442,12 @@
                 font-size: 16px; /* Taille de la police */
             }
         </style>
+
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
 
     </div>
 </body>
