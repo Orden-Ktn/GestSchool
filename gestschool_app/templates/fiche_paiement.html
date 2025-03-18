@@ -57,7 +57,7 @@
                                             <th>Classe</th>
                                             <th>Scolarité</th>
                                             <th>Montant total payé</th>
-                                            <th>Reste à payé</th>
+                                            <th>Reste à payer</th>
                                             <th>Statut</th>
                                             <th>Action</th>
                                         </tr>
@@ -89,23 +89,23 @@
                                             </td>  
                                             <td>
                                                 
-                                                    {% if eleve.statut_paiement == "En dette" %}
-                                                        <span class="badge" style="background-color: red; padding: 5%;">
-                                                            {{ eleve.statut_paiement }}
-                                                        </span>                                            
-                                                    {% endif %}
-    
-                                                    {% if eleve.statut_paiement == "Soldé" %}
-                                                        <span class="badge" style="background-color: green; padding: 5%;">
-                                                            {{ eleve.statut_paiement }}
-                                                        </span>                                            
-                                                    {% endif %}
-                                                    
-                                                    {% if eleve.statut_paiement == "Marge dépassée mais soldé" %}
-                                                        <span class="badge" style="background-color: orange; padding: 5%;">
-                                                            {{ eleve.statut_paiement }}
-                                                        </span>                                            
-                                                    {% endif %}
+                                                {% if eleve.statut_paiement == "En dette" %}
+                                                    <span class="badge" style="background-color: red; padding: 5%;">
+                                                        {{ eleve.statut_paiement }}
+                                                    </span>                                            
+                                                {% endif %}
+
+                                                {% if eleve.statut_paiement == "Soldé" %}
+                                                    <span class="badge" style="background-color: green; padding: 5%;">
+                                                        {{ eleve.statut_paiement }}
+                                                    </span>                                            
+                                                {% endif %}
+                                                
+                                                {% if eleve.statut_paiement == "Marge dépassée mais soldé" %}
+                                                    <span class="badge" style="background-color: orange; padding: 5%;">
+                                                        {{ eleve.statut_paiement }}
+                                                    </span>                                            
+                                                {% endif %}
                                                 
                                                 </td>
                                             <td>
