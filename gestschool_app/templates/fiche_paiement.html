@@ -75,13 +75,13 @@
                                             <td> 
 
                                                 {% if eleve.statut_paiement == "En dette" %}
-                                                    <span class="badge" style="background-color: skyblue; padding: 5%;">
+                                                    <span class="badge" style="background-color:red; padding: 5%;">
                                                         {{ eleve.reste_a_payer }} FCFA
                                                     </span>                                            
                                                 {% endif %}
 
                                                 {% if eleve.statut_paiement == "Soldé" %}
-                                                    <span class="badge" style="background-color: skyblue; padding: 5%;">
+                                                    <span class="badge" style="background-color:green; padding: 5%;">
                                                         {{ reste }} FCFA
                                                     </span>                                            
                                                 {% endif %}
