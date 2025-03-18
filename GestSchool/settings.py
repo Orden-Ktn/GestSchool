@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-7j9n-shnzhol_lh*+6%5%letjb)j1-lmqzh0f4_duojkf=ok+d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -92,6 +92,9 @@ DATABASES = {
 
 LOGIN_URL = 'connexion'
 AUTH_USER_MODEL = 'gestschool_app.CustomUser'
+TIME_ZONE = 'Africa/Lagos'
+USE_TZ = True
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 

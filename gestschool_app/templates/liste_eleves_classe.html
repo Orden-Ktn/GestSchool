@@ -4,16 +4,11 @@
 
 <div class="content-page">
     <div class="content">
-
-        <!-- Start Content-->
         <div class="container-fluid">
-
-            <!-- start page title -->
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box">
-                        <button type="button"
-                            class="page-title btn btn-outline-danger btn-rounded waves-effect width-md waves-light" onclick="goBack()">
+                        <button type="button" class="page-title btn btn-outline-danger btn-rounded waves-effect width-md waves-light" onclick="goBack()">
                             <i class="ion ion-md-arrow-back"></i>
                             Retour
                         </button>
@@ -27,7 +22,6 @@
                     </div>
                 </div>
             </div>
-            <!-- end page title -->
             {% if messages %}
                 <div class="alert-container">
                     {% for message in messages %}
@@ -49,6 +43,7 @@
                                         <table class="table table-striped mb-0">
                                             <thead>
                                                 <tr>
+                                                    <th>ID</th>
                                                     <th>Nom</th>
                                                     <th>Prénom</th>
                                                     <th>Matière</th>
@@ -59,28 +54,32 @@
                                             </thead>
                                             <tbody>
                                                 {% for eleve in eleves %}
-                                                    <tr>
-                                                        <td>{{ eleve.nom }}</td>
-                                                        <td>{{ eleve.prenom }}</td>
-                                                        <td>{{ matiere.sigle }}</td>
-                                                        <td style="width: 15%;">
-                                                            <select class="form-control" name="option" id="option">
-                                                                <option value="Interro 1">Interro 1</option>
-                                                                <option value="Interro 2">Interro 2</option>
-                                                                <option value="Interro 3">Interro 3</option>
-                                                                <option value="Devoir 1">Devoir 1</option>
-                                                                <option value="Devoir 2">Devoir 2</option>
-                                                            </select>
-                                                        </td>
-                                                        <td style="width: 15%;">
-                                                            <input type="number" name="note" class="form-control" min="00" max="20" step="0.01">
-                                                        </td>
-                                                        <td style="width: 5%;">
-                                                            <button class="btn btn-success btn-user btn-block" type="submit"
-                                                                style="font-size: medium;"> Valider
-                                                            </button>
-                                                        </td>
-                                                    </tr>
+                                                    <form method="post" action="{% url 'enregistrer_note' %}" id="form-{{ eleve.id_eleve }}">
+                                                        {% csrf_token %}
+                                                        <tr>
+                                                            <td>{{ eleve.id_eleve }}</td>
+                                                            <td>{{ eleve.nom }}</td>
+                                                            <td>{{ eleve.prenom }}</td>
+                                                            <td>{{ matiere.sigle }}</td>
+                                                            <td style="width: 15%;">
+                                                                <select class="form-control" name="option" required>
+                                                                    <option value="Interro 1">Interro 1</option>
+                                                                    <option value="Interro 2">Interro 2</option>
+                                                                    <option value="Interro 3">Interro 3</option>
+                                                                    <option value="Devoir 1">Devoir 1</option>
+                                                                    <option value="Devoir 2">Devoir 2</option>
+                                                                </select>
+                                                            </td>
+                                                            <td style="width: 15%;" >
+                                                                <input type="number" required name="note" class="form-control" min="00" max="20" step="0.01">
+                                                            </td>
+                                                            <td style="width: 5%;">
+                                                                <input type="hidden" name="eleve_id" value="{{ eleve.id_eleve }}">
+                                                                <input type="hidden" name="matiere_id" value="{{ matiere.id }}">
+                                                                <button class="btn btn-success btn-user btn-block" type="submit" style="font-size: medium;">Valider</button>
+                                                            </td>
+                                                        </tr>
+                                                    </form>
                                                 {% endfor %}
                                             </tbody>
                                         </table>
@@ -96,40 +95,4 @@
         </div>
     </div>
 </div>
-
-
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-    style="display: none;" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title" id="myLargeModalLabel">Ajout de matière</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body">
-                <form role="form" method="post" action="{% url 'ajouter_matiere' %}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="userName">Nom<span class="text-danger">*</span></label>
-                        <input type="text" name="nom" parsley-trigger="change" required="" placeholder="EX : Mathématiques"
-                            class="form-control" id="nom">
-                    </div>
-                    <div class="form-group">
-                        <label for="userName">Sigle<span class="text-danger">*</span></label>
-                        <input type="text" name="sigle" parsley-trigger="change" required="" placeholder="EX : Maths"
-                            class="form-control" id="sigle">
-                    </div>
-                    <div class="col-lg-12 modal-footer">
-                        <button type="submit" class="btn btn-primary">Ajouter</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-
 {% endblock %}

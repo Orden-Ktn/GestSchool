@@ -127,7 +127,7 @@ class Personnel(models.Model):
     role = models.CharField(max_length=100, default='Personnel')
     annee_scolaire = models.ForeignKey(AnneeScolaire, on_delete=models.SET_NULL, null=True, blank=True)
     password = models.CharField(max_length=255) 
-
+ 
     def save(self, *args, **kwargs):
         # Hacher le mot de passe uniquement si le mot de passe est en texte brut
         if not self.password.startswith('pbkdf2_'):
@@ -160,17 +160,15 @@ class Professeur_Classe(models.Model):
 
 
 class Note(models.Model):
-    eleve_id = models.ForeignKey(Eleve, on_delete=models.CASCADE)
-    matiere_id = models.ForeignKey(Matiere, on_delete=models.CASCADE)
-    interro1 = models.CharField(max_length=50)
-    interro2 = models.CharField(max_length=50)
-    interro3 = models.CharField(max_length=50)
-    dev1 = models.CharField(max_length=50)
-    dev2 = models.CharField(max_length=50)
-    coef = models.CharField(max_length=50)
-    tri = models.CharField(max_length=50)
-    moy_interro = models.CharField(max_length=50)
-    moy_coef = models.CharField(max_length=50)
+    eleve = models.ForeignKey(Eleve, on_delete=models.CASCADE)
+    matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE)
+    option = models.CharField(max_length=100)
+    note = models.DecimalField(max_digits=5, decimal_places=2)
+    annee_scolaire = models.ForeignKey(AnneeScolaire, on_delete=models.SET_NULL, null=True, blank=True)
+    trimestre = models.ForeignKey(Trimestre, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f"Note de {self.eleve.nom} en {self.matiere.sigle} ({self.option})"
 
 
 

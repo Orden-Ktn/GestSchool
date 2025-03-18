@@ -9,8 +9,8 @@ from .models import *
 import time
 from plyer import notification
 from django.db.models import Count, F, Value, Window
-from django.db.models.functions import Rank
-from django.db.models import Prefetch, Q
+from django.db.models.functions import Rank, Coalesce
+from django.db.models import Prefetch, Q, Sum, DecimalField
 from decimal import Decimal
 from .forms import *
 
@@ -152,15 +152,14 @@ def delete_professeur(request, id):
     objet.delete()      
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from .models import AnneeScolaire, Classe_exist, Eleve, Professeur, CustomUser, Matiere, Professeur_Classe
-from django.db.models import Q
 
 @login_required
 def index(request):
     annee_active = AnneeScolaire.objects.filter(active=True).first()
+    trimestre_active = Trimestre.objects.filter(active=True).first()
     matieres = Matiere.objects.all()
+
+    eleves_par_classe = {}  # Initialiser eleves_par_classe ici
 
     if annee_active:
         total_classes = Classe_exist.objects.count()
@@ -169,6 +168,7 @@ def index(request):
         total_personnels = CustomUser.objects.exclude(role="Superadmin").exclude(role="Aucun").exclude(role="Professeur").filter(is_active="1").count()
         total_students_boys = Eleve.objects.filter(annee_scolaire=annee_active, sexe='M').count()
         total_students_girls = Eleve.objects.filter(annee_scolaire=annee_active, sexe='F').count()
+        solde_paye = Solde_Scolarite.objects.aggregate(total_montant=Sum(Coalesce('montant_paye', 0), output_field=DecimalField()))['total_montant']
 
         pourcentage_boys = (total_students_boys * 100) / total_students if total_students > 0 else 0
         pourcentage_girls = (total_students_girls * 100) / total_students if total_students > 0 else 0
@@ -182,11 +182,14 @@ def index(request):
             classes_attribuees = Professeur_Classe.objects.filter(professeur=professeur)
 
             eleves_par_classe = {}
+            matiere_professeur = professeur.matiere  # Récupérer la matière du professeur
+
             for classe_attribuee in classes_attribuees:
                 eleves_par_classe[classe_attribuee.classe.fusion] = Eleve.objects.filter(classe=classe_attribuee.classe.fusion)
+
         except Professeur.DoesNotExist:
             nombre_classes_professeur = 0  # Si le professeur n'existe pas, le nombre est 0
-
+            matiere_professeur = None  # Si le professeur n'existe pas, la matière est None
 
     else:
         total_classes = 0
@@ -197,7 +200,9 @@ def index(request):
         total_students_girls = 0
         percent_boys = 0
         percent_girls = 0
-        nombre_classes_professeur = 0 # si l'année scolaire n'est pas active, le nombre est 0
+        solde_paye = 0
+        nombre_classes_professeur = 0  # si l'année scolaire n'est pas active, le nombre est 0
+        matiere_professeur = None  # Si l'année scolaire n'est pas active, la matière est None
 
     context = {
         'total_classes': total_classes,
@@ -209,13 +214,15 @@ def index(request):
         'percent_boys': percent_boys,
         'percent_girls': percent_girls,
         'annee_active': annee_active,
+        'trimestre_active': trimestre_active,
         'matieres': matieres,
         'nombre_classes_professeur': nombre_classes_professeur,
-        'eleves_par_classe': eleves_par_classe
+        'eleves_par_classe': eleves_par_classe,
+        'matiere_professeur': matiere_professeur,  # Ajouter la matière du professeur au contexte
+        "solde_paye": solde_paye
     }
 
     return render(request, 'index.html', context)
-
 
 #vue pour la déconnexion
 def deconnexion(request):
@@ -745,78 +752,51 @@ def liste_eleves_classe(request, classe_nom):
     except Professeur_Classe.DoesNotExist:
         return render(request, 'liste_eleves_classe.html', {'error': "Classe non attribuée à ce professeur.", 'eleves_par_classe': {}}) #ajouter dictionnaire vide, pour eviter les erreurs si le template est aussi utilisé pour les autres vues.
 
-def ajout_note(request, id_eleve):
-    eleves = Eleve.objects.filter(id_eleve=id_eleve)
-    matieres = Matiere.objects.all()
-    return render(request, 'ajout_note.html', {'eleves': eleves, 'matieres': matieres})
-
-def ajouter_note(request):
+def enregistrer_note(request):
     if request.method == 'POST':
-        # Récupération des données du formulaire
         eleve_id = request.POST.get('eleve_id')
         matiere_id = request.POST.get('matiere_id')
-        n1 = request.POST.get('n1')
-        n2 = request.POST.get('n2')
-        n3 = request.POST.get('n3')
-        n4 = request.POST.get('n4')
-        n5 = request.POST.get('n5')
-        coef = request.POST.get('coef')
-        tri = request.POST.get('tri')
-
-        # Vérification si la matière existe déjà pour cet élève
-        existing_note = Note.objects.filter(eleve_id=eleve_id, matiere_id=matiere_id, tri=tri).first()
-
-        if existing_note:
-            # Si l'enregistrement existe déjà, afficher un message d'erreur
-            messages.error(request, "Les notes ont déjà été enregistrées pour cette matière.")
-            return redirect(request.META.get('HTTP_REFERER', '/'))
-
+        option = request.POST.get('option')
+        note_value = request.POST.get('note')
+        annee_active = AnneeScolaire.objects.filter(active=True).first()
+        trimestre_active = Trimestre.objects.filter(active=True).first()
 
         try:
-            # Convertir les notes en float, en gérant les valeurs vides ou non valides
-            interro1 = float(n1) if n1.strip() else 0.0
-            interro2 = float(n2) if n2.strip() else 0.0
-            interro3 = float(n3) if n3.strip() else 0.0
-            dev1 = float(n4) if n4.strip() else 0.0
-            dev2 = float(n5) if n5.strip() else 0.0
-            coef = float(coef) if coef.strip() else 1.0  # Valeur par défaut pour le coefficient
+            eleve = Eleve.objects.get(id_eleve=eleve_id)
+            matiere = Matiere.objects.get(id=matiere_id)
 
-            # Calcul des moyennes
-            moy_int = (interro1 + interro2 + interro3) / 3 if (interro1 + interro2 + interro3) > 0 else 0.0
-            moy_interro = round(moy_int, 2)
-            moy = (moy_interro + dev1 + dev2) / 3 if (moy_interro + dev1 + dev2) > 0 else 0.0
-            moy_coe = moy * coef
-            moy_coef = round(moy_coe, 2)
+            # Vérifier si une note existe déjà
+            existing_note = Note.objects.filter(
+                eleve=eleve,
+                matiere=matiere,
+                option=option,
+                trimestre=trimestre_active,
+                annee_scolaire=annee_active
+            ).first()
 
-            # Validation simple
-            if all([eleve_id, matiere_id, n1, n2, n3, n4, n5, coef, tri]):
-                # Création de l'objet NoteCycle2 et sauvegarde dans la base de données
-                Note.objects.create(
-                    eleve_id_id=eleve_id,
-                    matiere_id_id=matiere_id,
-                    interro1=interro1,
-                    interro2=interro2,
-                    interro3=interro3,
-                    dev1=dev1,
-                    dev2=dev2,
-                    coef=coef,
-                    tri=tri,
-                    moy_interro=moy_interro,
-                    moy_coef=moy_coef
-                )
-
-                messages.success(request, "Les notes ont été enregistrées pour cette matière.")
-                return redirect(request.META.get('HTTP_REFERER', '/'))
+            if existing_note:
+                messages.error(request, f"Une note pour {option} existe déjà pour cet élève et cette matière.")
             else:
-                # Gérer les erreurs si les données sont invalides
-                messages.error(request, 'Tous les champs sont requis.')
+                # Créer et enregistrer la nouvelle note
+                note = Note(
+                    eleve=eleve,
+                    matiere=matiere,
+                    option=option,
+                    note=note_value,
+                    trimestre=trimestre_active,
+                    annee_scolaire=annee_active
+                )
+                note.save()
+                messages.success(request, "Note enregistrée avec succès.")
 
-        except ValueError as e:
-            # Gérer les erreurs de conversion
-            messages.error(request, 'Veuillez entrer des valeurs numériques valides pour les notes.')
+        except (Eleve.DoesNotExist, Matiere.DoesNotExist):
+            messages.error(request, "Élève ou matière introuvable.")
+        except Exception as e:
+            messages.error(request, f"Une erreur s'est produite: {e}")
 
-    return render(request, 'index.html')
+        return redirect(request.META.get('HTTP_REFERER', '/'))
 
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
 

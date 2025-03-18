@@ -71,8 +71,8 @@ urlpatterns = [
     path('mes classes/', views.mes_classes, name='mes_classes'),
     path('élève/', views.eleve, name='eleve'),
     path('classe/<str:classe_nom>/', views.liste_eleves_classe, name='liste_eleves_classe'),
-    path('ajout note/<int:id_eleve>/', views.ajout_note, name='ajout_note'),
-    path('ajouter note/', views.ajouter_note, name='ajouter_note'),
+    path('enregistrer_note/', views.enregistrer_note, name='enregistrer_note'),
+
 
 
 
@@ -86,7 +86,7 @@ urlpatterns = [
     path('vérification/', views.verification, name='verification'),
     path('download/', views.download, name='download'),
 
-
+ 
     path('personnel/', views.personnel, name='personnel'),
     path("modifier_role/", views.modifier_role, name="modifier_role")
 
