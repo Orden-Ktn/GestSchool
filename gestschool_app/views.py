@@ -169,6 +169,10 @@ def index(request):
         total_students_boys = Eleve.objects.filter(annee_scolaire=annee_active, sexe='M').count()
         total_students_girls = Eleve.objects.filter(annee_scolaire=annee_active, sexe='F').count()
         solde_paye = Solde_Scolarite.objects.aggregate(total_montant=Sum(Coalesce('montant_paye', 0), output_field=DecimalField()))['total_montant']
+        if solde_paye is None:
+            solde_paye = 0
+        elif solde_paye == 0:
+            solde_paye = 0
 
         pourcentage_boys = (total_students_boys * 100) / total_students if total_students > 0 else 0
         pourcentage_girls = (total_students_girls * 100) / total_students if total_students > 0 else 0
@@ -178,7 +182,7 @@ def index(request):
         # Récupérer le professeur connecté et compter ses classes
         try:
             professeur = Professeur.objects.get(user=request.user)
-            nombre_classes_professeur = Professeur_Classe.objects.filter(professeur=professeur).count()
+            nombre_classes_professeur = Professeur_Classe.objects.filter(Q (annee_scolaire=annee_active) & Q(professeur=professeur)).count()
             classes_attribuees = Professeur_Classe.objects.filter(professeur=professeur)
 
             eleves_par_classe = {}
@@ -361,29 +365,36 @@ def fiche_paiement(request):
             # Comparer le montant total payé au tarif
             if total_cotisations == int(eleve.tarif_montant):
                 eleve.statut_paiement = "Soldé"
+                reste = 0
             elif total_cotisations > int(eleve.tarif_montant):
                 eleve.statut_paiement = "Marge dépassée mais soldé"
             else:
                 eleve.statut_paiement = "En dette"
+                reste_a_payer = int(eleve.tarif_montant) - int(eleve.total_cotisations)
+                eleve.reste_a_payer = reste_a_payer
+     
 
         except (Classe_exist.DoesNotExist, Tarif.DoesNotExist):
             # Si le tarif n'est pas trouvé, définir une valeur par défaut
             eleve.tarif_montant = 0
             eleve.total_cotisations = 0
+            eleve.reste_a_payer = 0
             eleve.statut_paiement = "N/A"  # Statut par défaut si le tarif n'est pas trouvé
 
-    return render(request, 'fiche_paiement.html', {'eleves': eleves})
+    return render(request, 'fiche_paiement.html', {'eleves': eleves, 'reste_a_payer': reste_a_payer, 'reste': reste,})
 
 
 def modifier_solde(request, eleve_id):
     eleve = get_object_or_404(Eleve, pk=eleve_id)
+    annee_active = AnneeScolaire.objects.filter(active=True).first()
     if request.method == 'POST':
         try:
             nouveau_montant = request.POST['nouveau_montant']
 
             Solde_Scolarite.objects.create(
                 eleve=eleve,
-                montant_paye=nouveau_montant,   # Utiliser directement le nouveau montant
+                montant_paye=nouveau_montant, 
+                annee_scolaire=annee_active, 
             )
 
             messages.success(request, 'Le nouveau montant a été enregistré avec succès.')

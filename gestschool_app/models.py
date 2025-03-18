@@ -75,6 +75,7 @@ class Solde_Scolarite(models.Model):
     eleve = models.ForeignKey('Eleve', on_delete=models.CASCADE)
     montant_paye = models.DecimalField(max_digits=10, decimal_places=2)
     date_modification = models.DateTimeField(auto_now=True)
+    annee_scolaire = models.ForeignKey(AnneeScolaire, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"Solde de {self.eleve.nom} {self.eleve.prenom}"

@@ -50,13 +50,14 @@
                                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <!-- <th>ID</th> -->
                                             <th>Nom</th>
                                             <th>Prénoms</th>
                                             <th>Contact parent (s)</th>
                                             <th>Classe</th>
                                             <th>Scolarité</th>
                                             <th>Montant total payé</th>
+                                            <th>Reste à payé</th>
                                             <th>Statut</th>
                                             <th>Action</th>
                                         </tr>
@@ -64,13 +65,28 @@
                                     <tbody>
                                         {% for eleve in eleves %}
                                         <tr>
-                                            <td>{{ eleve.id_eleve }}</td>
+                                            <!-- <td>{{ eleve.id_eleve }}</td> -->
                                             <td>{{ eleve.nom }}</td>
                                             <td>{{ eleve.prenom }}</td>
                                             <td>{{ eleve.contact }}</td>
                                             <td>{{ eleve.classe }}</td>
                                             <td>{{ eleve.tarif_montant }} FCFA</td>
-                                            <td>{{ eleve.total_cotisations }} FCFA</td>  
+                                            <td>{{ eleve.total_cotisations }} FCFA</td>
+                                            <td> 
+
+                                                {% if eleve.statut_paiement == "En dette" %}
+                                                    <span class="badge" style="background-color: skyblue; padding: 5%;">
+                                                        {{ eleve.reste_a_payer }} FCFA
+                                                    </span>                                            
+                                                {% endif %}
+
+                                                {% if eleve.statut_paiement == "Soldé" %}
+                                                    <span class="badge" style="background-color: skyblue; padding: 5%;">
+                                                        {{ reste }} FCFA
+                                                    </span>                                            
+                                                {% endif %}
+
+                                            </td>  
                                             <td>
                                                 
                                                     {% if eleve.statut_paiement == "En dette" %}
@@ -117,7 +133,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="submit" class="btn btn-success">Modifier</button>
+                                                                        <button type="submit" class="btn btn-success">Valider</button>
                                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
                                                                     </div>
                                                                 </form>
