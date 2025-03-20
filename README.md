@@ -1,6 +1,6 @@
 # Projet de Gestion d'École Django
 
-Ce projet est une application web de gestion d'école développée avec le framework Django. Il permet de gérer les élèves, les professeurs, le personnel administratif, les classes, les notes, le finance, l'élaboration de l'emploi du temps, la génération de bulletin et bien plus encore.
+Ce projet est une application web de gestion d'école développée avec le framework Django. Il permet de gérer les élèves, les professeurs, le personnel administratif, les classes, les notes, le finance, l'élaboration de l'emploi du temps, la génération de bulletin, l'édition de cahier de texte et bien plus encore.
 
 ## Prérequis
 
@@ -77,6 +77,7 @@ Les informations de connexion de test de base sont fournies dans le fichier `ide
 * Interface d'administration Django
 * Tableau de bord avec statistiques
 * Gestion des matières
+* Ajout de contenu dasn le cahier de texte
 * Gestion des trimestres
 * Gestion des années scolaires
 * Gestion des utilisateurs (personnel, professeurs)
