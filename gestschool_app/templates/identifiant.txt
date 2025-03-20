@@ -15,6 +15,10 @@ professeur2
         username : Jean_DUPONT
         password : 123456@gmail.com
 
+professeur3
+        username : TOTO_Jacques
+        password : 789456@gmail.com
+
 comptable
         username : Emma_JADE
         password : qwertz@gmail.com
