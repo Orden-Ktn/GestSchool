@@ -108,7 +108,7 @@ def editer_profile(request):
 
     return redirect('index')
 
-
+@login_required
 def professeur(request):
     annee_active = AnneeScolaire.objects.filter(active=True).first()
     classes = Classe_exist.objects.all()
@@ -121,6 +121,7 @@ def professeur(request):
 
     return render(request, 'professeur.html', {'professeurs': professeurs, 'classes': classes})
 
+@login_required
 def attribuer_classe_professeur(request):
     if request.method == 'POST':
         # Récupération des données du formulaire
@@ -153,6 +154,7 @@ def attribuer_classe_professeur(request):
 
     return redirect('professeur')
 
+@login_required
 def delete_professeur(request, id):
     objet = Professeur.objects.get(pk=id)
     objet.delete()      
@@ -278,6 +280,7 @@ def change_user(request):
 
 
 #vues pour les matières
+@login_required
 def ajouter_matiere(request):
     if request.method == 'POST':
         # Récupération des données du formulaire
@@ -308,6 +311,7 @@ def ajouter_matiere(request):
 
     return redirect('matiere')   
 
+@login_required
 def matiere(request):
        # Récupération de toutes les matieres
        matieres = Matiere.objects.all()
@@ -318,6 +322,7 @@ def matiere(request):
 
 
 #vues pour les tarifs
+@login_required
 def ajouter_tarif(request):
     if request.method == 'POST':
         # Récupération des données du formulaire
@@ -344,6 +349,7 @@ def ajouter_tarif(request):
 
     return redirect('tarif')   
 
+@login_required
 def modify_tarif(request, id):
     tarif = Tarif.objects.get(id=id)
     classes = Classe_exist.objects.all()
@@ -355,6 +361,7 @@ def modify_tarif(request, id):
         return redirect('tarif')
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
+@login_required
 def fiche_paiement(request):
     annee_active = AnneeScolaire.objects.filter(active=True).first()
     eleves = Eleve.objects.filter(annee_scolaire_id=annee_active)
@@ -397,7 +404,7 @@ def fiche_paiement(request):
 
     return render(request, 'fiche_paiement.html', {'eleves': eleves, 'reste_a_payer': reste_a_payer, 'reste': reste,})
 
-
+@login_required
 def modifier_solde(request, eleve_id):
     eleve = get_object_or_404(Eleve, pk=eleve_id)
     annee_active = AnneeScolaire.objects.filter(active=True).first()
@@ -418,6 +425,7 @@ def modifier_solde(request, eleve_id):
             return redirect('fiche_paiement')
     return redirect('fiche_paiement')
 
+@login_required
 def tarif(request):
     tarifs = Tarif.objects.all()
     classes = Classe_exist.objects.all()
@@ -425,10 +433,12 @@ def tarif(request):
 
 
 #vues pour le personnel
+@login_required
 def personnel(request):
     personnels = CustomUser.objects.exclude(role="Superadmin")
     return render(request, 'personnel.html', {'personnels': personnels})
 
+@login_required
 def modifier_role(request):
     if request.method == "POST":
         personnel_id = request.POST.get("id_personnel")
@@ -446,6 +456,7 @@ def modifier_role(request):
     return redirect("personnel")
 
 #vues pour les classes
+@login_required
 def ajouter_classe(request):
     if request.method == 'POST':
         # Récupération des données du formulaire
@@ -476,6 +487,7 @@ def ajouter_classe(request):
 
     return redirect('classe')
  
+@login_required
 def classe(request):
     classes = Classe_exist.objects.all()
     classes_professeurs = []
@@ -493,6 +505,7 @@ def classe(request):
 
 
 #vues pour les annees
+@login_required
 def ajouter_annee(request):
     if request.method == 'POST':
         # Récupération des données du formulaire
@@ -522,6 +535,7 @@ def ajouter_annee(request):
 
     return redirect('annee_scolaire')    
 
+@login_required
 def activer_annee(request, annee_id):
     # Désactiver toutes les années scolaires
     AnneeScolaire.objects.update(active=False)
@@ -533,6 +547,7 @@ def activer_annee(request, annee_id):
 
     return redirect('annee_scolaire') 
 
+@login_required
 def annee_scolaire(request):
        # Récupération de toutes les annees
        annees = AnneeScolaire.objects.all()
@@ -541,6 +556,7 @@ def annee_scolaire(request):
 
 
 #vues pour les annees
+@login_required
 def ajouter_trimestre(request):
     if request.method == 'POST':
         # Récupération des données du formulaire
@@ -570,6 +586,7 @@ def ajouter_trimestre(request):
 
     return redirect('trimestre')    
 
+@login_required
 def activer_trimestre(request, trimestre_id):
     Trimestre.objects.update(active=False)
  
@@ -579,6 +596,7 @@ def activer_trimestre(request, trimestre_id):
 
     return redirect('trimestre') 
 
+@login_required
 def trimestre(request):
        trimestres = Trimestre.objects.all()
        return render(request, 'trimestre.html', {'trimestres': trimestres})
@@ -586,6 +604,7 @@ def trimestre(request):
 
 
 #vues pour les emplois
+@login_required
 def ajout_emploi(request):
        # Récupération de toutes les matieres2
        matieres = Matiere.objects.all()
@@ -593,6 +612,7 @@ def ajout_emploi(request):
        series = Serie.objects.all()
        return render(request, 'emploi/ajout_emploi.html', {'matieres': matieres, 'classes': classes, 'series': series})
 
+@login_required
 def ajouter_emploi(request):
     if request.method == 'POST':
         cours1 = request.POST.get('cours1')
@@ -644,6 +664,7 @@ def ajouter_emploi(request):
      
     return render(request, 'ajout_emploi.html')
 
+@login_required
 def emploi(request):
     emploi1 = Emploi.objects.filter()
     matieres = Matiere.objects.all()
@@ -655,6 +676,7 @@ def emploi(request):
 
 
 #vues pour les eleves
+@login_required
 def ajouter_eleve(request):
     if request.method == 'POST':
            nom = request.POST.get('nom')
@@ -684,13 +706,14 @@ def ajouter_eleve(request):
 
     return redirect('eleve')  
 
+@login_required
 def eleve(request):
     annee_active = AnneeScolaire.objects.filter(active=True).first()
     classes = Classe.objects.all()
     eleves = Eleve.objects.filter(annee_scolaire_id=annee_active)
     return render(request, 'eleve.html', {'eleves': eleves, 'classes': classes})
 
-
+@login_required
 def modify_information(request, id_eleve):
     eleve = Eleve.objects.get(id_eleve=id_eleve)
     classes = Classe.objects.all()
@@ -707,13 +730,14 @@ def modify_information(request, id_eleve):
         return redirect('eleve')
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
+@login_required
 def delete_student(request, id_eleve):
     objet = Eleve.objects.get(pk=id_eleve)
     objet.delete()      
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
-
+@login_required
 def update(request):
     if request.method == 'POST':
            # Récupération des données du formulaire
@@ -784,6 +808,7 @@ def cahier_texte(request, classe_nom):
             'cahier_textes': [],
         })
 
+@login_required
 def ajouter_contenu_cahier_texte(request):
     if request.method == 'POST':
         classe = request.POST.get('classe')
@@ -865,6 +890,7 @@ def liste_eleves_classe(request, classe_nom):
     except Professeur_Classe.DoesNotExist:
         return render(request, 'liste_eleves_classe.html', {'error': "Classe non attribuée à ce professeur.", 'eleves_par_classe': {}}) #ajouter dictionnaire vide, pour eviter les erreurs si le template est aussi utilisé pour les autres vues.
 
+@login_required
 def enregistrer_note(request):
     if request.method == 'POST':
         eleve_id = request.POST.get('eleve_id')
@@ -912,22 +938,21 @@ def enregistrer_note(request):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
-
-
 #vues pour les bulletins
+@login_required
 def eleve1(request):
-       eleve6 = Eleve.objects.filter(classe="6ème")
-       eleve5 = Eleve.objects.filter(classe="5ème")
-       eleve4 = Eleve.objects.filter(classe="4ème")
-       eleve3 = Eleve.objects.filter(classe="3ème")
-       return render(request, 'bulletins/eleve_cycle1.html', {'eleve6': eleve6, 'eleve5': eleve5, 'eleve4': eleve4, 'eleve3': eleve3})
-
+    eleve6 = Eleve.objects.filter(classe="6ème")
+    eleve5 = Eleve.objects.filter(classe="5ème")
+    eleve4 = Eleve.objects.filter(classe="4ème")
+    eleve3 = Eleve.objects.filter(classe="3ème")
+    return render(request, 'bulletins/eleve_cycle1.html', {'eleve6': eleve6, 'eleve5': eleve5, 'eleve4': eleve4, 'eleve3': eleve3})
+@login_required
 def eleve2(request):
-       eleve0 = Eleve.objects.filter(classe="2nde")
-       eleve1 = Eleve.objects.filter(classe="1ère")
-       eleve2 = Eleve.objects.filter(classe="Tle")
-       return render(request, 'bulletins/eleve_cycle2.html', {'eleve0': eleve0, 'eleve1': eleve1, 'eleve2': eleve2})
-
+    eleve0 = Eleve.objects.filter(classe="2nde")
+    eleve1 = Eleve.objects.filter(classe="1ère")
+    eleve2 = Eleve.objects.filter(classe="Tle")
+    return render(request, 'bulletins/eleve_cycle2.html', {'eleve0': eleve0, 'eleve1': eleve1, 'eleve2': eleve2})
+@login_required
 def bulletin_trim1(request, id_eleve):
     eleve = get_object_or_404(Eleve, id_eleve=id_eleve)
     classes = Classe.objects.all()
@@ -962,6 +987,7 @@ def bulletin_trim1(request, id_eleve):
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
+@login_required
 def bulletin_trim2(request, id_eleve):
     eleve = get_object_or_404(Eleve, id_eleve=id_eleve)
     classes = Classe.objects.all()
@@ -994,6 +1020,7 @@ def bulletin_trim2(request, id_eleve):
         return render(request, 'bulletins/bulletin2.html', {'bul': bul, 'matieres': matieres, 'eleve': eleve, 'total3': total3 , 'moy_gen2': moy_gen2, 'trim': trim})
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
+@login_required
 def bulletin_trim3(request, id_eleve):
     eleve = get_object_or_404(Eleve, id_eleve=id_eleve)
     classes = Classe.objects.all()
@@ -1027,7 +1054,7 @@ def bulletin_trim3(request, id_eleve):
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
-
+@login_required
 def save_bulletin(request):
     if request.method == 'POST':
         total = request.POST.get('total')
@@ -1057,18 +1084,20 @@ def save_bulletin(request):
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
-
+@login_required
 def verification(request):
     eleves = Eleve.objects.all()
     return render(request, 'bulletins/check.html', {'eleves': eleves})
 
 # Fonction utilitaire pour convertir une chaîne en float
+@login_required
 def convert_to_float(value):
     try:
         return float(value.replace(',', '.'))
     except (ValueError, AttributeError):
         return 0.0
 
+@login_required
 def download(request):
     if request.method == 'POST':
         tri = int(request.POST.get('tri', 0))

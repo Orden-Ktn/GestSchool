@@ -90,7 +90,7 @@ DATABASES = {
     }
 }
 
-LOGIN_URL = 'connexion'
+LOGIN_URL = 'login_view'
 AUTH_USER_MODEL = 'gestschool_app.CustomUser'
 TIME_ZONE = 'Africa/Lagos'
 USE_TZ = True
