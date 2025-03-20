@@ -46,11 +46,6 @@
                                 <i class="mdi mdi-account-outline"></i>
                                 <span>Profile</span>
                             </button>
-                            
-                            <a class="dropdown-item notify-item">
-                                <i class="mdi mdi-account-outline"></i>
-                                <span>{{user.role}} <em>({{ matiere_professeur.sigle }})</em></span>
-                            </a>
                         {% endif %}
 
                         {% if user.role != "Professeur" %}
@@ -153,6 +148,12 @@
                                     <span> Elève </span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{% url 'visualisation_cahier_texte' %}" class="waves-effect">
+                                    <i class="ion ion-ios-book"></i>
+                                    <span> Cahier de texte </span>
+                                </a>
+                            </li>
                         {% elif user.role == "Comptable" %}
                             <li>
                                 <a href="{% url 'index' %}" class="waves-effect">
@@ -204,6 +205,23 @@
                                     {% for classe_nom in eleves_par_classe %}
                                         <ul class="nav-second-level" aria-expanded="false">
                                             <li><a href="{% url 'liste_eleves_classe' classe_nom=classe_nom %}">{{ classe_nom }}</a></li>
+                                        </ul>
+                                    {% endfor %}
+                                {% else %}
+                                    <ul class="nav-item">
+                                        <a class="nav-link disabled">Aucune classe attribuée</a>
+                                    </ul>
+                                {% endif %}
+                            </li>
+                            <li>
+                                <a href="javascript: void(0);" class="waves-effect">
+                                    <i class="ion ion-ios-book"></i>
+                                    <span> Cahier de texte </span>
+                                </a>
+                                {% if eleves_par_classe %}
+                                    {% for classe_nom in eleves_par_classe %}
+                                        <ul class="nav-second-level" aria-expanded="false">
+                                            <li><a href="{% url 'cahier_texte' classe_nom=classe_nom %}">{{ classe_nom }}</a></li>
                                         </ul>
                                     {% endfor %}
                                 {% else %}

@@ -17,67 +17,64 @@
 
 </head>
 
-<body class="nk-body npc-default pg-auth">
-    <div class="nk-app-root">
-        <div class="nk-main ">
-            <div class="nk-wrap nk-wrap-nosidebar">
-                <div class="nk-content ">
-                    <div class="nk-split nk-split-page nk-split-lg">
-                        <div class="nk-split-content nk-block-area nk-block-area-column nk-auth-container bg-white">
-                            <div class="absolute-top-right d-lg-none p-3 p-sm-5">
-                                <a href="#" class="toggle btn-white btn btn-icon btn-light" data-target="athPromo"><em
-                                        class="icon ni ni-info"></em></a>
+<body class="authentication-page" style="background-color: aliceblue;">
+    <div class="nk-app-root" style="margin-top: 5%;">
+        <div class="account-pages my-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6 col-xl-5">
+                        <div class="card mt-4" style="border-radius: 5%;">
+                            <div class="card-header text-center p-4 bg-primary">
+                                <h5 class="text-white font-13 mb-0">GestSchool | CREATION DE COMPTE</h5>
                             </div>
-                            <div class="nk-block nk-block-middle nk-auth-body" style="margin-top: 15%;">
-                                <div class="brand-logo pb-5">
-                                    <a href="html/index.html" class="logo-link">
-                                        <h2 class="nk-block-title">Création de compte</h2>
-                                    </a>
-                                </div>
-
+                            <div class="card-body">
                                 {% if messages %}
-                                    <div class="alert-container">
-                                        {% for message in messages %}
-                                            <div class="alert alert-fill alert-info" role="alert">
-                                                <h4 class="alert-title">GestSchool</h4>
-                                                <div class="alert-message"><i class="ion ion-ios-alert"></i> {{ message }}</div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-
-                                <form class="form-validate is-alter" method="post" action="{% url 'register' %}" style=" margin-top : 2%;">
-                                    {% csrf_token %}
-                                    {% for field in form %}
-                                        <div class="form-group">
-                                            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                            <div class="form-control-wrap">
-                                                {{ field|add_class:"form-control form-control-lg" }}
-                                                {% if field.errors %}
-                                                    <div class="form-note-s2 text-danger">
-                                                        {{ field.errors }}
-                                                    </div>
-                                                {% endif %}
-                                            </div>
+                                <div class="alert-container">
+                                    {% for message in messages %}
+                                        <div class="alert alert-fill alert-info" role="alert">
+                                            <h4 class="alert-title">GestSchool</h4>
+                                            <div class="alert-message"><i class="ion ion-ios-alert"></i> {{ message }}</div>
                                         </div>
                                     {% endfor %}
-                                    <div class="form-group">
-                                        <button class="btn btn-lg btn-primary btn-block">S'inscrire &nbsp<em
-                                                class="icon ni ni-signin"></em></button>
-                                    </div>
-                                </form>
-                                <div class="form-note-s2 pt-4" style="text-align: center;"> Vous avez déjà un compte? <a href="{% url 'login_view' %}">Connectez-vous</a>
                                 </div>
+                            {% endif %}
+
+                            <form class="form-validate is-alter" method="post" action="{% url 'register' %}" style=" margin-top : 2%;">
+                                {% csrf_token %}
+                                {% for field in form %}
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                        <div class="form-control-wrap">
+                                            {{ field|add_class:"form-control form-control-lg" }}
+                                            {% if field.errors %}
+                                                <div class="form-note-s2 text-danger">
+                                                    {{ field.errors }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                <div class="form-group">
+                                    <button class="btn btn-lg btn-primary btn-block">S'inscrire &nbsp</button>
+                                </div>
+                            </form>
+                            <div class="form-note-s2 pt-4" style="text-align: center;"> Vous avez déjà un compte? <a href="{% url 'login_view' %}">Connectez-vous</a>
                             </div>
+
+                            </div>
+                            <!-- end card-body -->
                         </div>
-                        <div class="image-container">
-                            <img src="/static/auth/static/image/eleve1.jpg" alt="" style="background-size: cover; height: 100vh; object-fit: cover; box-shadow: 30px 30px 50px rgba(1, 1, 1, 1);">
-                        </div>
+                        <!-- end card -->
+
+                        <!-- end row -->
+
                     </div>
+                    <!-- end col -->
                 </div>
+                <!-- end row -->
+
             </div>
         </div>
-
         <div class="preloader-body bg-lighter">
             <div class="cube-wrapper">
                 <div class="cube-folding">
@@ -86,7 +83,7 @@
                     <span class="leaf3"></span>
                     <span class="leaf4"></span>
                 </div>
-                <span class="loading" data-name="Loading">Loading</span>
+                <span class="loading" data-name="Loading">Chargement</span>
             </div>
         </div>
 

@@ -72,8 +72,12 @@ urlpatterns = [
     path('élève/', views.eleve, name='eleve'),
     path('classe/<str:classe_nom>/', views.liste_eleves_classe, name='liste_eleves_classe'),
     path('enregistrer_note/', views.enregistrer_note, name='enregistrer_note'),
+    
 
-
+#urls pour cahier de texte
+    path('cahier de texte/<str:classe_nom>/', views.cahier_texte, name='cahier_texte'),
+    path('ajouter_contenu_cahier_texte/', views.ajouter_contenu_cahier_texte, name='ajouter_contenu_cahier_texte'),
+    path('cahier_texte/', views.visualisation_cahier_texte, name='visualisation_cahier_texte'),
 
 
 #urls pour les bulletins

@@ -23,12 +23,7 @@
 * 06. INDIVIDUL CONCEPTS
 * 07. PREVIEWS
 ---------------------- **/
-.image-container img {
-  width: 100%;
-  height: 100vh;
-  object-fit: cover;
-  box-shadow: 30px 30px 30px black; /* Ombre noire sur tous les côtés */
-}
+
 @import url(https://fonts.googleapis.com/css?family=Archivo+Narrow);
 .preloader-body{
   position: fixed;

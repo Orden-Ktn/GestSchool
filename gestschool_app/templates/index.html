@@ -199,7 +199,8 @@
                         </div>                         
 
                         {% elif user.role == "Professeur" %}
-                            <div class="col-xl-4 col-sm-6">
+                  
+                            <div class="col-xl-3 col-sm-3">
                                 <div class="card bg-primary">
                                     <div class="card-body widget-style-2">
                                         <div class="text-white media">
@@ -213,7 +214,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-xl-4 col-sm-6">
+                            <div class="col-xl-3 col-sm-3">
                                 <div class="card bg-warning">
                                     <div class="card-body widget-style-2">
                                         <div class="text-white media">
@@ -227,7 +228,21 @@
                                 </div>
                             </div>
 
-                            <div class="col-xl-4 col-sm-6">
+                            <div class="col-xl-3 col-sm-3">
+                                <div class="card bg-secondary">
+                                    <div class="card-body widget-style-2">
+                                        <div class="text-white media">
+                                            <div class="media-body align-self-center">
+                                                <p class="mb-0">Matière enseignée</p>
+                                                <h2 class="my-0 text-white"><span>{{ matiere_prof.sigle}}</span></h2>
+                                            </div>
+                                            <i class="ion-md-calendar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-sm-3">
                                 <div class="card bg-purple">
                                     <div class="card-body widget-style-2">
                                         <div class="text-white media">
@@ -240,7 +255,16 @@
                                     </div>
                                 </div>
                             </div>
+
+                            {% if profil_manquant %}
                             <p style="margin: auto; font-style: italic;">Mettez à jour votre profil à votre première connexion.</p>
+                            {% else %}
+                                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                    </div>
+                                <div class="table-responsive">
+                                    </div>
+                            {% endif %}
+
                         {% elif user.role == "Comptable" %}
                         <div class="col-xl-6 col-sm-6">
                             <div class="card bg-primary">

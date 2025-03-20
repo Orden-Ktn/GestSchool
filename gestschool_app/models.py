@@ -160,6 +160,17 @@ class Professeur_Classe(models.Model):
     annee_scolaire = models.ForeignKey(AnneeScolaire, on_delete=models.SET_NULL, null=True, blank=True)
 
 
+class Cahier_texte(models.Model):  
+    id_prof = models.ForeignKey(Professeur, on_delete=models.SET_NULL, null=True, blank=True)
+    classe = models.CharField(max_length=80) 
+    matiere = models.CharField(max_length=100)
+    date = models.DateField(max_length=100)
+    contenu = models.CharField(max_length=5000)
+    annee_scolaire = models.ForeignKey(AnneeScolaire, on_delete=models.SET_NULL, null=True, blank=True)
+    trimestre = models.ForeignKey(Trimestre, on_delete=models.SET_NULL, null=True, blank=True)
+
+
+
 class Note(models.Model):
     eleve = models.ForeignKey(Eleve, on_delete=models.CASCADE)
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE)

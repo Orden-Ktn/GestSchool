@@ -165,7 +165,8 @@ def index(request):
     trimestre_active = Trimestre.objects.filter(active=True).first()
     matieres = Matiere.objects.all()
 
-    eleves_par_classe = {}  # Initialiser eleves_par_classe ici
+    eleves_par_classe = {}  
+    profil_manquant = False
 
     if annee_active:
         total_classes = Classe_exist.objects.count()
@@ -192,14 +193,17 @@ def index(request):
             classes_attribuees = Professeur_Classe.objects.filter(professeur=professeur)
 
             eleves_par_classe = {}
-            matiere_professeur = professeur.matiere  # Récupérer la matière du professeur
-
+            matiere_professeur = professeur.matiere_id
+            matiere_prof = Matiere.objects.get(id=matiere_professeur)
+            
             for classe_attribuee in classes_attribuees:
                 eleves_par_classe[classe_attribuee.classe.fusion] = Eleve.objects.filter(classe=classe_attribuee.classe.fusion)
 
         except Professeur.DoesNotExist:
             nombre_classes_professeur = 0  # Si le professeur n'existe pas, le nombre est 0
-            matiere_professeur = None  # Si le professeur n'existe pas, la matière est None
+            matiere_professeur = None
+            matiere_prof = None
+            profil_manquant = True,
 
     else:
         total_classes = 0
@@ -212,7 +216,9 @@ def index(request):
         percent_girls = 0
         solde_paye = 0
         nombre_classes_professeur = 0  # si l'année scolaire n'est pas active, le nombre est 0
-        matiere_professeur = None  # Si l'année scolaire n'est pas active, la matière est None
+        matiere_professeur = None  
+        matiere_prof= None
+        profil_manquant = True
 
     context = {
         'total_classes': total_classes,
@@ -229,7 +235,9 @@ def index(request):
         'nombre_classes_professeur': nombre_classes_professeur,
         'eleves_par_classe': eleves_par_classe,
         'matiere_professeur': matiere_professeur,  # Ajouter la matière du professeur au contexte
-        "solde_paye": solde_paye
+        'solde_paye': solde_paye,
+        'matiere_prof': matiere_prof,
+        'profil_manquant': profil_manquant
     }
 
     return render(request, 'index.html', context)
@@ -736,6 +744,91 @@ def update(request):
     return render(request, 'ajout_eleve.html')
 
 
+#vues pour le chaier de texte 
+@login_required
+def cahier_texte(request, classe_nom):
+    try:
+        trimestre_active = Trimestre.objects.filter(active=True).first()
+        professeur = Professeur.objects.get(user=request.user)
+        matiere = professeur.matiere
+        classe = Classe_exist.objects.get(fusion=classe_nom)
+        classe_attribuee = Professeur_Classe.objects.get(professeur=professeur, classe=classe)
+        eleves = Eleve.objects.filter(classe=classe_nom)
+
+        cahier_textes = Cahier_texte.objects.filter(id_prof=professeur, classe=classe_nom, trimestre_id=trimestre_active)
+
+        return render(request, 'cahier_texte.html', {
+            'eleves': eleves,
+            'matiere': matiere,
+            'classe_nom': classe_nom,
+            'eleves_par_classe': {classe_nom: eleves},
+            'cahier_textes': cahier_textes,  # Ajout des données du cahier de texte
+        })
+    except Professeur.DoesNotExist:
+        return render(request, 'cahier_texte.html', {
+            'error': "Votre profil professeur n'existe pas.",
+            'eleves_par_classe': {},
+            'cahier_textes': [],  # Ajout de liste vide pour éviter les erreurs
+        })
+    except Classe_exist.DoesNotExist:
+        return render(request, 'cahier_texte.html', {
+            'error': "Classe non trouvée.",
+            'eleves_par_classe': {},
+            'cahier_textes': [],
+        })
+    except Professeur_Classe.DoesNotExist:
+        return render(request, 'cahier_texte.html', {
+            'error': "Classe non attribuée à ce professeur.",
+            'eleves_par_classe': {},
+            'cahier_textes': [],
+        })
+
+def ajouter_contenu_cahier_texte(request):
+    if request.method == 'POST':
+        classe = request.POST.get('classe')
+        matiere = request.POST.get('matiere')
+        date = request.POST.get('date')
+        contenu = request.POST.get('contenu')
+        annee_active = AnneeScolaire.objects.filter(active=True).first()
+        trimestre_active = Trimestre.objects.filter(active=True).first()
+
+        existing_classe = Cahier_texte.objects.filter(Q(classe=classe) & Q(matiere=matiere) & Q(date=date)).exists()
+
+        if existing_classe:
+            messages.error(request, "Le contenu de ce cours est déjà ajouté pour cette date.")
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+
+        try:
+            if classe and matiere and date and contenu:
+                customer_user = CustomUser.objects.get(id=request.user.id)
+                professeur = customer_user.professeur
+
+                if annee_active and trimestre_active is None:
+                    messages.error(request, "Aucune année scolaire active n'est définie.")
+                    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+                Cahier_texte.objects.create(id_prof=professeur, classe=classe, matiere=matiere, date=date, contenu=contenu, annee_scolaire=annee_active, trimestre=trimestre_active)
+                messages.success(request, "Contenu ajouté dans le cahier de texte!")
+                return redirect(request.META.get('HTTP_REFERER', '/'))
+            else:
+                return render(request, 'cahier_texte.html', {'error': 'Tous les champs sont requis.'})
+
+        except ValueError as e:
+            print(f"ValueError: {e}")
+            messages.error(request, 'Veuillez bien renseigner les informations.')
+        except CustomerUser.DoesNotExist:
+            messages.error(request, "L'utilisateur connecté n'existe pas.")
+        except Professeur.DoesNotExist:
+            messages.error(request, "L'utilisateur connecté n'est pas un professeur valide.")
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+@login_required
+def visualisation_cahier_texte(request):
+    trimestre_active = Trimestre.objects.filter(active=True).first()
+    cahier_textes = Cahier_texte.objects.filter(trimestre_id=trimestre_active)
+    return render(request, 'visualisation_cahier_texte.html', {'cahier_textes': cahier_textes})
+
 
 #vues pour les notes
 @login_required
@@ -814,6 +907,7 @@ def enregistrer_note(request):
         return redirect(request.META.get('HTTP_REFERER', '/'))
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
 
 
 
