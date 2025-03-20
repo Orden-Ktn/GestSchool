@@ -190,7 +190,7 @@ def index(request):
         try:
             professeur = Professeur.objects.get(user=request.user)
             nombre_classes_professeur = Professeur_Classe.objects.filter(Q (annee_scolaire=annee_active) & Q(professeur=professeur)).count()
-            classes_attribuees = Professeur_Classe.objects.filter(professeur=professeur)
+            classes_attribuees = Professeur_Classe.objects.filter(Q(annee_scolaire=annee_active) & Q(professeur=professeur))
 
             eleves_par_classe = {}
             matiere_professeur = professeur.matiere_id
@@ -744,18 +744,19 @@ def update(request):
     return render(request, 'ajout_eleve.html')
 
 
-#vues pour le chaier de texte 
+#vues pour le cahier de texte 
 @login_required
 def cahier_texte(request, classe_nom):
     try:
         trimestre_active = Trimestre.objects.filter(active=True).first()
+        annee_active = AnneeScolaire.objects.filter(active=True).first()
         professeur = Professeur.objects.get(user=request.user)
         matiere = professeur.matiere
         classe = Classe_exist.objects.get(fusion=classe_nom)
-        classe_attribuee = Professeur_Classe.objects.get(professeur=professeur, classe=classe)
+        classe_attribuee = Professeur_Classe.objects.get(Q(annee_scolaire=annee_active) & Q(professeur=professeur) & Q(classe=classe))
         eleves = Eleve.objects.filter(classe=classe_nom)
 
-        cahier_textes = Cahier_texte.objects.filter(id_prof=professeur, classe=classe_nom, trimestre_id=trimestre_active)
+        cahier_textes = Cahier_texte.objects.filter(Q(annee_scolaire=annee_active) & Q(id_prof=professeur) & Q(classe=classe_nom) & Q(trimestre_id=trimestre_active))
 
         return render(request, 'cahier_texte.html', {
             'eleves': eleves,
@@ -826,16 +827,18 @@ def ajouter_contenu_cahier_texte(request):
 @login_required
 def visualisation_cahier_texte(request):
     trimestre_active = Trimestre.objects.filter(active=True).first()
-    cahier_textes = Cahier_texte.objects.filter(trimestre_id=trimestre_active)
+    annee_active = AnneeScolaire.objects.filter(active=True).first()
+    cahier_textes = Cahier_texte.objects.filter(Q(annee_scolaire=annee_active) & Q(annee_scolaire=trimestre_active))
     return render(request, 'visualisation_cahier_texte.html', {'cahier_textes': cahier_textes})
 
 
 #vues pour les notes
 @login_required
 def mes_classes(request):
+    annee_active = AnneeScolaire.objects.filter(active=True).first()
     try:
         professeur = Professeur.objects.get(user=request.user)  # Access Professeur through the 'user' field
-        classes_attribuees = Professeur_Classe.objects.filter(professeur=professeur)
+        classes_attribuees = Professeur_Classe.objects.filter(Q(annee_scolaire=annee_active) & Q(professeur=professeur))
 
         eleves_par_classe = {}
         for classe_attribuee in classes_attribuees:
