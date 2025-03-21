@@ -43,10 +43,21 @@
                     <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
 
                         {% if user.role == "Professeur" %}
-                            <button data-toggle="modal" data-target=".editprofil" class="dropdown-item notify-item">
+                            {% if profil_manquant %}
+                               <button data-toggle="modal" data-target=".editprofil" class="dropdown-item notify-item">
+                                    <i class="mdi mdi-account-outline"></i>
+                                    <span>Profile</span>
+                                </button>
+                            {% else %}
+                                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                    </div>
+                                <div class="table-responsive">
+                                    </div>
+                            {% endif %}
+                            <a class="dropdown-item notify-item">
                                 <i class="mdi mdi-account-outline"></i>
-                                <span>Profile</span>
-                            </button>
+                                <span>{{user.role}}</span>
+                            </a>
                         {% endif %}
 
                         {% if user.role != "Professeur" %}
