@@ -13,7 +13,7 @@ from django.db.models.functions import Rank, Coalesce
 from django.db.models import Prefetch, Q, Sum, DecimalField
 from decimal import Decimal
 from .forms import *
-
+from collections import defaultdict
 
 
 #vue pour l'inscription
@@ -33,7 +33,7 @@ def register(request):
             messages.error(request, 'Erreur lors de l\'inscription. Veuillez vérifier les informations.')
     else:
         form = CustomUserCreationForm()
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'authentification/register.html', {'form': form})
 
 
 #vue pour la connexion
@@ -53,10 +53,10 @@ def login_view(request):
             messages.error(request, 'Veuillez corriger les erreurs du formulaire.')
     else:
         form = LoginForm()
-    return render(request, 'connexion.html', {'form': form})
+    return render(request, 'authentification/connexion.html', {'form': form})
 
 def lock_screen(request):
-    return render(request, 'lock_screen.html')    
+    return render(request, 'authentification/lock_screen.html')    
 
 
 @login_required
@@ -66,7 +66,7 @@ def profile(request):
         professeur = Professeur.objects.get(email=request.user.email)
     except Professeur.DoesNotExist:
         professeur = None
-    return render(request, 'profile.html', {'matieres': matieres, 'professeur': professeur})
+    return render(request, 'personne/profil.html', {'matieres': matieres, 'professeur': professeur})
 
 
 @login_required
@@ -103,8 +103,7 @@ def editer_profile(request):
                 messages.error(request, f'Veuillez bien renseigner les informations. {e}')
                 return redirect('index')
         else:
-            # Si la requête n'est pas POST, afficher un formulaire vide (ou pré-rempli si nécessaire)
-            return render(request, 'editer_profile.html')  # Assurez-vous d'avoir un template editer_profile.html
+            return redirect(request.META.get('HTTP_REFERER', '/'))  
 
     return redirect('index')
 
@@ -119,7 +118,7 @@ def professeur(request):
         classes_attribuees = Professeur_Classe.objects.filter(professeur=professeur)
         professeur.classes_attribuees = [pc.classe.fusion for pc in classes_attribuees]
 
-    return render(request, 'professeur.html', {'professeurs': professeurs, 'classes': classes})
+    return render(request, 'personne/professeur.html', {'professeurs': professeurs, 'classes': classes})
 
 @login_required
 def attribuer_classe_professeur(request):
@@ -146,7 +145,7 @@ def attribuer_classe_professeur(request):
                return redirect(request.META.get('HTTP_REFERER', '/'))
             else:
                # Gérer les erreurs si les données sont invalides
-               return render(request, 'professeur.html', {'error': 'Tous les champs sont requis.'})
+               return render(request, 'personne/professeur.html', {'error': 'Tous les champs sont requis.'})
            
         except ValueError as e:
             # Gérer les erreurs de conversion
@@ -250,7 +249,7 @@ def deconnexion(request):
     return redirect('login_view')
 
 def changer_user(request):
-    return render(request, 'change_user.html')
+    return render(request, 'authentification/change_user.html')
 
 #vue pour le changement de nom et mot de passe
 def change_user(request):
@@ -273,7 +272,7 @@ def change_user(request):
     else:
         form = ChangeUserForm()
 
-    return render(request, 'change_user.html', {'form': form})
+    return render(request, 'authentification/change_user.html', {'form': form})
 
 
 
@@ -303,7 +302,7 @@ def ajouter_matiere(request):
                return redirect(request.META.get('HTTP_REFERER', '/'))
            else:
                # Gérer les erreurs si les données sont invalides
-               return render(request, 'matiere.html', {'error': 'Tous les champs sont requis.'})
+               return render(request, 'autre/matiere.html', {'error': 'Tous les champs sont requis.'})
            
         except ValueError as e:
             # Gérer les erreurs de conversion
@@ -315,7 +314,7 @@ def ajouter_matiere(request):
 def matiere(request):
        # Récupération de toutes les matieres
        matieres = Matiere.objects.all()
-       return render(request, 'matiere.html', {'matieres': matieres})
+       return render(request, 'autre/matiere.html', {'matieres': matieres})
 
 
 
@@ -402,7 +401,7 @@ def fiche_paiement(request):
             eleve.reste_a_payer = 0
             eleve.statut_paiement = "N/A"  # Statut par défaut si le tarif n'est pas trouvé
 
-    return render(request, 'fiche_paiement.html', {'eleves': eleves, 'reste_a_payer': reste_a_payer, 'reste': reste,})
+    return render(request, 'finance/fiche_paiement.html', {'eleves': eleves, 'reste_a_payer': reste_a_payer, 'reste': reste,})
 
 @login_required
 def modifier_solde(request, eleve_id):
@@ -429,14 +428,14 @@ def modifier_solde(request, eleve_id):
 def tarif(request):
     tarifs = Tarif.objects.all()
     classes = Classe_exist.objects.all()
-    return render(request, 'grille_tarif.html', {'tarifs': tarifs, 'classes': classes})
+    return render(request, 'finance/grille_tarif.html', {'tarifs': tarifs, 'classes': classes})
 
 
 #vues pour le personnel
 @login_required
 def personnel(request):
     personnels = CustomUser.objects.exclude(role="Superadmin")
-    return render(request, 'personnel.html', {'personnels': personnels})
+    return render(request, 'personne/personnel.html', {'personnels': personnels})
 
 @login_required
 def modifier_role(request):
@@ -479,7 +478,7 @@ def ajouter_classe(request):
                return redirect(request.META.get('HTTP_REFERER', '/'))
            else:
                # Gérer les erreurs si les données sont invalides
-               return render(request, 'classe.html', {'error': 'Tous les champs sont requis.'})
+               return render(request, 'autre/classe.html', {'error': 'Tous les champs sont requis.'})
            
         except ValueError as e:
             # Gérer les erreurs de conversion
@@ -499,7 +498,7 @@ def classe(request):
             'professeurs': [{'professeur': professeur.professeur, 'matiere': professeur.matiere} for professeur in professeurs]
         })
 
-    return render(request, 'classe.html', {'classes_professeurs': classes_professeurs})
+    return render(request, 'autre/classe.html', {'classes_professeurs': classes_professeurs})
 
 
 
@@ -527,7 +526,7 @@ def ajouter_annee(request):
                return redirect(request.META.get('HTTP_REFERER', '/'))
            else:
                # Gérer les erreurs si les données sont invalides
-               return render(request, 'annee_scolaire.html', {'error': 'Tous les champs sont requis.'})
+               return render(request, 'autre/annee_scolaire.html', {'error': 'Tous les champs sont requis.'})
            
         except ValueError as e:
             # Gérer les erreurs de conversion
@@ -544,6 +543,7 @@ def activer_annee(request, annee_id):
     annee = AnneeScolaire.objects.get(id=annee_id)
     annee.active = True
     annee.save()
+    messages.success(request, "Année Scolaire activée!")
 
     return redirect('annee_scolaire') 
 
@@ -551,7 +551,7 @@ def activer_annee(request, annee_id):
 def annee_scolaire(request):
        # Récupération de toutes les annees
        annees = AnneeScolaire.objects.all()
-       return render(request, 'annee_scolaire.html', {'annees': annees})
+       return render(request, 'autre/annee_scolaire.html', {'annees': annees})
 
 
 
@@ -578,7 +578,7 @@ def ajouter_trimestre(request):
                return redirect(request.META.get('HTTP_REFERER', '/'))
            else:
                # Gérer les erreurs si les données sont invalides
-               return render(request, 'trimestre.html', {'error': 'Tous les champs sont requis.'})
+               return render(request, 'autre/trimestre.html', {'error': 'Tous les champs sont requis.'})
            
         except ValueError as e:
             # Gérer les erreurs de conversion
@@ -593,25 +593,18 @@ def activer_trimestre(request, trimestre_id):
     trimestre = Trimestre.objects.get(id=trimestre_id)
     trimestre.active = True
     trimestre.save()
+    messages.success(request, "Trimestre activé!")
 
     return redirect('trimestre') 
 
 @login_required
 def trimestre(request):
        trimestres = Trimestre.objects.all()
-       return render(request, 'trimestre.html', {'trimestres': trimestres})
+       return render(request, 'autre/trimestre.html', {'trimestres': trimestres})
 
 
 
 #vues pour les emplois
-@login_required
-def ajout_emploi(request):
-       # Récupération de toutes les matieres2
-       matieres = Matiere.objects.all()
-       classes = Classe.objects.all()
-       series = Serie.objects.all()
-       return render(request, 'emploi/ajout_emploi.html', {'matieres': matieres, 'classes': classes, 'series': series})
-
 @login_required
 def ajouter_emploi(request):
     if request.method == 'POST':
@@ -656,20 +649,20 @@ def ajouter_emploi(request):
                 
             else:
                 # Gérer les erreurs si les données sont invalides
-                return render(request, 'ajout_emploi.html', {'error': 'Tous les champs sont requis.'})
+                return render(request, 'autre/emploi.html', {'error': 'Tous les champs sont requis.'})
             
         except ValueError as e:
             # Gérer les erreurs de conversion
             messages.error(request, 'Veuillez bien renseigner les informations.')
      
-    return render(request, 'ajout_emploi.html')
+    return render(request, 'autre/emploi.html')
 
 @login_required
 def emploi(request):
     emploi1 = Emploi.objects.filter()
     matieres = Matiere.objects.all()
     classes = Classe.objects.all()
-    return render(request, 'emploi.html', {'emploi1': emploi1, 'matieres': matieres, 'classes': classes,})
+    return render(request, 'autre/emploi.html', {'emploi1': emploi1, 'matieres': matieres, 'classes': classes,})
 
 
 
@@ -702,7 +695,7 @@ def ajouter_eleve(request):
                 messages.success(request, "Enregistrement réussie pour l'élève!")
                 return redirect(request.META.get('HTTP_REFERER', '/'))
            else:
-               return render(request, 'eleve.html', {'error': 'Tous les champs sont requis.'})
+               return render(request, 'personne/eleve.html', {'error': 'Tous les champs sont requis.'})
 
     return redirect('eleve')  
 
@@ -711,7 +704,7 @@ def eleve(request):
     annee_active = AnneeScolaire.objects.filter(active=True).first()
     classes = Classe.objects.all()
     eleves = Eleve.objects.filter(annee_scolaire_id=annee_active)
-    return render(request, 'eleve.html', {'eleves': eleves, 'classes': classes})
+    return render(request, 'personne/eleve.html', {'eleves': eleves, 'classes': classes})
 
 @login_required
 def modify_information(request, id_eleve):
@@ -737,37 +730,6 @@ def delete_student(request, id_eleve):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
-@login_required
-def update(request):
-    if request.method == 'POST':
-           # Récupération des données du formulaire
-           eleve = request.POST.get('id')
-           nom = request.POST.get('nom')
-           prenom = request.POST.get('prenom')
-           sexe = request.POST.get('sexe')
-           contact = request.POST.get('contact')
-           date_naissance = request.POST.get('date')
-           classe = request.POST.get('classe')
-           serie = request.POST.get('serie')
-           statut = request.POST.get('statut')
-
-           # Vérification si la matière existe déjà pour cet élève
-           existing_eleve = Eleve.objects.filter(id_eleve=eleve).first()
-
-           if existing_eleve:
-
-                # Validation simple
-                if nom and prenom and sexe and contact and date_naissance and classe and serie and statut:
-                    # Création de l'objet Classe et sauvegarde dans la base de données
-                    Eleve.objects.filter(id_eleve=eleve).update(nom=nom, prenom=prenom, sexe=sexe, contact=contact, date_naissance=date_naissance, classe=classe, serie=serie, statut=statut)
-                    return redirect('all_eleve')  # Remplacez par l'URL de redirection après l'enregistrement
-                else:
-                    # Gérer les erreurs si les données sont invalides
-                    return render(request, 'ajout_eleve.html', {'error': 'Tous les champs sont requis.'})
-
-    return render(request, 'ajout_eleve.html')
-
-
 #vues pour le cahier de texte 
 @login_required
 def cahier_texte(request, classe_nom):
@@ -782,7 +744,7 @@ def cahier_texte(request, classe_nom):
 
         cahier_textes = Cahier_texte.objects.filter(Q(annee_scolaire=annee_active) & Q(id_prof=professeur) & Q(classe=classe_nom) & Q(trimestre_id=trimestre_active))
 
-        return render(request, 'cahier_texte.html', {
+        return render(request, 'cahier de texte/cahier_texte.html', {
             'eleves': eleves,
             'matiere': matiere,
             'classe_nom': classe_nom,
@@ -790,19 +752,19 @@ def cahier_texte(request, classe_nom):
             'cahier_textes': cahier_textes,  # Ajout des données du cahier de texte
         })
     except Professeur.DoesNotExist:
-        return render(request, 'cahier_texte.html', {
+        return render(request, 'cahier de texte/cahier_texte.html', {
             'error': "Votre profil professeur n'existe pas.",
             'eleves_par_classe': {},
             'cahier_textes': [],  # Ajout de liste vide pour éviter les erreurs
         })
     except Classe_exist.DoesNotExist:
-        return render(request, 'cahier_texte.html', {
+        return render(request, 'cahier de texte/cahier_texte.html', {
             'error': "Classe non trouvée.",
             'eleves_par_classe': {},
             'cahier_textes': [],
         })
     except Professeur_Classe.DoesNotExist:
-        return render(request, 'cahier_texte.html', {
+        return render(request, 'cahier de texte/cahier_texte.html', {
             'error': "Classe non attribuée à ce professeur.",
             'eleves_par_classe': {},
             'cahier_textes': [],
@@ -837,7 +799,7 @@ def ajouter_contenu_cahier_texte(request):
                 messages.success(request, "Contenu ajouté dans le cahier de texte!")
                 return redirect(request.META.get('HTTP_REFERER', '/'))
             else:
-                return render(request, 'cahier_texte.html', {'error': 'Tous les champs sont requis.'})
+                return render(request, 'cahier de texte/cahier_texte.html', {'error': 'Tous les champs sont requis.'})
 
         except ValueError as e:
             print(f"ValueError: {e}")
@@ -853,8 +815,8 @@ def ajouter_contenu_cahier_texte(request):
 def visualisation_cahier_texte(request):
     trimestre_active = Trimestre.objects.filter(active=True).first()
     annee_active = AnneeScolaire.objects.filter(active=True).first()
-    cahier_textes = Cahier_texte.objects.filter(Q(annee_scolaire=annee_active) & Q(annee_scolaire=trimestre_active))
-    return render(request, 'visualisation_cahier_texte.html', {'cahier_textes': cahier_textes})
+    cahier_textes = Cahier_texte.objects.filter(Q(annee_scolaire=annee_active) & Q(trimestre=trimestre_active))
+    return render(request, 'cahier de texte/visualisation_cahier_texte.html', {'cahier_textes': cahier_textes})
 
 
 #vues pour les notes
@@ -869,26 +831,140 @@ def mes_classes(request):
         for classe_attribuee in classes_attribuees:
             eleves_par_classe[classe_attribuee.classe.fusion] = Eleve.objects.filter(classe=classe_attribuee.classe.fusion)
 
-        return render(request, 'all_eleve.html', {'eleves_par_classe': eleves_par_classe})
+        return render(request, 'personne/all_eleve.html', {'eleves_par_classe': eleves_par_classe})
     except Professeur.DoesNotExist:
         #Handle the case where a professor profile does not exist for the user.
-        return render(request, 'all_eleve.html', {'error':"Votre profil professeur n'existe pas"})
+        return render(request, 'personne/all_eleve.html', {'error':"Votre profil professeur n'existe pas"})
+
 
 @login_required
-def liste_eleves_classe(request, classe_nom):
+def fiche_notes(request, classe_nom):
+    trimestre = Trimestre.objects.filter(active=True).first()
+    try:
+        professeur = Professeur.objects.get(user=request.user)
+        matiere = professeur.matiere
+        classe = Classe_exist.objects.get(fusion=classe_nom)
+        classe_existe = classe.fusion
+        classe_attribuee = Professeur_Classe.objects.get(professeur=professeur, classe=classe)
+        eleves = Eleve.objects.filter(classe=classe_nom)
+        notes = Note.objects.filter(eleve__classe=classe_nom, matiere_id=matiere.id, trimestre=trimestre)
+
+        coefficient_classe = Coefficient.objects.get(classe=classe_existe)
+        coefficient_val = float(coefficient_classe.coefficient)
+
+        notes_par_eleve = defaultdict(list)
+        for note in notes:
+            notes_par_eleve[note.eleve].append(note)
+
+        # Calcul des moyennes
+        eleves_avec_moyennes = []
+        for eleve in eleves:
+            eleve_data = {
+                'eleve': eleve,
+                'notes': notes_par_eleve[eleve],
+                'moyenne_interro': 0,
+                'moyenne_generale': 0,
+                'moyenne_coefficientee': 0,
+                'coefficient': coefficient_classe,
+            }
+
+            # Calcul de la moyenne d'interrogation (avec prise en compte des cas où interro 3 n'est pas rempli)
+            interro_notes = [note.note for note in notes_par_eleve[eleve] if note.option in ['Interro 1', 'Interro 2', 'Interro 3']]
+            if interro_notes:
+                if len(interro_notes) >= 2:
+                    eleve_data['moyenne_interro'] = round(sum(interro_notes[:2]) / min(len(interro_notes), 2), 2)
+                elif len(interro_notes) == 1:
+                    eleve_data['moyenne_interro'] = interro_notes[0] #Si une seule note d'interro.
+                else:
+                    eleve_data['moyenne_interro'] = 0 # Si aucune note d'interro.
+
+            # Récupération des notes Devoir 1 et Devoir 2
+            devoir_notes = {note.option: note.note for note in notes_par_eleve[eleve] if note.option in ['Devoir 1', 'Devoir 2']}
+            devoir1 = devoir_notes.get('Devoir 1', 0)
+            devoir2 = devoir_notes.get('Devoir 2', 0)
+
+            # Calcul de la moyenne générale
+            if eleve_data['moyenne_interro'] or devoir1 or devoir2:
+                eleve_data['moyenne_generale'] = round((eleve_data['moyenne_interro'] + devoir1 + devoir2) / 3, 2)
+
+            # Calcul de la moyenne coefficientée
+            eleve_data['moyenne_coefficientee'] = round(float(eleve_data['moyenne_generale']) * coefficient_val, 2)
+
+            if eleve_data['moyenne_coefficientee'] >= (coefficient_val * 10):
+                eleve_data['message'] = "Coefficienté"
+            else:
+                eleve_data['message'] = "Non Coefficienté"
+
+            eleves_avec_moyennes.append(eleve_data)
+
+        return render(request, 'notes/fiche_notes.html', {
+            'eleves_avec_moyennes': eleves_avec_moyennes,
+            'matiere': matiere,
+            'classe_nom': classe_nom,
+            'eleves_par_classe': {classe_nom: eleves}
+        })
+    except Professeur.DoesNotExist:
+        return render(request, 'notes/fiche_notes.html', {'error': "Votre profil professeur n'existe pas.", 'eleves_par_classe': {}})
+    except Classe_exist.DoesNotExist:
+        return render(request, 'notes/fiche_notes.html', {'error': "Classe non trouvée.", 'eleves_par_classe': {}})
+    except Professeur_Classe.DoesNotExist:
+        return render(request, 'notes/fiche_notes.html', {'error': "Classe non attribuée à ce professeur.", 'eleves_par_classe': {}})
+    except Coefficient.DoesNotExist:
+        return render(request, 'notes/fiche_notes.html', {'error': "Coefficient non trouvé pour cette classe.", 'eleves_par_classe': {}})
+
+@login_required
+def ajouter_coefficient(request):
+    if request.method == 'POST':
+        classe = request.POST.get('classe')
+        matiere = request.POST.get('matiere')
+        coefficient = request.POST.get('coefficient')
+
+        existing_coefficient = Coefficient.objects.filter(Q(coefficient=coefficient) & Q(classe=classe) & Q(matiere=matiere)).exists()
+
+        if existing_coefficient:
+            messages.error(request, "Ce coefficient a déjà été enregistré pour cette matière.")
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+
+        try:
+            # Validation simple
+            if coefficient and classe and matiere:
+                Coefficient.objects.create(classe=classe, matiere=matiere, coefficient=coefficient)
+                messages.success(request, "Coefficient enregistré!")
+                return redirect(request.META.get('HTTP_REFERER', '/'))
+            else:
+                messages.error(request, "Tous les champs sont requis.")
+                return redirect(request.META.get('HTTP_REFERER', '/'))
+
+        except ValueError as e:
+            # Gérer les erreurs de conversion
+            messages.error(request, 'Veuillez bien renseigner les informations.')
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+@login_required
+def ajout_notes(request, classe_nom):
+    trimestre = Trimestre.objects.filter(active=True).first()
     try:
         professeur = Professeur.objects.get(user=request.user)
         matiere = professeur.matiere
         classe = Classe_exist.objects.get(fusion=classe_nom)
         classe_attribuee = Professeur_Classe.objects.get(professeur=professeur, classe=classe)
         eleves = Eleve.objects.filter(classe=classe_nom)
-        return render(request, 'liste_eleves_classe.html', {'eleves': eleves, 'matiere': matiere, 'classe_nom': classe_nom, 'eleves_par_classe': {classe_nom:eleves} }) #ajouter le dictionnaire eleves_par_classe.
+        notes = Note.objects.filter(eleve__classe=classe_nom, matiere_id=matiere.id,trimestre=trimestre) 
+
+        notes_par_eleve = defaultdict(list)
+        for note in notes:
+            notes_par_eleve[note.eleve].append(note)
+
+        return render(request, 'notes/gestion_notes.html', {'eleves': eleves, 'notes_par_eleve': notes_par_eleve, 'matiere': matiere, 'classe_nom': classe_nom, 'eleves_par_classe': {classe_nom:eleves} })
     except Professeur.DoesNotExist:
-        return render(request, 'liste_eleves_classe.html', {'error': "Votre profil professeur n'existe pas.", 'eleves_par_classe': {}}) #ajouter dictionnaire vide, pour eviter les erreurs si le template est aussi utilisé pour les autres vues.
+        return render(request, 'notes/gestion_notes.html', {'error': "Votre profil professeur n'existe pas.", 'eleves_par_classe': {}})
     except Classe_exist.DoesNotExist:
-        return render(request, 'liste_eleves_classe.html', {'error': "Classe non trouvée.", 'eleves_par_classe': {}}) #ajouter dictionnaire vide, pour eviter les erreurs si le template est aussi utilisé pour les autres vues.
+        return render(request, 'notes/gestion_notes.html', {'error': "Classe non trouvée.", 'eleves_par_classe': {}})
     except Professeur_Classe.DoesNotExist:
-        return render(request, 'liste_eleves_classe.html', {'error': "Classe non attribuée à ce professeur.", 'eleves_par_classe': {}}) #ajouter dictionnaire vide, pour eviter les erreurs si le template est aussi utilisé pour les autres vues.
+        return render(request, 'notes/gestion_notes.html', {'error': "Classe non attribuée à ce professeur.", 'eleves_par_classe': {}})
+
 
 @login_required
 def enregistrer_note(request):

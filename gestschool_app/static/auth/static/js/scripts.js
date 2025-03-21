@@ -1010,7 +1010,7 @@
     var $preloader = $('.js-preloader');
     if ($preloader.exists()) {
       $body.addClass("page-loaded");
-      $preloader.delay(600).fadeOut(300);
+      $preloader.delay(400).fadeOut(300);
     }
   };
 

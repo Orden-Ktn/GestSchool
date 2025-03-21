@@ -1,0 +1,109 @@
+{% extends "menu.html" %}
+
+{% block content %}
+{% load custom_filters %}
+<div class="content-page">
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <button type="button" class="page-title btn btn-outline-danger btn-rounded waves-effect width-md waves-light" onclick="goBack()">
+                            <i class="ion ion-md-arrow-back"></i>
+                            Retour
+                        </button>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb p-0 m-0">
+                                <li class="breadcrumb-item active">GestSchool</li>
+                                <li class="breadcrumb-item"><a>Fiche de note</a></li>
+                            </ol>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            {% if messages %}
+                <div class="alert-container">
+                    {% for message in messages %}
+                        <div class="alert alert-fill alert-info" role="alert">
+                            <h4 class="alert-title">GestSchool</h4>
+                            <div class="alert-message"><i class="ion ion-ios-alert"></i> {{ message }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- <button type="button" class="page-title btn btn-outline-success btn-rounded waves-effect width-md waves-light" data-toggle="modal" data-target=".bs-example-modal-lg">
+                                    <i class="ion ion-md-add-circle"></i>
+                                    Ajouter une note
+                                </button> -->
+                                <div class="table-responsive"><br>
+                                    {% if eleves_avec_moyennes %}
+                                        <table class="table table-striped mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Elève</th>
+                                                    <th>Matière</th>
+                                                    <th>Coefficient</th>
+                                                    <th>Notes obtenues</th>
+                                                    <th>Moyenne Interro</th>
+                                                    <th>Moyenne Générale</th>
+                                                    <th>Moyenne Coefficientée</th>
+                                                    <th>Statut</th>
+                                                   
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for eleve_data in eleves_avec_moyennes %}
+                                                    <tr>
+                                                        <td>{{ eleve_data.eleve.nom }} {{ eleve_data.eleve.prenom }}</td>
+                                                        <td>{{ matiere.sigle }}</td>
+                                                        <td>{{ eleve_data.coefficient.coefficient }}</td>
+                                                        <td>
+                                                            {% for note in eleve_data.notes %}
+                                                              <em style="font-weight: bold;">  {{ note.option }} </em> : {{ note.note }}{% if not forloop.last %} <br> {% endif %}
+                                                            {% endfor %}
+                                                        </td>
+                                                        <td>{{ eleve_data.moyenne_interro }}</td>
+                                                        <td>{{ eleve_data.moyenne_generale }}</td>
+                                                        <td>{{ eleve_data.moyenne_coefficientee }}</td>   
+                                                        <td>
+                                                            {% if eleve_data.message == "Coefficienté" %}
+                                                                <span class="badge" style="background-color:green; padding: 5%;">
+                                                                    {{ eleve_data.message }}
+                                                                </span>                                            
+                                                            {% endif %}
+
+                                                            {% if eleve_data.message == "Non Coefficienté" %}
+                                                                <span class="badge" style="background-color:red; padding: 5%;">
+                                                                    {{ eleve_data.message }}
+                                                                </span>                                            
+                                                            {% endif %}
+                                                        </td>
+                                                    
+                                                    </tr>
+                                                {% empty %}
+                                                    <tr>
+                                                        <td colspan="7" style="text-align: center; color: red; font-style: italic;">Aucune note enregistrée pour ce trimestre</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    {% elif classe_nom %}
+                                        <p style="text-align: center; color: red; font-style: italic;">Aucun élève trouvé dans la classe {{ classe_nom }}.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

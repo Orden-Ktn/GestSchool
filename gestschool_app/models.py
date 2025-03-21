@@ -183,6 +183,11 @@ class Note(models.Model):
         return f"Note de {self.eleve.nom} en {self.matiere.sigle} ({self.option})"
 
 
+class Coefficient(models.Model):
+    classe = models.CharField(max_length=100)
+    matiere = models.CharField(max_length=100)
+    coefficient = models.CharField(max_length=100)
+
 
 class Bulletin(models.Model):
     id_eleve = models.CharField(max_length=80)

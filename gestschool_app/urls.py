@@ -52,7 +52,6 @@ urlpatterns = [
 
 
 #urls des emplois
-    path('ajout emploi/', views.ajout_emploi, name='ajout_emploi'),
     path('ajouter emploi/', views.ajouter_emploi, name='ajouter_emploi'),
     path('emploi/', views.emploi, name='emploi'),
 
@@ -63,15 +62,15 @@ urlpatterns = [
     path('élève/', views.eleve, name='eleve'),
     path('modifier elève/<int:id_eleve>/', views.modify_information, name='modify_information'),
     path('supprimer élève/<int:id_eleve>/', views.delete_student, name='delete_student'),
-    path('update/', views.update, name='update'),
-
 
 
 #urls pour les notes
     path('mes classes/', views.mes_classes, name='mes_classes'),
     path('élève/', views.eleve, name='eleve'),
-    path('classe/<str:classe_nom>/', views.liste_eleves_classe, name='liste_eleves_classe'),
+    path('fiche de notes classe/<str:classe_nom>/', views.fiche_notes, name='fiche_notes'),
+    path('ajout de notes classe/<str:classe_nom>/', views.ajout_notes, name='ajout_notes'),
     path('enregistrer_note/', views.enregistrer_note, name='enregistrer_note'),
+    path('ajouter_coefficient/', views.ajouter_coefficient, name='ajouter_coefficient'),
     
 
 #urls pour cahier de texte
