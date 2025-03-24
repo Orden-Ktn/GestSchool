@@ -90,8 +90,9 @@ urlpatterns = [
     path('vérification/', views.verification, name='verification'),
     path('download/', views.download, name='download'),
 
- 
+#urls pour les utilisateurs
     path('personnel/', views.personnel, name='personnel'),
-    path("modifier_role/", views.modifier_role, name="modifier_role")
+    path("modifier_role/", views.modifier_role, name="modifier_role"),
+    path('supprimer_utilisateur/<int:personnel_id>/', views.supprimer_utilisateur, name='supprimer_utilisateur'),
 
 ]

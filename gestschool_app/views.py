@@ -156,14 +156,12 @@ def attribuer_classe_professeur(request):
 @login_required
 def delete_professeur(request, id):
     professeur = get_object_or_404(Professeur, pk=id)
-    user = professeur.user  # Récupérer l'utilisateur associé au professeur
+    user = professeur.user 
 
-    # Supprimer le professeur
     professeur.delete()
 
-    # Mettre à jour le rôle de l'utilisateur dans CustomUser
-    if user: #vérifier si l'utilisateur existe
-        user.role = 'Personnel'  # ou la valeur que vous utilisez pour le rôle "Personnel"
+    if user:
+        user.role = 'Personnel'
         user.save()
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
@@ -454,6 +452,13 @@ def modifier_role(request):
         ROLES_VALIDES = ["Censeur", "Professeur", "Secrétaire", "Surveillant", "Comptable", "Aucun"]
 
         if nouveau_role in ROLES_VALIDES and (personnel.role == "Personnel" or personnel.role == "Aucun"):
+            # Vérifier si le rôle est déjà attribué à un autre utilisateur
+            if nouveau_role in ["Censeur", "Secrétaire", "Comptable"]:
+                autre_utilisateur = CustomUser.objects.filter(role=nouveau_role).exclude(id=personnel_id).first()
+                if autre_utilisateur:
+                    messages.error(request, f"Le rôle '{nouveau_role}' est déjà attribué à {autre_utilisateur.username}.")
+                    return redirect("personnel")  # Rediriger sans modifier le rôle
+
             personnel.role = nouveau_role
             personnel.save()
             messages.success(request, f"Le rôle de {personnel.username} a été mis à jour en {nouveau_role}.")
@@ -461,6 +466,17 @@ def modifier_role(request):
             messages.error(request, f"Attribution de rôle non réussie. {personnel.username} a déjà un rôle.")
 
     return redirect("personnel")
+
+
+@login_required
+def supprimer_utilisateur(request, personnel_id):
+    personnel = get_object_or_404(CustomUser, id=personnel_id)
+    personnel.delete()
+
+    messages.success(request, "L'utilisateur a été supprimé avec succès.")
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
 
 #vues pour les classes
 @login_required
