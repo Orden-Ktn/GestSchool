@@ -54,6 +54,7 @@ urlpatterns = [
 #urls des emplois
     path('ajouter emploi/', views.ajouter_emploi, name='ajouter_emploi'),
     path('emploi/', views.emploi, name='emploi'),
+    path('supprimer emploi/<int:id>/', views.delete_emploi, name='delete_emploi'),
 
 
 

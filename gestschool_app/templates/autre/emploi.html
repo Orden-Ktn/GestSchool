@@ -44,11 +44,11 @@
                     <div class="col-lg-12">
                         <div class="card card-bordered">
                             <div class="card-inner">
-                                {% for emploi1 in emploi1 %}
+                                {% for emploi in emploi %}
                                 <div class="card-head" style="margin-top : 1%;">
                                     <h5 class="alert alert-info"><em class="icon ni ni-calendar-check-fill"></em>&nbsp
                                         Emploi du temps de la
-                                        {{emploi1.classe}} {{emploi1.serie}} </h5>
+                                        {{emploi.classe}} </h5>
                                 </div>
 
                                 <table id="table" class="table table-striped table-bordered">
@@ -85,11 +85,11 @@
                                                     name="temps1" value="08H-10H" placeholder="08H-10H"
                                                     class="form-control form-control-medium-input" readonly />
                                             </td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours1}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours2}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours3}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours4}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours5}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours1}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours2}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours3}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours4}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours5}}</td>
                                         </tr>
 
                                         <tr>
@@ -99,11 +99,11 @@
                                                     name="temps1" value="10H-12H" placeholder="10H-12H"
                                                     class="form-control form-control-medium-input" readonly />
                                             </td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours6}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours7}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours8}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours9}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours10}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours6}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours7}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours8}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours9}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours10}}</td>
                                         </tr>
 
                                         <tr>
@@ -119,11 +119,11 @@
                                                     name="temps1" value="14H-16H" placeholder="14H-16H"
                                                     class="form-control form-control-medium-input" readonly />
                                             </td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours11}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours12}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours13}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours14}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours15}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours11}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours12}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours13}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours14}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours15}}</td>
                                         </tr>
 
                                         <tr>
@@ -133,13 +133,42 @@
                                                     name="temps1" value="16H-18H" placeholder="16H-18H"
                                                     class="form-control form-control-medium-input" readonly />
                                             </td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours16}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours17}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours18}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours19}}</td>
-                                            <td class="col-note" style="text-align: center;">{{emploi1.cours20}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours16}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours17}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours18}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours19}}</td>
+                                            <td class="col-note" style="text-align: center;">{{emploi.cours20}}</td>
                                         </tr>
                                     </tbody>
+                                    <tfoot>
+                                        <td colspan="7" style="justify-content: center; text-align: center;">
+                                            <button class="btn btn-danger col-4" data-toggle="modal" data-target="#deleteModal{{ emploi.id}}">
+                                                <i class="ion ion-ios-trash"></i> Supprimer
+                                            </button>
+
+                                            <div class="modal fade" id="deleteModal{{ emploi.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Confirmation de suppression</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            <p>Êtes-vous sûr de vouloir supprimer l'emploi de la classe de <b>{{ emploi.classe }}</b> ?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="{% url 'delete_emploi' emploi.id %}" class="btn btn-primary">
+                                                                Oui
+                                                            </a>
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tfoot>
                                 </table>
 
                                 {% empty %}

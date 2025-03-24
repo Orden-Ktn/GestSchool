@@ -155,10 +155,18 @@ def attribuer_classe_professeur(request):
 
 @login_required
 def delete_professeur(request, id):
-    objet = Professeur.objects.get(pk=id)
-    objet.delete()      
-    return redirect(request.META.get('HTTP_REFERER', '/'))
+    professeur = get_object_or_404(Professeur, pk=id)
+    user = professeur.user  # Récupérer l'utilisateur associé au professeur
 
+    # Supprimer le professeur
+    professeur.delete()
+
+    # Mettre à jour le rôle de l'utilisateur dans CustomUser
+    if user: #vérifier si l'utilisateur existe
+        user.role = 'Personnel'  # ou la valeur que vous utilisez pour le rôle "Personnel"
+        user.save()
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
 def index(request):
@@ -659,11 +667,26 @@ def ajouter_emploi(request):
 
 @login_required
 def emploi(request):
-    emploi1 = Emploi.objects.filter()
+    emploi = Emploi.objects.filter()
     matieres = Matiere.objects.all()
     classes = Classe.objects.all()
-    return render(request, 'autre/emploi.html', {'emploi1': emploi1, 'matieres': matieres, 'classes': classes,})
+    return render(request, 'autre/emploi.html', {'emploi': emploi, 'matieres': matieres, 'classes': classes,})
 
+@login_required
+def delete_emploi(request, id):
+    emploi = get_object_or_404(Emploi, pk=id)
+    classe_nom = emploi.classe 
+
+    emploi.delete()
+
+    try:
+        classe_exist = Classe_exist.objects.get(fusion=classe_nom)
+        classe_exist.delete()
+    except Classe_exist.DoesNotExist:
+        pass
+
+    messages.error(request, "Suppression réussie pour cet emploi de temps et les classes associées.")
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
 
@@ -843,13 +866,14 @@ def fiche_notes(request, classe_nom):
     try:
         professeur = Professeur.objects.get(user=request.user)
         matiere = professeur.matiere
+        matiere_actuelle = matiere.sigle
         classe = Classe_exist.objects.get(fusion=classe_nom)
         classe_existe = classe.fusion
         classe_attribuee = Professeur_Classe.objects.get(professeur=professeur, classe=classe)
         eleves = Eleve.objects.filter(classe=classe_nom)
         notes = Note.objects.filter(eleve__classe=classe_nom, matiere_id=matiere.id, trimestre=trimestre)
-
-        coefficient_classe = Coefficient.objects.get(classe=classe_existe)
+        annee_active = AnneeScolaire.objects.filter(active=True).first()
+        coefficient_classe = Coefficient.objects.get(classe=classe_existe, annee_scolaire=annee_active, matiere=matiere_actuelle)
         coefficient_val = float(coefficient_classe.coefficient)
 
         notes_par_eleve = defaultdict(list)
@@ -918,6 +942,7 @@ def ajouter_coefficient(request):
         classe = request.POST.get('classe')
         matiere = request.POST.get('matiere')
         coefficient = request.POST.get('coefficient')
+        annee_active = AnneeScolaire.objects.filter(active=True).first()
 
         existing_coefficient = Coefficient.objects.filter(Q(coefficient=coefficient) & Q(classe=classe) & Q(matiere=matiere)).exists()
 
@@ -928,7 +953,7 @@ def ajouter_coefficient(request):
         try:
             # Validation simple
             if coefficient and classe and matiere:
-                Coefficient.objects.create(classe=classe, matiere=matiere, coefficient=coefficient)
+                Coefficient.objects.create(classe=classe, matiere=matiere, coefficient=coefficient, annee_scolaire=annee_active)
                 messages.success(request, "Coefficient enregistré!")
                 return redirect(request.META.get('HTTP_REFERER', '/'))
             else:

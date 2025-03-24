@@ -41,7 +41,7 @@
                                     <!-- <h4 class="header-title mb-4" style="margin-right: 10px;">Cahier de texte</h4> -->
                                     <button type="button"
                                         class="page-title btn btn-outline-success btn-rounded waves-effect width-md waves-light"
-                                        data-toggle="modal" data-target=".bs-example-modal-lg">
+                                        data-toggle="modal" data-target=".addContenu">
                                         <i class="ion ion-md-add-circle"></i>
                                         Ajouter un contenu 
                                     </button>
@@ -90,7 +90,7 @@
     </div>
 </div>
 
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+<div class="modal fade addContenu" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
     style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -131,7 +131,7 @@
 
                         <div class="form-group col-md-4">
                             <label for="inputEmail4" class="col-form-label">Date</label>
-                            <input class="form-control" id="example-date" type="date" name="date">
+                            <input class="form-control" id="example-date" type="date" name="date" required>
                         </div>
                         <input hidden type="text" class="form-control" readonly="" name="id_prof" value="{{user.id}}">
                     </div>
@@ -139,7 +139,7 @@
                     <div class="form-group row">
                         <label class="col-lg-2 col-form-label" for="example-textarea">Contenu</label>
                         <div class="col-lg-10">
-                            <textarea class="form-control" name="contenu" rows="5" id="example-textarea"></textarea>
+                            <textarea class="form-control" name="contenu" rows="5" id="example-textarea" required></textarea>
                         </div>
                     </div>        
 

@@ -121,26 +121,6 @@ class Eleve(models.Model):
     statut = models.CharField(max_length=100)
     annee_scolaire = models.ForeignKey(AnneeScolaire, on_delete=models.SET_NULL, null=True, blank=True)
 
-class Personnel(models.Model):
-    id_personnel = models.AutoField(primary_key=True)  
-    username = models.CharField(max_length=80)
-    contact = models.CharField(max_length=100)
-    role = models.CharField(max_length=100, default='Personnel')
-    annee_scolaire = models.ForeignKey(AnneeScolaire, on_delete=models.SET_NULL, null=True, blank=True)
-    password = models.CharField(max_length=255) 
- 
-    def save(self, *args, **kwargs):
-        # Hacher le mot de passe uniquement si le mot de passe est en texte brut
-        if not self.password.startswith('pbkdf2_'):
-            self.password = make_password(self.password)
-        super().save(*args, **kwargs)
-
-    def check_password(self, raw_password):
-        # Vérifie si le mot de passe brut correspond au mot de passe haché
-        return check_password(raw_password, self.password)
-
-    def __str__(self):
-        return self.username
 
 class Professeur(models.Model):  
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
@@ -187,6 +167,10 @@ class Coefficient(models.Model):
     classe = models.CharField(max_length=100)
     matiere = models.CharField(max_length=100)
     coefficient = models.CharField(max_length=100)
+    annee_scolaire = models.ForeignKey(AnneeScolaire, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        unique_together = ('classe', 'annee_scolaire', 'matiere')
 
 
 class Bulletin(models.Model):
