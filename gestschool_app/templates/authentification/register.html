@@ -1,135 +1,58 @@
 {% load form_tags %}
 <!DOCTYPE html>
-<html lang="zxx" class="js">
-
+<html lang="en">
 <head>
-    <base href="./static/auth/static/./static/auth/static/./static/auth/static/">
-    <meta charset="utf-8">
-    <meta name="author" content="Softnio">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description"
-        content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
-    <link rel="icon" href="/static/auth/static/image/favicon/logo_gestschool.png" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GestSchool</title>
-    <link rel="stylesheet" href="/static/auth/static/css/dashlite.css?ver=3.2.3">
-    <link id="skin-default" rel="stylesheet" href="/static/auth/static/css/theme.css?ver=3.2.3">
-    <link rel="stylesheet" href="/static/auth/static/css/dashlite.css">
-
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="/static/auth/static/image/favicon/logo_gestschool.png" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/auth.css">
 </head>
+<body>
+    <div class="login-container">
+        <div class="form-column">
+      
+            <h1 class="title">Création de compte</h1>
+            {% if messages %}
+                <div class="alert-container">
+                    {% for message in messages %}
+                        <div class="alert alert-fill alert-info" role="alert">
+                            <h4 class="alert-title">GestSchool</h4>
+                            <div class="alert-message"><i class="ion ion-ios-alert"></i> {{ message }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
 
-<body class="authentication-page">
-    <div class="nk-app-root" style="margin-top: 5%;">
-        <div class="account-pages my-5">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-8 col-lg-6 col-xl-5">
-                        <div class="card mt-4" style="border-radius: 5%;">
-                            <div class="card-header text-center p-4 bg-primary">
-                                <h5 class="text-white font-13 mb-0">GestSchool | CREATION DE COMPTE</h5>
-                            </div>
-                            <div class="card-body">
-                                {% if messages %}
-                                <div class="alert-container">
-                                    {% for message in messages %}
-                                        <div class="alert alert-fill alert-info" role="alert">
-                                            <h4 class="alert-title">GestSchool</h4>
-                                            <div class="alert-message"><i class="ion ion-ios-alert"></i> {{ message }}</div>
-                                        </div>
-                                    {% endfor %}
+            <form class="form-validate is-alter" method="post" action="{% url 'register' %}" style=" margin-top : 2%;">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <div class="form-control-wrap">
+                            {{ field|add_class:"form-control form-control-lg" }}
+                            {% if field.errors %}
+                                <div class="form-note-s2 text-danger">
+                                    {{ field.errors }}
                                 </div>
                             {% endif %}
-
-                            <form class="form-validate is-alter" method="post" action="{% url 'register' %}" style=" margin-top : 2%;">
-                                {% csrf_token %}
-                                {% for field in form %}
-                                    <div class="form-group">
-                                        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                        <div class="form-control-wrap">
-                                            {{ field|add_class:"form-control form-control-lg" }}
-                                            {% if field.errors %}
-                                                <div class="form-note-s2 text-danger">
-                                                    {{ field.errors }}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                                <div class="form-group">
-                                    <button class="btn btn-lg btn-primary btn-block">S'inscrire &nbsp</button>
-                                </div>
-                            </form>
-                            <div class="form-note-s2 pt-4" style="text-align: center;"> Vous avez déjà un compte? <a href="{% url 'login_view' %}">Connectez-vous</a>
-                            </div>
-
-                            </div>
-                            <!-- end card-body -->
-                        </div>
-                        <!-- end card -->
-
-                        <!-- end row -->
-
+                        </div><br>
                     </div>
-                    <!-- end col -->
+                {% endfor %}
+                <br>
+                <button type="submit" class="btn">S'inscrire</button>
+                <div class="register-link">
+                    <p>Vous avez un compte? <a href="{% url 'login_view' %}">Connectez-vous</a></p>
                 </div>
-                <!-- end row -->
-
-            </div>
+            </form> 
         </div>
-        <div class="preloader-body bg-lighter">
-            <div class="cube-wrapper">
-                <div class="cube-folding">
-                    <span class="leaf1"></span>
-                    <span class="leaf2"></span>
-                    <span class="leaf3"></span>
-                    <span class="leaf4"></span>
-                </div>
-                <span class="loading" data-name="Loading">Chargement</span>
-            </div>
-        </div>
+        <div class="image-column"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
-        <script src="/static/auth/static/js/bundle.js?ver=3.2.3"></script>
-        <script src="/static/auth/static/js/scripts.js?ver=3.2.3"></script>
-        <script src="/static/auth/static/js/main.js"></script>
+<script src="/static/js/auth.js"></script>
 
-        <script>
-            setTimeout(function() {
-                let alerts = document.querySelectorAll('.alert-fill'); // Sélectionne les alertes par leur classe
-                alerts.forEach(function(alert) {
-                    alert.style.display = 'none';
-                });
-            }, 8000); // 8000 millisecondes = 8 secondes
-        </script>
-        <style>
-            .alert-container {
-                position: fixed; /* Position fixe pour rester en haut de la page */
-                margin: auto;
-                top: 20px; /* Marge du haut */
-                left: 50%; /* Centrer horizontalement */
-                transform: translateX(-50%); /* Ajuster le centrage */
-                width: 80%; /* Largeur de l'alerte (ajustez selon vos besoins) */
-                max-width: 500px; /* Largeur maximale */
-                z-index: 1000; /* Assurez-vous qu'il est au-dessus des autres éléments */
-            }
-        
-            .alert {
-                background-color: #e0f7fa; /* Couleur de fond claire */
-                border: 1px solid #b2ebf2; /* Bordure légère */
-                border-radius: 5px; /* Coins arrondis */
-                padding: 20px; /* Espacement intérieur */
-                text-align: center; /* Centrer le texte */
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Ombre légère */
-            }
-        
-            .alert-title {
-                color: #00838f; /* Couleur du titre */
-                margin-bottom: 10px; /* Marge sous le titre */
-            }
-        
-            .alert-message {
-                color: #263238; /* Couleur du message */
-                font-size: 16px; /* Taille de la police */
-            }
-        </style>
-
-    </body>
 </html>

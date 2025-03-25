@@ -2,6 +2,21 @@
 
 {% block content %}
 
+    <div id="loading-screen">
+        <div class="spinner"></div> &nbsp;&nbsp;&nbsp;&nbsp; 
+        <span class="loading" data-name="Loading">Chargement...</span>
+    </div>
+
+    <div id="wrapper" style="display: none;">
+
+    </div>
+    <script>
+        setTimeout(function() {
+            document.getElementById('loading-screen').style.display = 'none';
+            document.getElementById('wrapper').style.display = 'block';
+        }, 2000);
+    </script>
+
     <div class="content-page">
         <div class="content">
 
