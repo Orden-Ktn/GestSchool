@@ -1,0 +1,88 @@
+{% extends "menu.html" %}
+
+{% block content %}
+
+<div class="content-page">
+    <div class="content">
+
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <!-- <button type="button"
+                            class="page-title btn btn-outline-success btn-rounded waves-effect width-md waves-light"
+                            data-toggle="modal" data-target=".bs-example-modal-lg">
+                            <i class="ion ion-md-add-circle"></i>
+                            Ajouter un élève
+                        </button> -->
+                        <div class="page-title-right">
+                            <ol class="breadcrumb p-0 m-0">
+                                <li class="breadcrumb-item active">GestSchool</li>
+                                <li class="breadcrumb-item"><a>Fiche de notes</a></li>
+                            </ol>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+            {% if messages %}
+                <div class="alert-container">
+                    {% for message in messages %}
+                        <div class="alert alert-fill alert-info" role="alert">
+                            <h4 class="alert-title">GestSchool</h4>
+                            <div class="alert-message"><i class="ion ion-ios-alert"></i> {{ message }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body table-responsive">
+                            <h4 class="m-t-0 header-title mb-4"><b>FICHE DE NOTES GENERALE</b></h4>
+
+                            <table id="datatable-buttons"
+                                class="table table-striped table-bordered dt-responsive nowrap"
+                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+
+                                <thead>
+                                    <tr>
+                                        <th>Elève</th>
+                                        <th>Classe</th>
+                                        <th>Matière</th>
+                                        <th>Moyenne Interro</th>
+                                        <th>Moyenne Générale</th>
+                                        <th>Moyenne Coefficientée</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for resultat in resultats %}
+                                        <tr>
+                                            <td>{{ resultat.eleve.nom }} {{ resultat.eleve.prenom }}</td>
+                                            <td>{{ resultat.eleve.classe }}</td>
+                                            <td>{{ resultat.matiere.sigle }}</td>
+                                            <td>{{ resultat.moyenne_interro }}</td>
+                                            <td>{{ resultat.moyenne_generale }}</td>
+                                            <td>{{ resultat.moyenne_coefficientee }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="5" style="text-align: center; color: red; font-style: italic;">Aucun résultat enregistré.</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

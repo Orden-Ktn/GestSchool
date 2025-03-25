@@ -9,8 +9,6 @@ urlpatterns = [
     path('connexion/', views.login_view, name='login_view'),
     path('inscription/', views.register, name='register'),
     path('déconnexion/', views.deconnexion, name='deconnexion'),
-    path('modification des identifiants/', views.change_user, name='change_user'),
-    path('ecran de verouillage/', views.lock_screen, name='lock_screen'),
     path('index/', views.index, name='index'),
 
 #urls pour professeur
@@ -72,6 +70,8 @@ urlpatterns = [
     path('ajout de notes classe/<str:classe_nom>/', views.ajout_notes, name='ajout_notes'),
     path('enregistrer_note/', views.enregistrer_note, name='enregistrer_note'),
     path('ajouter_coefficient/', views.ajouter_coefficient, name='ajouter_coefficient'),
+    path('enregistrer_resultats/', views.enregistrer_resultats, name='enregistrer_resultats'),
+    path('fiches de notes/', views.all_fiche_notes, name='all_fiche_notes'),
     
 
 #urls pour cahier de texte

@@ -163,6 +163,19 @@ class Note(models.Model):
         return f"Note de {self.eleve.nom} en {self.matiere.sigle} ({self.option})"
 
 
+class ResultatEleve(models.Model):
+    eleve = models.ForeignKey(Eleve, on_delete=models.CASCADE)
+    matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE)
+    moyenne_interro = models.CharField(max_length=100)
+    moyenne_generale = models.CharField(max_length=100)
+    moyenne_coefficientee = models.CharField(max_length=100)
+    annee_scolaire = models.ForeignKey(AnneeScolaire, on_delete=models.SET_NULL, null=True, blank=True)
+    trimestre = models.ForeignKey(Trimestre, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f"Note de {self.eleve.nom} en {self.matiere.sigle} ({self.moyenne_coefficientee})"
+
+
 class Coefficient(models.Model):
     classe = models.CharField(max_length=100)
     matiere = models.CharField(max_length=100)

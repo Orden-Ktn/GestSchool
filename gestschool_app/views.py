@@ -254,34 +254,6 @@ def deconnexion(request):
     logout(request)
     return redirect('login_view')
 
-def changer_user(request):
-    return render(request, 'authentification/change_user.html')
-
-#vue pour le changement de nom et mot de passe
-def change_user(request):
-    if request.method == 'POST':
-        form = ChangeUserForm(request.POST)
-        if form.is_valid():
-            new_username = form.cleaned_data['new_username']
-            new_password = form.cleaned_data['new_password']
-
-            # Update user information
-            user = request.user
-            user.username = new_username
-            user.set_password(new_password)
-            user.save()
-
-            # Important: update session to keep user logged in with new credentials
-            update_session_auth_hash(request, user)
-
-            return redirect('connexion')  # Redirect to profile page or any other page
-    else:
-        form = ChangeUserForm()
-
-    return render(request, 'authentification/change_user.html', {'form': form})
-
-
-
 
 
 #vues pour les matières
@@ -321,8 +293,6 @@ def matiere(request):
        # Récupération de toutes les matieres
        matieres = Matiere.objects.all()
        return render(request, 'autre/matiere.html', {'matieres': matieres})
-
-
 
 
 
@@ -1053,6 +1023,56 @@ def enregistrer_note(request):
         return redirect(request.META.get('HTTP_REFERER', '/'))
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+@login_required
+def enregistrer_resultats(request):
+    if request.method == 'POST':
+        eleve_id = request.POST.get('eleve_id')
+        matiere_id = request.POST.get('matiere_id')
+        moyenne_interro = request.POST.get('moyenne_interro')
+        moyenne_generale = request.POST.get('moyenne_generale')
+        moyenne_coefficientee = request.POST.get('moyenne_coefficientee')
+        annee_active = AnneeScolaire.objects.filter(active=True).first()
+        trimestre_active = Trimestre.objects.filter(active=True).first()
+
+        # Vérifier si un enregistrement existe déjà
+        if ResultatEleve.objects.filter(
+            eleve_id=eleve_id,
+            matiere_id=matiere_id,
+            annee_scolaire=annee_active,
+            trimestre=trimestre_active
+        ).exists():
+            messages.error(request, "Un enregistrement existe déjà pour cet élève et cette matière.")
+        else:
+            # Enregistrer les données dans votre modèle
+            resultat = ResultatEleve(
+                eleve_id=eleve_id,
+                matiere_id=matiere_id,
+                moyenne_interro=moyenne_interro,
+                moyenne_generale=moyenne_generale,
+                moyenne_coefficientee=moyenne_coefficientee,
+                trimestre=trimestre_active,
+                annee_scolaire=annee_active
+            )
+            resultat.save()
+            messages.success(request, "Enregistrement réussi.")
+
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+@login_required
+def all_fiche_notes(request):
+    # Récupérer tous les résultats
+    resultats = ResultatEleve.objects.all()
+
+    context = {
+        'resultats': resultats,
+    }
+
+    return render(request, 'notes/all_fiche_notes.html', context)
+
 
 
 #vues pour les bulletins

@@ -166,6 +166,12 @@
                                     <span> Cahier de texte </span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{% url 'all_fiche_notes' %}" class="waves-effect">
+                                    <i class="ion ion-md-paper"></i>
+                                    <span> Fiches de note </span>
+                                </a>                               
+                            </li>
                         {% elif user.role == "Comptable" %}
                             <li>
                                 <a href="{% url 'index' %}" class="waves-effect">
@@ -243,6 +249,7 @@
                                     </ul>
                                 {% endif %}
                             </li>
+
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect">
                                     <i class="ion ion-ios-book"></i>

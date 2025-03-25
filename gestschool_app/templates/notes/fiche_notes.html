@@ -48,44 +48,53 @@
                                                 <tr>
                                                     <th>Elève</th>
                                                     <th>Matière</th>
-                                                    <th>Coefficient</th>
                                                     <th>Notes obtenues</th>
                                                     <th>Moyenne Interro</th>
                                                     <th>Moyenne Générale</th>
                                                     <th>Moyenne Coefficientée</th>
                                                     <th>Statut</th>
-                                                   
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {% for eleve_data in eleves_avec_moyennes %}
-                                                    <tr>
-                                                        <td>{{ eleve_data.eleve.nom }} {{ eleve_data.eleve.prenom }}</td>
-                                                        <td>{{ matiere.sigle }}</td>
-                                                        <td>{{ eleve_data.coefficient.coefficient }}</td>
-                                                        <td>
-                                                            {% for note in eleve_data.notes %}
-                                                              <em style="font-weight: bold;">  {{ note.option }} </em> : {{ note.note }}{% if not forloop.last %} <br> {% endif %}
-                                                            {% endfor %}
-                                                        </td>
-                                                        <td>{{ eleve_data.moyenne_interro }}</td>
-                                                        <td>{{ eleve_data.moyenne_generale }}</td>
-                                                        <td>{{ eleve_data.moyenne_coefficientee }}</td>   
-                                                        <td>
-                                                            {% if eleve_data.message == "Coefficienté" %}
-                                                                <span class="badge" style="background-color:green; padding: 5%;">
-                                                                    {{ eleve_data.message }}
-                                                                </span>                                            
-                                                            {% endif %}
-
-                                                            {% if eleve_data.message == "Non Coefficienté" %}
-                                                                <span class="badge" style="background-color:red; padding: 5%;">
-                                                                    {{ eleve_data.message }}
-                                                                </span>                                            
-                                                            {% endif %}
-                                                        </td>
-                                                    
-                                                    </tr>
+                                                    <form method="POST" action="{% url 'enregistrer_resultats' %}">
+                                                        {% csrf_token %}
+                                                        <tr>
+                                                            <td>{{ eleve_data.eleve.nom }} {{ eleve_data.eleve.prenom }}</td>
+                                                            <td>{{ matiere.sigle }} ({{ eleve_data.coefficient.coefficient }})</td>
+                                                            <td>
+                                                                {% for note in eleve_data.notes %}
+                                                                    <em style="font-weight: bold;"> {{ note.option }} </em> : {{ note.note }}{% if not forloop.last %} <br> {% endif %}
+                                                                {% endfor %}
+                                                            </td>
+                                                            <td>{{ eleve_data.moyenne_interro }}</td>
+                                                            <td>{{ eleve_data.moyenne_generale }}</td>
+                                                            <td>{{ eleve_data.moyenne_coefficientee }}</td>
+                                                            <td>
+                                                                {% if eleve_data.message == "Coefficienté" %}
+                                                                    <span class="badge" style="background-color:green; padding: 5%;">
+                                                                        {{ eleve_data.message }}
+                                                                    </span>
+                                                                {% endif %}
+                                                                {% if eleve_data.message == "Non Coefficienté" %}
+                                                                    <span class="badge" style="background-color:red; padding: 5%;">
+                                                                        {{ eleve_data.message }}
+                                                                    </span>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td style="width: 5%;">
+                                                                <input type="hidden" name="eleve_id" value="{{ eleve_data.eleve.id_eleve }}">
+                                                                <input type="hidden" name="matiere_id" value="{{ matiere.id }}">
+                                                                <input type="hidden" name="moyenne_interro" value="{{ eleve_data.moyenne_interro }}">
+                                                                <input type="hidden" name="moyenne_generale" value="{{ eleve_data.moyenne_generale }}">
+                                                                <input type="hidden" name="moyenne_coefficientee" value="{{ eleve_data.moyenne_coefficientee }}">
+                                                                <button class="btn btn-success btn-user btn-block" type="submit">
+                                                                    Enregistrer
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </form>
                                                 {% empty %}
                                                     <tr>
                                                         <td colspan="7" style="text-align: center; color: red; font-style: italic;">Aucune note enregistrée pour ce trimestre</td>
